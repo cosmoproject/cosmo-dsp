@@ -16,10 +16,9 @@ instr 1
 	#include "includes/adc_channels.inc"
 
 
-
 ; FM
 
-	kfmidx scale gkpot0, 0, 10
+	kfmidx scale gkpot0, 0, 1
 	Sidx sprintfk "[Pot1] FM index: %f", kfmidx
 		puts Sidx, kfmidx+1  
 
@@ -54,7 +53,7 @@ instr 1
 	koscvol5 scale gkpot7, 0, 0.8
 	Svol5 sprintfk "[Pot8] OSC3 volume: %f", koscvol5
 		puts Svol5, koscvol5+1  
-		
+
 
 	afm poscil kfmidx*kfmfreq, kfmfreq
 
