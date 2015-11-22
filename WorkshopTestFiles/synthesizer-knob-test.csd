@@ -15,38 +15,37 @@ instr 1
 
 	#include "includes/adc_channels.inc"
 
-; OSC
 
-	koscvol1 scale gkpot0, 0, 0.8
-	Svol1 sprintfk "[Pot1] OSC1 volume: %f", koscvol1
-		puts Svol1, koscvol1+1  
-
-	koscvol2 scale gkpot1, 0, 0.8
-	Svol2 sprintfk "[Pot2] OSC2 volume: %f", koscvol2
-		puts Svol2, koscvol2+1  
-
-	koscvol3 scale gkpot2, 0, 0.8
-	Svol3 sprintfk "[Pot3] OSC3 volume: %f", koscvol3
-		puts Svol3, koscvol3+1  
 
 ; FM
 
-	kfmidx scale gkpot3, 0, 10
-	Sidx sprintfk "[Pot4] FM index: %f", kfmidx
+	kfmidx scale gkpot0, 0, 10
+	Sidx sprintfk "[Pot1] FM index: %f", kfmidx
 		puts Sidx, kfmidx+1  
 
-	kfmfreq scale gkpot4, 0.1, 500
-	Sfm sprintfk "[Pot5] FM freq: %f", kfmfreq
+	kfmfreq scale gkpot1, 0.1, 500
+	Sfm sprintfk "[Pot2] FM freq: %f", kfmfreq
 		puts Sfm, kfmfreq+1  
 
 ; LPF18
 
-	klpfreq scale gkpot5, 50, 20000
-	Slp sprintfk "[Pot6] Lowpass cutoff: %f", klpfreq
+	klpfreq scale gkpot2, 50, 20000
+	Slp sprintfk "[Pot3] Lowpass cutoff: %f", klpfreq
 		puts Slp, klpfreq+1  
 
-; More OSC
+; OSC
 
+	koscvol1 scale gkpot3, 0, 0.8
+	Svol1 sprintfk "[Pot4] OSC1 volume: %f", koscvol1
+		puts Svol1, koscvol1+1  
+
+	koscvol2 scale gkpot4, 0, 0.8
+	Svol2 sprintfk "[Pot5] OSC2 volume: %f", koscvol2
+		puts Svol2, koscvol2+1  
+
+	koscvol3 scale gkpot5, 0, 0.8
+	Svol3 sprintfk "[Pot6] OSC3 volume: %f", koscvol3
+		puts Svol3, koscvol3+1  
 
 	koscvol4 scale gkpot6, 0, 0.8
 	Svol4 sprintfk "[Pot7] OSC2 volume: %f", koscvol4
@@ -55,6 +54,7 @@ instr 1
 	koscvol5 scale gkpot7, 0, 0.8
 	Svol5 sprintfk "[Pot8] OSC3 volume: %f", koscvol5
 		puts Svol5, koscvol5+1  
+		
 
 	afm poscil kfmidx*kfmfreq, kfmfreq
 
