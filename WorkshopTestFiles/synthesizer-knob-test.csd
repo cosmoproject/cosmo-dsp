@@ -33,6 +33,7 @@ instr 1
 
 ; LPF18
 
+	gkpot2 expcurve gkpot2, 30
 	klpfreq scale gkpot2, 5000, 200
 	Slp sprintfk "[Pot3] Lowpass cutoff: %f", klpfreq
 		puts Slp, klpfreq+1  
@@ -53,11 +54,11 @@ instr 1
 		puts Svol3, koscvol3+1  
 
 	koscvol4 scale gkpot6, 0.2, 0
-	Svol4 sprintfk "[Pot7] OSC2 volume: %f", koscvol4
+	Svol4 sprintfk "[Pot7] OSC4 volume: %f", koscvol4
 		puts Svol4, koscvol4+1  
 
 	koscvol5 scale gkpot7, 0.2, 0
-	Svol5 sprintfk "[Pot8] OSC3 volume: %f", koscvol5
+	Svol5 sprintfk "[Pot8] OSC5 volume: %f", koscvol5
 		puts Svol5, koscvol5+1  
 
 
