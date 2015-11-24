@@ -1,6 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024 
+;-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024 
+-odac
 </CsOptions>
 <CsInstruments>
 sr      = 44100
@@ -18,54 +19,59 @@ instr 1
 
 ; FM
 
-	kfmidx scale gkpot0, 0, 1
+	kfmidx scale gkpot0, 4, 0
 	Sidx sprintfk "[Pot1] FM index: %f", kfmidx
 		puts Sidx, kfmidx+1  
+	kfmidx portk kfmidx, 0.1
 
-	kfmfreq scale gkpot1, 0.1, 500
+	gkpot1 expcurve gkpot1, 30
+	kfmfreq scale gkpot1, 500, 0.1
+	;kfmfreq logcurve kfmfreq, 2
 	Sfm sprintfk "[Pot2] FM freq: %f", kfmfreq
 		puts Sfm, kfmfreq+1  
+ 	kfmfreq portk kfmfreq, 0.1
 
 ; LPF18
 
-	klpfreq scale gkpot2, 50, 20000
+	klpfreq scale gkpot2, 5000, 200
 	Slp sprintfk "[Pot3] Lowpass cutoff: %f", klpfreq
 		puts Slp, klpfreq+1  
+	klpfreq portk klpfreq, 0.1
 
 ; OSC
 
-	koscvol1 scale gkpot3, 0, 0.8
+	koscvol1 scale gkpot3, 0.2, 0
 	Svol1 sprintfk "[Pot4] OSC1 volume: %f", koscvol1
 		puts Svol1, koscvol1+1  
 
-	koscvol2 scale gkpot4, 0, 0.8
+	koscvol2 scale gkpot4, 0.2, 0
 	Svol2 sprintfk "[Pot5] OSC2 volume: %f", koscvol2
 		puts Svol2, koscvol2+1  
 
-	koscvol3 scale gkpot5, 0, 0.8
+	koscvol3 scale gkpot5, 0.2, 0
 	Svol3 sprintfk "[Pot6] OSC3 volume: %f", koscvol3
 		puts Svol3, koscvol3+1  
 
-	koscvol4 scale gkpot6, 0, 0.8
+	koscvol4 scale gkpot6, 0.2, 0
 	Svol4 sprintfk "[Pot7] OSC2 volume: %f", koscvol4
 		puts Svol4, koscvol4+1  
 
-	koscvol5 scale gkpot7, 0, 0.8
+	koscvol5 scale gkpot7, 0.2, 0
 	Svol5 sprintfk "[Pot8] OSC3 volume: %f", koscvol5
 		puts Svol5, koscvol5+1  
 
 
 	afm poscil kfmidx*kfmfreq, kfmfreq
 
-	a1 poscil koscvol1 + afm, 200
-	a2 poscil koscvol2 + afm, 202
-	a3 poscil koscvol3 + afm, 350
-	a4 poscil koscvol4 + afm, 520
-	a5 poscil koscvol5 + afm, 740
+	a1 poscil koscvol1, 200 + afm
+	a2 poscil koscvol2, 300 + afm
+	a3 poscil koscvol3, 400 + afm
+	a4 poscil koscvol4, 500 + afm
+	a5 poscil koscvol5, 600 + afm
 
 	asynth = a1 + a2 + a3 + a4 + a5
 
-	asynth lpf18 asynth, klpfreq, 0.5, 0
+	asynth lpf18 asynth, klpfreq, 0.7, 0
 
 	outs asynth, asynth
 	
@@ -84,3 +90,164 @@ i1 0 86400
 
 
 
+<bsbPanel>
+ <label>Widgets</label>
+ <objectName/>
+ <x>795</x>
+ <y>186</y>
+ <width>458</width>
+ <height>240</height>
+ <visible>true</visible>
+ <uuid/>
+ <bgcolor mode="nobackground">
+  <r>255</r>
+  <g>255</g>
+  <b>255</b>
+ </bgcolor>
+ <bsbObject type="BSBKnob" version="2">
+  <objectName>P0</objectName>
+  <x>25</x>
+  <y>18</y>
+  <width>80</width>
+  <height>80</height>
+  <uuid>{fa06a4c9-d17f-43cf-9138-22437742aa1e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.57000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBKnob" version="2">
+  <objectName>P1</objectName>
+  <x>139</x>
+  <y>18</y>
+  <width>80</width>
+  <height>80</height>
+  <uuid>{c8218ac6-f35b-4dfc-80cd-143cf4e0942e}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>1.00000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBKnob" version="2">
+  <objectName>P2</objectName>
+  <x>240</x>
+  <y>30</y>
+  <width>80</width>
+  <height>80</height>
+  <uuid>{693d12d9-cecb-49aa-8dc3-70be95dca4aa}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.25000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBKnob" version="2">
+  <objectName>P3</objectName>
+  <x>360</x>
+  <y>36</y>
+  <width>80</width>
+  <height>80</height>
+  <uuid>{0eebf160-aef3-4f4c-b737-4156d1a85d4a}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.92000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBKnob" version="2">
+  <objectName>P4</objectName>
+  <x>42</x>
+  <y>153</y>
+  <width>80</width>
+  <height>80</height>
+  <uuid>{7e764715-0547-44ef-8d62-1d41f052384c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.86000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBKnob" version="2">
+  <objectName>P5</objectName>
+  <x>151</x>
+  <y>161</y>
+  <width>80</width>
+  <height>80</height>
+  <uuid>{d45c3f79-5d44-4eea-9def-3de790acb90c}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.89000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBKnob" version="2">
+  <objectName>P6</objectName>
+  <x>273</x>
+  <y>165</y>
+  <width>80</width>
+  <height>80</height>
+  <uuid>{608b01de-29f8-4892-8558-1d499cc1ad26}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.92000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+ <bsbObject type="BSBKnob" version="2">
+  <objectName>P7</objectName>
+  <x>381</x>
+  <y>166</y>
+  <width>80</width>
+  <height>80</height>
+  <uuid>{eab75137-4f40-4466-8d9e-f15947f311d1}</uuid>
+  <visible>true</visible>
+  <midichan>0</midichan>
+  <midicc>0</midicc>
+  <minimum>0.00000000</minimum>
+  <maximum>1.00000000</maximum>
+  <value>0.92000000</value>
+  <mode>lin</mode>
+  <mouseControl act="jump">continuous</mouseControl>
+  <resolution>0.01000000</resolution>
+  <randomizable group="0">false</randomizable>
+ </bsbObject>
+</bsbPanel>
+<bsbPresets>
+</bsbPresets>
