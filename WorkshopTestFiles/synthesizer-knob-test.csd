@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
-;-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024 
--odac
+-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024 
+;-odac
 </CsOptions>
 <CsInstruments>
 sr      = 44100
