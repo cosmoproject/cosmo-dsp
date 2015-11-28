@@ -23,7 +23,6 @@ instr 1
 	gaL, gaR Lowpass_Stereo gaL, gaR, 3000
 	gaL, gaR Reverb gaL, gaR, 0.98
 	
-
 	outs gaL, gaR  
 
 	endin
