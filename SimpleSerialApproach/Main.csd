@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
-;-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B512
--odac -iadc0
+-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B512
+;-odac -iadc0
 </CsOptions>
 <CsInstruments>
 sr      = 44100
@@ -10,8 +10,8 @@ ksmps  	= 32
 nchnls 	= 2
 
 giSine ftgen 0, 0, 4096, 10, 1
-#include "UDOs/reverb.csd"
-#include "UDOs/lowpass.csd"
+#include "UDOs/Reverb.csd"
+#include "UDOs/Lowpass.csd"
 
 instr 1 
 	#include "includes/adc_channels.inc"
