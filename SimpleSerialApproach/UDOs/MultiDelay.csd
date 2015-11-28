@@ -31,10 +31,8 @@ opcode MultiDelay_Stereo, aa, aakkkkk
 		ad2 	deltap3 adlytime * 1.5
 		ad3 	deltap3 adlytime * 4
 		aDlyL = ad1 + (ad2 * 0.6) + (ad3 * 0.4)
-		gkled3 = 1
 	else
 		aDlyL = ad1
-		gkled3 = 0
 	endif
 	aFeedL tone aDlyL, kcutoff
 

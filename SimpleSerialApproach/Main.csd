@@ -21,10 +21,13 @@ instr 1
 
 	gaL, gaR ins
 
-	gaL, gaR Reverb gaL, gaR, gkpot1
-	gaL, gaR SquareMod gaL, gaR, gkpot0, 1
+	kgain = 10
+	gaL = gaL * kgain
+	gaR = gaR * kgain
 
-	gaL, gaR MultiDelay_Stereo gaL, gaR, gkswitch0, gkpot5, gkpot6, 0.6, 0.5
+	gaL, gaR Reverb gaL, gaR, gkpot1, gkswitch0
+
+	gaL, gaR MultiDelay_Stereo gaL, gaR, gkswitch3, gkpot5, gkpot6, 0.6, gkswitch2
 
 	if (gkswitch0 == 1) then
 		gkled0 = 1
@@ -32,11 +35,31 @@ instr 1
 		gkled0 = 0
 	endif
 
+	if (gkswitch1 == 1) then
+		gkled1 = 1
+	elseif (gkswitch1 == 0) then
+		gkled1 = 0
+	endif
+
+	if (gkswitch2 == 1) then
+		gkled2 = 1
+	elseif (gkswitch2 == 0) then
+		gkled2 = 0
+	endif
+
+	if (gkswitch3 == 1) then
+		gkled3 = 1
+	elseif (gkswitch3 == 0) then
+		gkled3 = 0
+	endif
+
+	gaL, gaR SquareMod gaL, gaR, gkpot0, gkswitch1
+
 	gaL, gaR Lowpass_Stereo gaL, gaR, gkpot2, gkpot4
 
 	gaL, gaR Reverb gaL, gaR, 0.8, 0.8, 0.3
 	
-	outs gaL*3, gaR*3  
+	outs gaL, gaR 
 
 endin
 
