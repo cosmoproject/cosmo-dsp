@@ -35,3 +35,4 @@ opcode SquareMod, aa, aakk
 	aoutR = (ainR * (1-kMix)) + (aFXR * kMix) 
 	xout aoutL, aoutR
 endop
+

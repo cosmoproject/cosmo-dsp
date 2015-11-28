@@ -1,31 +1,32 @@
-opcode MultiDelay_Stereo
+opcode MultiDelay_Stereo, aa, aakkkkk
 	ainL, ainR, kmultitap, kdlytime, kfeed, kcutoff, kDly_Mix xin
 
 	kfeed scale kfeed, 1, 0
 	Sfb sprintfk "Feedback: %f", kfeed
 		puts Sfb, kfeed+1  
 
-	kdlytime expcurve kdlytime, 30
-	kdlytime scale kdlytime, 800, 1
+	kdlytime expcurve kdlytime, 10
+	kdlytime scale kdlytime, 1000, 1
 	Scut sprintfk "Delay time: %dms", kdlytime
 		puts Scut, kdlytime
 
 	kdlytime port kdlytime, 0.7
 	adlytime interp kdlytime / 1000 
 
-	kcutoff logcurve kcutoff, 0.05
+	;kcutoff logcurve kcutoff, 0.05
 	kcutoff scale kcutoff, 12000, 500
 	Slpf sprintfk "Dly Feed LPF Cutoff: %d", kcutoff
 		puts Slpf, kcutoff
 
 	kDly_Mix scale kDly_Mix, 1, 0
-	Srev sprintfk "Reverb Mix: %f", kDly_Mix
+	Srev sprintfk "Delay Mix: %f", kDly_Mix
 		puts Srev, kDly_Mix+1 
 
 	; Delay code
 
-	adL 	delayr 4 ; Left delay time in seconds
-	ad1 	deltap3 adlytime
+	abufL	delayr 4 ; Left delay time in seconds
+	ad1 	deltap3 adlytime 
+
 	if (kmultitap == 1) then 
 		ad2 	deltap3 adlytime * 1.5
 		ad3 	deltap3 adlytime * 4
@@ -40,8 +41,8 @@ opcode MultiDelay_Stereo
 
 	;printk2 gkswitch3
 
-	adR 	delayr 3 ; Right delay time in seconds
-	ad4		deltap3 adlytime 
+	abufR 	delayr 3 ; Right delay time in seconds
+	ad4		deltap3 adlytime
 	if (kmultitap == 1) then 
 		ad5 	deltap3 adlytime * 2
 		ad6 	deltap3 adlytime * 3
@@ -53,8 +54,8 @@ opcode MultiDelay_Stereo
 
 
 
-			delayw aR + (aFeedL * kfeed)
-			delayw aL + (aFeedR * kfeed)
+			delayw ainR + (aFeedL * kfeed)
+			delayw ainL + (aFeedR * kfeed)
 
 	;----------------------
 

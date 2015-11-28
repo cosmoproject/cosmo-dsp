@@ -117,7 +117,19 @@ instr 2
     puts Sfreq, kfreq+1  
   kfreq portk kfreq, 0.1
 
-  a1 poscil 0.2, kfreq 
+  irelease = 0.3
+  iamp = 0.2
+  xtratim irelease
+  krel init 0
+  krel release
+  if (krel == 1) kgoto rel
+    kamp = iamp
+    kgoto done 
+  rel:
+    kamp linseg iamp, irelease, 0
+  done:
+
+  a1 poscil kamp, kfreq 
 
   outs a1, a1
 endin
@@ -128,7 +140,19 @@ instr 3
     puts Sfreq, kfreq+1  
   kfreq portk kfreq, 0.1
 
-  a1 poscil 0.2, kfreq 
+  irelease = 0.3
+  iamp = 0.2
+  xtratim irelease
+  krel init 0
+  krel release
+  if (krel == 1) kgoto rel
+    kamp = iamp
+    kgoto done 
+  rel:
+    kamp linseg iamp, irelease, 0
+  done:
+
+  a1 poscil kamp, kfreq 
 
   outs a1, a1
 endin
@@ -139,7 +163,19 @@ instr 4
     puts Sfreq, kfreq+1  
   kfreq portk kfreq, 0.1
 
-  a1 poscil 0.2, kfreq 
+  irelease = 0.3
+  iamp = 0.2
+  xtratim irelease
+  krel init 0
+  krel release
+  if (krel == 1) kgoto rel
+    kamp = iamp
+    kgoto done 
+  rel:
+    kamp linseg iamp, irelease, 0
+  done:
+
+  a1 poscil kamp, kfreq 
 
   outs a1, a1
 endin
@@ -150,7 +186,19 @@ instr 5
     puts Sfreq, kfreq+1  
   kfreq portk kfreq, 0.1
 
-  a1 poscil 0.2, kfreq 
+  irelease = 0.3
+  iamp = 0.2
+  xtratim irelease
+  krel init 0
+  krel release
+  if (krel == 1) kgoto rel
+    kamp = iamp
+    kgoto done 
+  rel:
+    kamp linseg iamp, irelease, 0
+  done:
+
+  a1 poscil kamp, kfreq 
 
   outs a1, a1
 endin
@@ -166,170 +214,3 @@ i1 0 86400
 
 
 
-
-
-<bsbPanel>
- <label>Widgets</label>
- <objectName/>
- <x>914</x>
- <y>515</y>
- <width>462</width>
- <height>154</height>
- <visible>true</visible>
- <uuid/>
- <bgcolor mode="nobackground">
-  <r>255</r>
-  <g>255</g>
-  <b>255</b>
- </bgcolor>
- <bsbObject type="BSBButton" version="2">
-  <objectName>M0</objectName>
-  <x>20</x>
-  <y>107</y>
-  <width>100</width>
-  <height>30</height>
-  <uuid>{a7bda10e-dcb6-4281-a438-d8fba050b6e1}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <type>value</type>
-  <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
-  <text>Switch0	</text>
-  <image>/</image>
-  <eventLine/>
-  <latch>true</latch>
-  <latched>false</latched>
- </bsbObject>
- <bsbObject type="BSBButton" version="2">
-  <objectName>M1</objectName>
-  <x>128</x>
-  <y>107</y>
-  <width>100</width>
-  <height>30</height>
-  <uuid>{2fbb4f2f-f001-4d35-9111-f1fa185c1223}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <type>value</type>
-  <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
-  <text>Switch1</text>
-  <image>/</image>
-  <eventLine/>
-  <latch>true</latch>
-  <latched>false</latched>
- </bsbObject>
- <bsbObject type="BSBButton" version="2">
-  <objectName>M2</objectName>
-  <x>233</x>
-  <y>107</y>
-  <width>100</width>
-  <height>30</height>
-  <uuid>{7c31a1b1-cb68-4ddb-b656-243ed7f2f8b2}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <type>value</type>
-  <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
-  <text>Switch2</text>
-  <image>/</image>
-  <eventLine/>
-  <latch>true</latch>
-  <latched>false</latched>
- </bsbObject>
- <bsbObject type="BSBButton" version="2">
-  <objectName>M3</objectName>
-  <x>337</x>
-  <y>106</y>
-  <width>100</width>
-  <height>30</height>
-  <uuid>{f05d8717-9d71-42e3-81aa-06de34aefa11}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <type>value</type>
-  <pressedValue>1.00000000</pressedValue>
-  <stringvalue/>
-  <text>Switch3</text>
-  <image>/</image>
-  <eventLine>i1 0 10</eventLine>
-  <latch>true</latch>
-  <latched>false</latched>
- </bsbObject>
- <bsbObject type="BSBKnob" version="2">
-  <objectName>P0</objectName>
-  <x>32</x>
-  <y>21</y>
-  <width>80</width>
-  <height>80</height>
-  <uuid>{fe8fc880-037c-4d78-a0d6-e6145291d3ca}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <minimum>0.00000000</minimum>
-  <maximum>1.00000000</maximum>
-  <value>0.55000000</value>
-  <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
-  <resolution>0.01000000</resolution>
-  <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject type="BSBKnob" version="2">
-  <objectName>P1</objectName>
-  <x>136</x>
-  <y>20</y>
-  <width>80</width>
-  <height>80</height>
-  <uuid>{d15fa49c-23c4-491b-a9f8-adbd4c7950dd}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <minimum>0.00000000</minimum>
-  <maximum>1.00000000</maximum>
-  <value>0.14000000</value>
-  <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
-  <resolution>0.01000000</resolution>
-  <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject type="BSBKnob" version="2">
-  <objectName>P2</objectName>
-  <x>240</x>
-  <y>20</y>
-  <width>80</width>
-  <height>80</height>
-  <uuid>{8b4b0930-0c43-47ab-b25e-2b97297e2706}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <minimum>0.00000000</minimum>
-  <maximum>1.00000000</maximum>
-  <value>0.65000000</value>
-  <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
-  <resolution>0.01000000</resolution>
-  <randomizable group="0">false</randomizable>
- </bsbObject>
- <bsbObject type="BSBKnob" version="2">
-  <objectName>P3</objectName>
-  <x>345</x>
-  <y>19</y>
-  <width>80</width>
-  <height>80</height>
-  <uuid>{451da4ce-3756-4586-8466-f30d87796dd3}</uuid>
-  <visible>true</visible>
-  <midichan>0</midichan>
-  <midicc>0</midicc>
-  <minimum>0.00000000</minimum>
-  <maximum>1.00000000</maximum>
-  <value>0.59000000</value>
-  <mode>lin</mode>
-  <mouseControl act="jump">continuous</mouseControl>
-  <resolution>0.01000000</resolution>
-  <randomizable group="0">false</randomizable>
- </bsbObject>
-</bsbPanel>
-<bsbPresets>
-</bsbPresets>
