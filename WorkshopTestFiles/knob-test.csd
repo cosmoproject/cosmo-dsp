@@ -94,10 +94,10 @@ i1 0 86400
 <bsbPanel>
  <label>Widgets</label>
  <objectName/>
- <x>795</x>
- <y>186</y>
- <width>458</width>
- <height>240</height>
+ <x>944</x>
+ <y>155</y>
+ <width>422</width>
+ <height>206</height>
  <visible>true</visible>
  <uuid/>
  <bgcolor mode="nobackground">
@@ -107,8 +107,8 @@ i1 0 86400
  </bgcolor>
  <bsbObject type="BSBKnob" version="2">
   <objectName>P0</objectName>
-  <x>25</x>
-  <y>18</y>
+  <x>23</x>
+  <y>17</y>
   <width>80</width>
   <height>80</height>
   <uuid>{fa06a4c9-d17f-43cf-9138-22437742aa1e}</uuid>
@@ -117,7 +117,7 @@ i1 0 86400
   <midicc>0</midicc>
   <minimum>0.00000000</minimum>
   <maximum>1.00000000</maximum>
-  <value>0.57000000</value>
+  <value>0.34000000</value>
   <mode>lin</mode>
   <mouseControl act="jump">continuous</mouseControl>
   <resolution>0.01000000</resolution>
@@ -125,8 +125,8 @@ i1 0 86400
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>P1</objectName>
-  <x>139</x>
-  <y>18</y>
+  <x>124</x>
+  <y>17</y>
   <width>80</width>
   <height>80</height>
   <uuid>{c8218ac6-f35b-4dfc-80cd-143cf4e0942e}</uuid>
@@ -143,8 +143,8 @@ i1 0 86400
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>P2</objectName>
-  <x>240</x>
-  <y>30</y>
+  <x>221</x>
+  <y>16</y>
   <width>80</width>
   <height>80</height>
   <uuid>{693d12d9-cecb-49aa-8dc3-70be95dca4aa}</uuid>
@@ -161,8 +161,8 @@ i1 0 86400
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>P3</objectName>
-  <x>360</x>
-  <y>36</y>
+  <x>314</x>
+  <y>16</y>
   <width>80</width>
   <height>80</height>
   <uuid>{0eebf160-aef3-4f4c-b737-4156d1a85d4a}</uuid>
@@ -179,8 +179,8 @@ i1 0 86400
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>P4</objectName>
-  <x>42</x>
-  <y>153</y>
+  <x>24</x>
+  <y>106</y>
   <width>80</width>
   <height>80</height>
   <uuid>{7e764715-0547-44ef-8d62-1d41f052384c}</uuid>
@@ -197,8 +197,8 @@ i1 0 86400
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>P5</objectName>
-  <x>151</x>
-  <y>161</y>
+  <x>125</x>
+  <y>106</y>
   <width>80</width>
   <height>80</height>
   <uuid>{d45c3f79-5d44-4eea-9def-3de790acb90c}</uuid>
@@ -215,8 +215,8 @@ i1 0 86400
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>P6</objectName>
-  <x>273</x>
-  <y>165</y>
+  <x>221</x>
+  <y>107</y>
   <width>80</width>
   <height>80</height>
   <uuid>{608b01de-29f8-4892-8558-1d499cc1ad26}</uuid>
@@ -233,8 +233,8 @@ i1 0 86400
  </bsbObject>
  <bsbObject type="BSBKnob" version="2">
   <objectName>P7</objectName>
-  <x>381</x>
-  <y>166</y>
+  <x>314</x>
+  <y>107</y>
   <width>80</width>
   <height>80</height>
   <uuid>{eab75137-4f40-4466-8d9e-f15947f311d1}</uuid>
