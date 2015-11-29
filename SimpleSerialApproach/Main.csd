@@ -5,7 +5,7 @@
 </CsOptions>
 <CsInstruments>
 sr      = 44100
-ksmps  	= 32
+ksmps  	= 64
 0dbfs	= 1
 nchnls 	= 2
 
@@ -18,48 +18,33 @@ giSine ftgen 0, 0, 4096, 10, 1
 instr 1 
 	#include "includes/adc_channels.inc"
 	#include "includes/gpio_channels.inc"
+	#include "includes/switch2led.inc"
 
 	gaL, gaR ins
 
-	kgain = 10
-	gaL = gaL * kgain
-	gaR = gaR * kgain
+	kPreGain = 1
+	kPostGain = 2
 
-	gaL, gaR Reverb gaL, gaR, gkpot1, gkswitch0
+	gaL compress gaL, gaL, -20, 40, 60, 30, 0.1, 0.5, 0.02
+	gaR compress gaR, gaR, -20, 40, 60, 30, 0.1, 0.5, 0.02
 
-	gaL, gaR MultiDelay_Stereo gaL, gaR, gkswitch3, gkpot5, gkpot6, 0.6, gkswitch2
+	gaL pareq gaL, 1500, 6, 0.7, 2
+	gaR pareq gaR, 1500, 6, 0.7, 2
 
-	if (gkswitch0 == 1) then
-		gkled0 = 1
-	elseif (gkswitch0 == 0) then
-		gkled0 = 0
-	endif
+	gaL = gaL * kPreGain
+	gaR = gaR * kPreGain
 
-	if (gkswitch1 == 1) then
-		gkled1 = 1
-	elseif (gkswitch1 == 0) then
-		gkled1 = 0
-	endif
+	gaL tone gaL, 8000
+	gaR tone gaR, 8000
 
-	if (gkswitch2 == 1) then
-		gkled2 = 1
-	elseif (gkswitch2 == 0) then
-		gkled2 = 0
-	endif
+		gadlyL, gadlyR MultiDelay_Stereo gaL, gaR, gkswitch3, gkpot5, gkpot6, 1, gkswitch2*0.75
 
-	if (gkswitch3 == 1) then
-		gkled3 = 1
-	elseif (gkswitch3 == 0) then
-		gkled3 = 0
-	endif
-
-	gaL, gaR SquareMod gaL, gaR, gkpot0, gkswitch1
-
-	gaL, gaR Lowpass_Stereo gaL, gaR, gkpot2, gkpot4
-
-	gaL, gaR Reverb gaL, gaR, 0.8, 0.8, 0.3
-	
-	outs gaL, gaR 
+		gaL, gaR Reverb gaL + gadlyL, gaR + gadlyR, gkpot1, gkswitch0
+		gaL, gaR SquareMod gaL, gaR, gkpot0, gkswitch1
+		gaL, gaR Lowpass_Stereo gaL, gaR, gkpot2, gkpot4
+		gaL, gaR Reverb gaL, gaR, 0.8, 0.8, 0.3
+		
+	outs (gaL + gadlyL) * kPostGain, (gaR + gadlyR) * kPostGain
 
 endin
 

@@ -24,6 +24,10 @@ opcode MultiDelay_Stereo, aa, aakkkkk
 
 	; Delay code
 
+	avDlyL vdelay3 ainL, adlytime, 1200
+	avDlyR vdelay3 ainR, adlytime, 1200
+
+
 	abufL	delayr 4 ; Left delay time in seconds
 	ad1 	deltap3 adlytime 
 
@@ -34,6 +38,7 @@ opcode MultiDelay_Stereo, aa, aakkkkk
 	else
 		aDlyL = ad1
 	endif
+	aDlyL = aDlyL + avDlyL
 	aFeedL tone aDlyL, kcutoff
 
 
@@ -48,6 +53,7 @@ opcode MultiDelay_Stereo, aa, aakkkkk
 	else
 		aDlyR = ad4
 	endif
+	aDlyR = aDlyR + avDlyR
 	aFeedR tone aDlyR, kcutoff
 
 
