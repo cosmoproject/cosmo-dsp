@@ -21,3 +21,27 @@
 	elseif (gkswitch3 == 0) then
 		gkled3 = 0
 	endif
+
+	if (gkswitch4 == 1) then
+		gkled4 = 1
+	elseif (gkswitch4 == 0) then
+		gkled4 = 0
+	endif
+
+	if (gkswitch5 == 1) then
+		gkled5 = 1
+	elseif (gkswitch5 == 0) then
+		gkled5 = 0
+	endif
+
+	if (gkswitch6 == 1) then
+		gkled6 = 1
+	elseif (gkswitch6 == 0) then
+		gkled6 = 0
+	endif
+
+	if (gkswitch7 == 1) then
+		gkled7 = 1
+	elseif (gkswitch7 == 0) then
+		gkled7 = 0
+	endif
