@@ -28,7 +28,6 @@ instr 1
 ;										bf 		bw	  gain   num     ksep    ksep2 sepmode scalemode
 	gaL, gaR ResonatorFollower gaL, gaR, gkpot0, gkpot1, 1,   gkpot2, gkpot3, gkpot4,   0,      2 
 
-
 	gadlyL, gadlyR TriggerDelay gaL, gaR, gkpot0, gkpot1, gkpot2, gkpot3, gkpot4, 1, 0.5, 1, gkpot5, gkpot6, gkpot7
 
 	gaL, gaR Reverb gaL, gaR, 0.8, 0.8, 0.3
@@ -53,9 +52,6 @@ instr 1
 	outs aOutL, aOutR
 
 endin
-
-endin
-
 
 </CsInstruments>
 <CsScore>
