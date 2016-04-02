@@ -49,6 +49,8 @@ nchnls = 2
 #include "UDOs/MultiDelay.csd"
 #include "UDOs/TriggerDelay.csd"
 #include "UDOs/Resonator.csd"
+#include "UDOs/LiveLooper.csd"
+#include "UDOs/Sine.csd"
 
 instr 1 
 	#include "includes/adc_channels.inc"
@@ -61,10 +63,35 @@ instr 1
 ;										bf 		bw	  gain   num     ksep    ksep2 sepmode scalemode
 	;gaL, gaR Resonator gaL, gaR, gkpot0, gkpot1, 1,   gkpot2, gkpot3, gkpot4,   0,      2 
 
-	gadlyL, gadlyR TriggerDelay gaL, gaR, gkpot0, gkpot1, gkpot2, gkpot3, gkpot4, 1, 0.5, 0.5, gkpot5, gkpot6, gkpot7
 
-	gaL, gaR Reverb gadlyL, gadlyR, 0.8, 0.8, 0.3
+;  ainL, ainR, kRecord, kStop, kStart, kDryLevel, kLoopLevel, kLoopMode, kCFDuration, kShape xin
 
+	; If rec, then stop playing
+	if trigger(gkswitch0, 0.5, 1) == 1then 
+		gkswitch2 = 1
+	endif
+
+	; if play then stop recording
+	if trigger(gkswitch1, 0.5, 1) == 1 then
+		gkswitch0 = 0
+	endif
+
+	; if stop then stop playing
+	if trigger(gkswitch2, 0.5, 1) == 1 then
+		gkswitch1 = 1
+	endif
+
+
+
+	gaLoopL, gaLoopR LiveLooper_Stereo gaL, gaR, gkswitch0, gkswitch1, gkswitch2, 0, 1, 1, 1, 0.5
+
+;	gadlyL, gadlyR TriggerDelay gaL, gaR, gkpot0, gkpot1, gkpot2, gkpot3, gkpot4, 1, 0.5, 0.5, gkpot5, gkpot6, gkpot7
+
+	gaL, gaR Reverb gaL, gaR, 0.8, 0.8, 0.3
+/*
+	gasin Sine 220
+	gaL = gaL + gasin
+*/
 ;	gaL = 0
 ;	gaR = 0
 
@@ -78,8 +105,12 @@ instr 1
 		gaL, gaR Lowpass_Stereo gaL, gaR, gkpot2, gkpot4
 		gaL, gaR Reverb gaL, gaR, 0.8, 0.8, 0.3
 */		
-	aOutL = (gaL + gadlyL)
-	aOutR = (gaR + gadlyR)
+	;aOutL = (gaL + gadlyL + gaLoopL)
+	;aOutR = (gaR + gadlyR + gaLoopR)
+
+	aOutL = (gaL+ gaLoopL)
+	aOutR = (gaR+ gaLoopR)
+	
 	;aOutL limit aOutL, 0.8, 0.95
 	;aOutR limit aOutR, 0.8, 0.95
 	outs aOutL, aOutR
