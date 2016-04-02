@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
 ;-odac2 -b128 -B256	-Ma	; realtime audio out
--odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024 --sched=99 -M0
+-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024 --sched=99 -+rtmidi=alsa -M hw:2
 </CsOptions>
 <CsInstruments>
 
