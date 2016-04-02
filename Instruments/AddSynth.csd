@@ -55,12 +55,7 @@ instr 10
 	;----------------------
 	; Synthesizer!
 	;----------------------
-
-	kOsc1running init 0
-	kOsc2running init 0
-	kOsc3running init 0
-	kOsc4running init 0
- 
+  
   iamp    ampmidi 0.2
   ifreq   cpsmidi
 

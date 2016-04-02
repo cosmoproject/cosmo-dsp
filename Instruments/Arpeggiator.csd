@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024 --sched=99 -+rtmidi=alsa -M hw:2 -m0
+-odac:hw:1,0 -d -+rtaudio=ALSA -b128 -B1024 --sched=99 -+rtmidi=alsa -M hw:2 
 </CsOptions>
 
 <CsInstruments>
@@ -9,6 +9,7 @@ sr 		= 	44100	;SAMPLE RATE
 ksmps 		= 	32	;NUMBER OF AUDIO SAMPLES IN EACH CONTROL CYCLE
 nchnls 		= 	2	;NUMBER OF CHANNELS (2=STEREO)
 0dbfs		=	1
+
 massign	0,0
 	
 ;Author: Iain McCurdy (2012)
@@ -72,48 +73,78 @@ endop
 ;This instrument needs to be last in order for the 'hold' function to work properly. I'm not sure why.
 instr	ScanWidgets
 	gkintvl		chnget	"intvl"
+	gkintvl init 7
 	gkcycles	chnget	"cycles"
+	gkcycles init 5
 	gktempo		chnget	"tempo"		;INTERNAL GUI CONTROL
-	gkbpm		chnget	"bpm"		;HOST TEMPO
-	gkClockSource	chnget	"ClockSource"	;CLOCK SOURCE SELECTOR SWITCH
-	if gkClockSource==1 then
-	 gktempo = gkbpm
-	else
-	 gktempo = gktempo
-	endif
+	gktempo init 120
+
 	gkCyUpDn	chnget	"CyUpDn"
+	gkCyUpDn init 1
 	gkTempoMlt	chnget	"TempoMlt"
+	gkTempoMlt init 3
+
 	gkhold		chnget	"hold"
-	gkhold = 0
+	gkhold init 0
 	gkmode		chnget	"mode"
+	gkmode init 1
+
 	gkswing		chnget	"swing"	
+	gkswing init 0.1
 	gkpause		chnget	"pause"
+	gkpause init 0
 	gkonoff		chnget	"onoff"
+	gkonoff init 1
 	gkAatt		chnget	"Aatt"
+	gkAatt init 0.001
 	gkAdec		chnget	"Adec"
+	gkAdec init 0.001
 	gkAsus		chnget	"Asus"
+	gkAsus init 1
 	gkArel		chnget	"Arel"
+	gkArel init 0.01
 	gkEnvAmt	chnget	"EnvAmt"
+	gkEnvAmt init 0.5
 	gkatt		chnget	"att"
+	gkatt init 0.001
 	gkdec		chnget	"dec"
+	gkdec init 0.5
 	gksus		chnget	"sus"
+	gksus init 0.5
 	gkrel		chnget	"rel"
+	gkrel init 0.1
 	gkres		chnget	"res"
+	gkres init 0.5
 	gkdist		chnget	"dist"
+	gkdist init 0
 	gkKybdTrk	chnget	"KybdTrk"
+	gkKybdTrk init 1
 	gkFiltType	chnget	"FiltType"
+	gkFiltType init 0
 	gkLFOdep	chnget	"LFOdep"
+	gkLFOdep init 0.15
 	gkLFOrate	chnget	"LFOrate"
+	gkLFOrate init 0.07
 	gkwave		chnget	"wave"
+	gkwave init 2
 	gkOctTrans	chnget	"OctTrans"
+	gkOctTrans init 4
 	gkSemiTrans	chnget	"SemiTrans"
+	gkSemiTrans init 11
 	gkNotePort	chnget	"NotePort"
+	gkNotePort init 0
 	gkSynLev	chnget	"SynLev"
+	gkSynLev init 0.3
 	gksubosc	chnget	"subosc"
+	gksubosc init 0
 	gkFShift	chnget	"FShift"	
+	gkFShift init 0
 	gkDryWet	chnget	"DryWet"
+	gkDryWet init 0.1
 	gkDlyTim	chnget	"DlyTim"
+	gkDlyTim init 4
 	gkDlyFB		chnget	"DlyFB"	
+	gkDlyFB init 0.5
 	gkZeroFS	chnget	"ZeroFS"
 	kzero		=	0
 	if changed(gkZeroFS)==1 then
