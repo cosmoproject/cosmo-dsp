@@ -1,8 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
-;-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B512
+-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B512
 ;-odac -iadc0 
--n -d -+rtmidi=NULL -M0 -m0d 
+;-n -d -+rtmidi=NULL -M0 -m0d 
 </CsOptions>
 <CsInstruments>
 sr      = 44100
@@ -23,14 +23,19 @@ instr 1
 	#include "includes/switch2led.inc"
 
 	gaL, gaR ins
+
+	kgain = 3
+
+	gaL *= kgain
+	gaR *= kgain
 	gadlyL = 0
 	gadlyR = 0
 ;										bf 		bw	  gain   num     ksep    ksep2 sepmode scalemode
 	gaL, gaR ResonatorFollower gaL, gaR, gkpot0, gkpot1, 1,   gkpot2, gkpot3, gkpot4,   0,      2 
 
-	gadlyL, gadlyR TriggerDelay gaL, gaR, gkpot0, gkpot1, gkpot2, gkpot3, gkpot4, 1, 0.5, 1, gkpot5, gkpot6, gkpot7
+;	gadlyL, gadlyR TriggerDelay gaL, gaR, gkpot0, gkpot1, gkpot2, gkpot3, gkpot4, 1, 0.5, 1, gkpot5, 0.8, 0.5
 
-	gaL, gaR Reverb gaL, gaR, 0.8, 0.8, 0.3
+	gaL, gaR Reverb gaL, gaR, gkpot0, gkpot1, gkpot2
 
 ;	gaL = 0
 ;	gaR = 0

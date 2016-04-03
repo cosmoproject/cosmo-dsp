@@ -1,12 +1,12 @@
-	if (gkswitch0 == 1) then
+	if (gktoggle0 == 1) then
 		gkled0 = 1
-	elseif (gkswitch0 == 0) then
+	elseif (gktoggle0 == 0) then
 		gkled0 = 0
 	endif
 
-	if (gkswitch1 == 1) then
+	if (gktoggle1 == 1) then
 		gkled1 = 1
-	elseif (gkswitch1 == 0) then
+	elseif (gktoggle1 == 0) then
 		gkled1 = 0
 	endif
 
