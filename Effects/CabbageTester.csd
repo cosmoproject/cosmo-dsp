@@ -33,7 +33,8 @@ checkbox bounds(304, 348, 82, 42), channel("L7")
 
 <CsoundSynthesizer>
 <CsOptions>
--n -d -+rtmidi=NULL -M0 -m0d 
+;-n -d -+rtmidi=NULL -M0 -m0d
+-d -n 
 </CsOptions>
 <CsInstruments>
 ; Initialize the global variables. 
@@ -50,7 +51,10 @@ nchnls = 2
 #include "UDOs/TriggerDelay.csd"
 #include "UDOs/Resonator.csd"
 #include "UDOs/LiveLooper.csd"
-#include "UDOs/Sine.csd"
+;#include "UDOs/Sine.csd"
+#include "UDOs/Chorus.csd"
+#include "UDOs/Reverse.csd"
+#include "UDOs/SineDelay.csd"
 
 instr 1 
 	#include "includes/adc_channels.inc"
@@ -83,11 +87,11 @@ instr 1
 
 
 
-	gaLoopL, gaLoopR LiveLooper_Stereo gaL, gaR, gkswitch0, gkswitch1, gkswitch2, 0, 1, 1, 1, 0.5
+	;gaLoopL, gaLoopR LiveLooper_Stereo gaL, gaR, gkswitch0, gkswitch1, gkswitch2, 0, 1, 1, 1, 0.5
 
 ;	gadlyL, gadlyR TriggerDelay gaL, gaR, gkpot0, gkpot1, gkpot2, gkpot3, gkpot4, 1, 0.5, 0.5, gkpot5, gkpot6, gkpot7
 
-	gaL, gaR Reverb gaL, gaR, 0.8, 0.8, 0.3
+	;gaL, gaR Reverb gaL, gaR, 0.8, 0.8, 0.3
 /*
 	gasin Sine 220
 	gaL = gaL + gasin
@@ -105,11 +109,21 @@ instr 1
 		gaL, gaR Lowpass_Stereo gaL, gaR, gkpot2, gkpot4
 		gaL, gaR Reverb gaL, gaR, 0.8, 0.8, 0.3
 */		
+;gaL, gaR Reverb gaL + gadlyL, gaR + gadlyR, gkpot1, gkswitch0
+;gaL, gaR SquareMod gaL, gaR, gkpot0, gkswitch1
+;gaL, gaR Chorus gaL, gaR, gkpot0
+gaL SineDelay gaL, gkpot0
+gaL Reverse gaL, 0.2
+gaL SquareMod gaL, 0.2
+;gaR SineDelay gaR, 0.4
 	;aOutL = (gaL + gadlyL + gaLoopL)
 	;aOutR = (gaR + gadlyR + gaLoopR)
 
-	aOutL = (gaL+ gaLoopL)
-	aOutR = (gaR+ gaLoopR)
+	;aOutL = (gaL+ gaLoopL)
+	;aOutR = (gaR+ gaLoopR)
+	
+	aOutL = gaL
+	aOutR = gaR
 	
 	;aOutL limit aOutL, 0.8, 0.95
 	;aOutR limit aOutR, 0.8, 0.95
