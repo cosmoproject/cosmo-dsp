@@ -26,11 +26,12 @@ opcode PartitionConv, aa, aak
 ; Larger values require less CPU but result in more latency.
 ; Smaller values produce lower latency but may cause -
 ; - realtime performance issues
-ipartitionsize	=	  256
+ipartitionsize	=	  8096
 
 aconvL	        pconvolve ainL, "../SoundFiles/ImpulseResponses/balance-mastering-teufelsberg-IR-01-44100-24bit.wav" ,ipartitionsize, 1
-aconvR	        pconvolve ainR, "../SoundFiles/ImpulseResponses/balance-mastering-teufelsberg-IR-01-44100-24bit.wav" ,ipartitionsize, 2
+;aconvR	        pconvolve ainR, "../SoundFiles/ImpulseResponses/balance-mastering-teufelsberg-IR-01-44100-24bit.wav" ,ipartitionsize, 2
 
+aconvR = aconvL
 ; create a delayed version of the input signal that will sync -
 ; - with convolution output
 
