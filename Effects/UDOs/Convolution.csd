@@ -26,7 +26,7 @@ opcode PartitionConv, aa, aak
 ; Larger values require less CPU but result in more latency.
 ; Smaller values produce lower latency but may cause -
 ; - realtime performance issues
-ipartitionsize	=	  8096
+ipartitionsize	=	  4096
 
 aconvL	        pconvolve ainL, "../SoundFiles/ImpulseResponses/Castello de Gualtieriis_ir1.wav" ,ipartitionsize
 ;aconvL	        pconvolve ainL, "../SoundFiles/ImpulseResponses/balance-mastering-teufelsberg-IR-01-44100-24bit.wav" ,ipartitionsize, 1

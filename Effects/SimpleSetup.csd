@@ -1,11 +1,11 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B512
-;-odac -iadc0
+-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b512 -B2048 -j4 --realtime
+;-odac -iadc0 -b128 -B512
 </CsOptions>
 <CsInstruments>
 sr      = 44100
-ksmps  	= 64
+ksmps  	= 128
 0dbfs	= 1
 nchnls 	= 2
 
