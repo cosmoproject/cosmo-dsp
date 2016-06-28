@@ -10,6 +10,7 @@ ksmps  	= 64
 nchnls 	= 2
 
 #include "UDOs/Reverb.csd"
+#include "UDOs/Convolution.csd"
 #include "UDOs/Lowpass.csd"
 
 instr 1 
@@ -20,9 +21,10 @@ instr 1
 	aL, aR ins
 
 	; Reverb arguments: decay, cutoff, mix
-	aL, aR Reverb aL, aR, gkpot0, gkpot1, gkswitch0
+	;aL, aR Reverb aL, aR, gkpot0, gkpot1, gkswitch0
+	aL, aR PartitionConv aL, aR, 1
 	; Lowpass_Stereo arguments: cutoff, resonance
-	aL, aR Lowpass_Stereo aL, aR, gkpot2, gkpot3
+	aL, aR Lowpass_Stereo aL, aR, 0.8, 0.5;gkpot2, gkpot3
 
 	outs aL, aR
 
