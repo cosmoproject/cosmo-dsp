@@ -28,7 +28,8 @@ opcode PartitionConv, aa, aak
 ; - realtime performance issues
 ipartitionsize	=	  8096
 
-aconvL	        pconvolve ainL, "../SoundFiles/ImpulseResponses/balance-mastering-teufelsberg-IR-01-44100-24bit.wav" ,ipartitionsize, 1
+aconvL	        pconvolve ainL, "../SoundFiles/ImpulseResponses/Castello de Gualtieriis_ir1.wav" ,ipartitionsize
+;aconvL	        pconvolve ainL, "../SoundFiles/ImpulseResponses/balance-mastering-teufelsberg-IR-01-44100-24bit.wav" ,ipartitionsize, 1
 ;aconvR	        pconvolve ainR, "../SoundFiles/ImpulseResponses/balance-mastering-teufelsberg-IR-01-44100-24bit.wav" ,ipartitionsize, 2
 
 aconvR = aconvL
