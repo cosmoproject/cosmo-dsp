@@ -23,7 +23,11 @@ opcode RandDelay, aa, aakkk					 ;  Rand_Delay
 	aWetL init 0
 	aWetR init 0
 
-	if kDryWet == 0 kgoto skipProc
+	if kDryWet == 0 then 
+		aWetL = 0
+		aWetR = 0
+		kgoto skipProc
+	endif
 
 	aPulse lfo 0.5, 3, 1
 	aPulse butlp aPulse, 100
