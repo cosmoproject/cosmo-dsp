@@ -20,6 +20,10 @@ opcode RandDelay, aa, aakkk					 ;  Rand_Delay
 	kRange init 5
 	kFeedback init 0.2
 	kDryWet init 0.5
+	aWetL init 0
+	aWetR init 0
+
+	if kDryWet == 0 kgoto skipProc
 
 	aPulse lfo 0.5, 3, 1
 	aPulse butlp aPulse, 100
@@ -38,8 +42,9 @@ opcode RandDelay, aa, aakkk					 ;  Rand_Delay
 	aDelayR delayr 1					;  a delayline, with 1 second maximum delay-time is initialised
 	aWetR	deltapi aRandomTimesR		; data at a flexible position is read from the delayline 
 		  delayw aInSigR+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
-	
-	
+
+skipProc:
+
 	aOutL ntrpol ainL, aWetL, kDryWet
 	aOutR ntrpol ainR, aWetR, kDryWet
 
