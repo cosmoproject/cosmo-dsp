@@ -9,67 +9,73 @@ ksmps  	= 64
 0dbfs	= 1
 nchnls 	= 2
 
+;#include "UDOs/Monobomb-UDO.csd"
 #include "../Effects/UDOs/Reverb.csd"
 #include "../Effects/UDOs/Lowpass.csd"
 #include "../Effects/UDOs/SolinaChorus.csd"
 
 
+;#include "Monobomb-inc.csd"
+
+massign 1, 2
+
+instr 10
+
+	icps cpsmidi
+	iamp ampmidi 0.8
+
+
+	a1 oscil iamp, icps
+
+	chnmix a1, "MasterL"
+	chnmix a1, "MasterR"
+endin
+
 instr 1
 
 	icps cpsmidi
-	iamp ampmidi 0.5
+	iamp ampmidi 1
 
-	
-	i_instrnum[] init 3
-	i_instrnum fillarray 3, 4, 2
+	; How does note on and off register?
 
-	/*
-	i_instrnum[0] nstrnum "StringSynth"
-	i_instrnum[1] nstrnum "SineSynth1"
-	i_instrnum[2] nstrnum "SineSynth2"
-	*/
+	ktrigIns init 1
+	instCount = 2
+	kinstrnum[] init instCount
+	kinstrnum fillarray 2, 3, 4
 
-	kndx init 0
-	ktrigger init 1
-
-
-	if (ktrigger == 1) then 
-;		event "i", 4, 0, -1, iamp, icps
-
-		until kndx == lenarray(i_instrnum) do
-			event "i", i_instrnum[kndx], 0, -1, iamp, icps
-			kndx += 1
+	if iamp > 0 && ktrigIns == 1 then
+		kx = 1
+		until kx >= instCount do 
+			event "i", kinstrnum[kx-1], 0, -1, iamp, icps
+			kx += 1
+			printk2 kinstrnum[kx-1]
 		od
-
+		ktrigIns = 0
 	endif
 
-	kNoteOff release
-
-	if kNoteOff == 1 then
-;		event "i", -4, 0, 1
-
-		kndx = 0
-		until kndx == lenarray(i_instrnum) do
-			event "i", -i_instrnum[kndx], 0, 1
-			kndx += 1
-
-		od 
-
+	krel release 
+	if krel == 1 then
+		kx = 1
+		until kx >= instCount do 
+			event "i", -kinstrnum[kx-1], 0, 1, iamp, icps
+			kx += 1
+		od
 	endif
-
-	ktrigger = 0
+	
 
 endin
 
 
-instr 2, StringSynth
+instr 2
 
-	iamp = ampdbfs(p4)
-	icps = p5
+	;iamp = ampdbfs(p4)
+	;ipch = p5
 
+	ipch cpsmidi
+	iamp ampmidi 0.8
 
 	ampenv = madsr:a(1, 0.1, 0.95, 0.5)
-	asig = vco2(0.5, icps)
+	asig = vco2(0.5, ipch)
 	asig = moogladder(asig, 6000, 0.1)
 
 	asig *= ampenv * iamp 
@@ -81,34 +87,22 @@ instr 2, StringSynth
 
 endin
 
-instr 3, SineSynth1
+instr 3
 
-	iamp = ampdbfs(p4)
-	icps = p5
+	a1 oscil p4, p5
 
-	ampenv = madsr:a(1, 0.1, 0.95, 0.5)
-	a1 oscil 0.5, icps
-
-	a1 *= ampenv * iamp 
-
-	chnmix a1, "MasterL"
+	;chnmix a1, "MasterL"
 	chnmix a1, "MasterR"
 
 endin
 
 
-instr 4, SineSynth2
+instr 4
 
-	iamp = ampdbfs(p4)
-	icps = p5
-
-	ampenv = madsr:a(1, 0.1, 0.95, 0.5)
-	a1 oscil 0.5, icps * 1.5
-
-	a1 *= ampenv * iamp 
+	a1 oscil p4, p5*1.5
 
 	chnmix a1, "MasterL"
-	chnmix a1, "MasterR"
+	;chnmix a1, "MasterR"
 
 endin
 
@@ -126,7 +120,6 @@ instr 99
 	chnset a0, "MasterL"
 	chnset a0, "MasterR"
 
-/*
 	aL solina_chorus aL, 0.18, 0.6, 6, 0.2
 	aR solina_chorus aR, 0.18, 0.6, 6, 0.2
 
@@ -138,7 +131,7 @@ instr 99
 
 	; Lowpass_Stereo arguments: cutoff, resonance
 	;aL, aR Lowpass_Stereo aL, aR, gkpot2, gkpot3
-*/
+
 	outs aL, aR
 
 endin
