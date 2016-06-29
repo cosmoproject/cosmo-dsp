@@ -14,61 +14,17 @@ nchnls 	= 2
 #include "../Effects/UDOs/SolinaChorus.csd"
 
 
+opcode MarimbaEmulator, a, ii
+iAmplitude, iFrequency xin
+;iAmplitude = ampdb(iAmplitude)
+aEnvelope = transeg:a(iAmplitude, 0.5, -6, 0)
+aOut = oscil:a(aEnvelope, iFrequency, -1)
+xout aOut
+endop
 
+opcode StringSynth, 0, ii
 
-instr 1
-
-	iamp ampmidi 0.5
-	icps cpsmidi
-
-	
-	i_instrnum[] init 3
-	i_instrnum fillarray 3, 4, 2
-
-	/*
-	i_instrnum[0] nstrnum "StringSynth"
-	i_instrnum[1] nstrnum "SineSynth1"
-	i_instrnum[2] nstrnum "SineSynth2"
-	*/
-
-
-	kndx init 0
-	ktrigger init 1
-
-	if (ktrigger == 1) then 
-;		event "i", 4, 0, -1, iamp, icps
-
-		until kndx == lenarray(i_instrnum) do
-			event "i", i_instrnum[kndx], 0, -1, iamp, icps
-			kndx += 1
-		od
-
-	endif
-
-	kNoteOff = 0; release
-
-
-	if kNoteOff == 1 then
-;		event "i", -4, 0, 1
-
-		kndx = 0
-		until kndx == lenarray(i_instrnum) do
-			event "i", -i_instrnum[kndx], 0, 1
-			kndx += 1
-
-		od 
-
-	endif
-
-	ktrigger = 0
-
-endin
-
-
-instr 2, StringSynth
-
-	iamp = ampdbfs(p4)
-	icps = p5
+iamp, icps xin
 
 
 	ampenv = madsr:a(1, 0.1, 0.95, 0.5)
@@ -82,12 +38,12 @@ instr 2, StringSynth
 	chnmix aL, "MasterL"
 	chnmix aR, "MasterR"
 
-endin
+endop
 
-instr 3, SineSynth1
 
-	iamp = ampdbfs(p4)
-	icps = p5
+opcode SineSynth1, 0, ii
+
+	iamp, icps xin
 
 	ampenv = madsr:a(1, 0.1, 0.95, 0.5)
 	a1 oscil 0.5, icps
@@ -96,22 +52,27 @@ instr 3, SineSynth1
 
 	chnmix a1, "MasterL"
 	chnmix a1, "MasterR"
+endop
 
-endin
 
+instr 1
 
-instr 4, SineSynth2
+	iamp ampmidi 0.3
+	icps cpsmidi
+	kNoteOff = 0; release
 
-	iamp = ampdbfs(p4)
-	icps = p5
+	aL init 0
+	aR init 0
 
-	ampenv = madsr:a(1, 0.1, 0.95, 0.5)
-	a1 oscil 0.5, icps * 1.5
-
-	a1 *= ampenv * iamp 
-
-	chnmix a1, "MasterL"
-	chnmix a1, "MasterR"
+	if kNoteOff == 0 then
+		StringSynth iamp, icps	
+		SineSynth1 iamp, icps
+		SineSynth1 iamp, icps*1.5
+	else
+		StringSynth 0, 0			
+		SineSynth1 0, 0					
+		SineSynth1 0, 0 
+	endif 
 
 endin
 

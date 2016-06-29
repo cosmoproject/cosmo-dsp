@@ -17,6 +17,10 @@ nchnls 	= 2
 #include "UDOs/TriggerDelay.csd"
 #include "UDOs/Resonator.csd"
 
+#include "UDOs/Reverse.csd"
+#include "UDOs/RandDelay.csd"
+#include "UDOs/Blur.csd"
+
 instr 1 
 	#include "includes/adc_channels.inc"
 	#include "includes/gpio_channels.inc"
@@ -30,12 +34,26 @@ instr 1
 	gaR *= kgain
 	gadlyL = 0
 	gadlyR = 0
-;										bf 		bw	  gain   num     ksep    ksep2 sepmode scalemode
-	gaL, gaR ResonatorFollower gaL, gaR, gkpot0, gkpot1, 1,   gkpot2, gkpot3, gkpot4,   0,      2 
+
+
+
+	; Lowpass arguments: cutoff, resonance
+	aL, aR Lowpass aL, aR, 0.6, 0.7, 0.5 ;gkpot2, gkpot3
+
+	; RandDelay arguments: range, feedback, mix
+	aL, aR RandDelay aL, aR, 0.1, 0.9, 0.9 
+
+	; Revers arguments: time
+	aL, aR Reverse aL, aR, 0.8
+
+;	ResoFollow arguments: bf, bw, gain, num, ksep, ksep2, epmod, scalemode
+;	gaL, gaR ResonatorFollower gaL, gaR, gkpot0, gkpot1, 1,   gkpot2, gkpot3, gkpot4,   0,      2 
+
 
 ;	gadlyL, gadlyR TriggerDelay gaL, gaR, gkpot0, gkpot1, gkpot2, gkpot3, gkpot4, 1, 0.5, 1, gkpot5, 0.8, 0.5
 
-	gaL, gaR Reverb gaL, gaR, gkpot0, gkpot1, gkpot2
+	; Reverb arguments: decay, cutoff, mix
+	;gaL, gaR Reverb gaL, gaR, gkpot0, gkpot1, gkpot2
 
 ;	gaL = 0
 ;	gaR = 0
@@ -43,7 +61,7 @@ instr 1
 
 
 /*
-		gadlyL, gadlyR MultiDelay_Stereo gaL, gaR, gkswitch3, gkpot5, gkpot6, 1, gkswitch2
+		gadlyL, gadlyR MultiDelay gaL, gaR, gkswitch3, gkpot5, gkpot6, 1, gkswitch2
 
 		gaL, gaR Reverb gaL + gadlyL, gaR + gadlyR, gkpot1, gkswitch0
 		gaL, gaR SquareMod gaL, gaR, gkpot0, gkswitch1
@@ -52,8 +70,10 @@ instr 1
 */		
 	aOutL = (gaL + gadlyL)
 	aOutR = (gaR + gadlyR)
+
 	;aOutL limit aOutL, 0.8, 0.95
 	;aOutR limit aOutR, 0.8, 0.95
+	
 	outs aOutL, aOutR
 
 endin

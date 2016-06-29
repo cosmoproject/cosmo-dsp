@@ -1,13 +1,13 @@
-opcode MultiDelay_Stereo, aa, aakkkkk
+opcode MultiDelay, aa, aakkkkk
 	ainL, ainR, kmultitap, kdlytime, kfeed, kcutoff, kDly_Mix xin
 
 	kfeed scale kfeed, 1, 0
-	Sfb sprintfk "Feedback: %f", kfeed
+	Sfb sprintfk "MultiDly Feedback: %f", kfeed
 		puts Sfb, kfeed+1  
 
 	kdlytime expcurve kdlytime, 10
 	kdlytime scale kdlytime, 1000, 1
-	Scut sprintfk "Delay time: %dms", kdlytime
+	Scut sprintfk "MultiDly time: %dms", kdlytime
 		puts Scut, kdlytime
 
 	kdlytime port kdlytime, 0.7
@@ -15,11 +15,11 @@ opcode MultiDelay_Stereo, aa, aakkkkk
 
 	;kcutoff logcurve kcutoff, 0.05
 	kcutoff scale kcutoff, 12000, 500
-	Slpf sprintfk "Dly Feed LPF Cutoff: %d", kcutoff
+	Slpf sprintfk "MultiDly Feed LPF Cutoff: %d", kcutoff
 		puts Slpf, kcutoff
 
 	kDly_Mix scale kDly_Mix, 1, 0
-	Srev sprintfk "Delay Mix: %f", kDly_Mix
+	Srev sprintfk "MultiDly Mix: %f", kDly_Mix
 		puts Srev, kDly_Mix+1 
 
 	; Delay code
