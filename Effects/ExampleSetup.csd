@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B512
+-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B512 -j4
 ;-odac -iadc0 
 ;-n -d -+rtmidi=NULL -M0 -m0d 
 </CsOptions>
@@ -26,53 +26,57 @@ instr 1
 	#include "includes/gpio_channels.inc"
 	#include "includes/switch2led.inc"
 
-	gaL, gaR ins
+	aL, aR ins
 
-	kgain = 3
+	;kgain = 3
 
-	gaL *= kgain
-	gaR *= kgain
-	gadlyL = 0
-	gadlyR = 0
+	;aL *= kgain
+	;aR *= kgain
+	adlyL = 0
+	adlyR = 0
 
 
+	gkpot6 = gkpot6 < 0.5 ? 0 : 1
 
 	; Lowpass arguments: cutoff, resonance
-	aL, aR Lowpass aL, aR, 0.6, 0.7, 0.5 ;gkpot2, gkpot3
+	aL, aR Lowpass aL, aR, gkpot3, 0.7, 0.5 ;gkpot2, gkpot3
 
 	; RandDelay arguments: range, feedback, mix
-	aL, aR RandDelay aL, aR, 0.1, 0.9, 0.9 
+	aL, aR RandDelay aL, aR, gkpot4, gkpot1, gkpot6 
 
 	; Revers arguments: time
-	aL, aR Reverse aL, aR, 0.8
+	;aL, aR Reverse aL, aR, gkpot5
 
 ;	ResoFollow arguments: bf, bw, gain, num, ksep, ksep2, epmod, scalemode
-;	gaL, gaR ResonatorFollower gaL, gaR, gkpot0, gkpot1, 1,   gkpot2, gkpot3, gkpot4,   0,      2 
+;	aL, aR ResonatorFollower aL, aR, gkpot0, gkpot1, 1,   gkpot2, gkpot3, gkpot4,   0,      2 
 
 
-;	gadlyL, gadlyR TriggerDelay gaL, gaR, gkpot0, gkpot1, gkpot2, gkpot3, gkpot4, 1, 0.5, 1, gkpot5, 0.8, 0.5
+;	adlyL, adlyR TriggerDelay aL, aR, gkpot0, gkpot1, gkpot2, gkpot3, gkpot4, 1, 0.5, 1, gkpot5, 0.8, 0.5
 
 	; Reverb arguments: decay, cutoff, mix
-	;gaL, gaR Reverb gaL, gaR, gkpot0, gkpot1, gkpot2
+	aL, aR Reverb aL, aR, gkpot0, 0.5, gkswitch3
 
-;	gaL = 0
-;	gaR = 0
+;	aL = 0
+;	aR = 0
 
 
 
 /*
-		gadlyL, gadlyR MultiDelay gaL, gaR, gkswitch3, gkpot5, gkpot6, 1, gkswitch2
+		adlyL, adlyR MultiDelay aL, aR, gkswitch3, gkpot5, gkpot6, 1, gkswitch2
 
-		gaL, gaR Reverb gaL + gadlyL, gaR + gadlyR, gkpot1, gkswitch0
-		gaL, gaR SquareMod gaL, gaR, gkpot0, gkswitch1
-		gaL, gaR Lowpass_Stereo gaL, gaR, gkpot2, gkpot4
-		gaL, gaR Reverb gaL, gaR, 0.8, 0.8, 0.3
+		aL, aR Reverb aL + adlyL, aR + adlyR, gkpot1, gkswitch0
+		aL, aR SquareMod aL, aR, gkpot0, gkswitch1
+		aL, aR Lowpass_Stereo aL, aR, gkpot2, gkpot4
+		aL, aR Reverb aL, aR, 0.8, 0.8, 0.3
 */		
-	aOutL = (gaL + gadlyL)
-	aOutR = (gaR + gadlyR)
+	aOutL = (aL + adlyL)
+	aOutR = (aR + adlyR)
 
 	;aOutL limit aOutL, 0.8, 0.95
 	;aOutR limit aOutR, 0.8, 0.95
+
+	; IF MONO OUT
+	aOutL = aOutL + aOutR 
 	
 	outs aOutL, aOutR
 
