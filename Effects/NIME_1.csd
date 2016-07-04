@@ -49,36 +49,70 @@ instr 1
 	gkpot6 = gkpot6 < 0.5 ? 0 : 1
 
 	; Lowpass arguments: cutoff, resonance
-	aL, aR Lowpass aL, aR, gkpot3, 0.7, 0.5 ;gkpot2, gkpot3
+	aL, aR Lowpass aL, aR, 0.8, 0.5, 0
+
+	; Distortion arguments: level, drive, tone
+	aL, aR Distortion aL, aR, 0.8, gkpot0, 0.5
+
+	; Blur arguments: time, mix
+	;aL, aR Blur aL, aR, 0.7, 0.5
+
+	; Octaver arguments: pitch (-12 to +12semi), mix
+	aL, aR Octaver aL, aR, 1, 0.5 * gkswitch2
+
+	; Chorus arguments: feed, mix
+	;aL, aR Chorus aL, aR, 0.3, 0.5
 
 	; RandDelay arguments: range, feedback, mix
-	aL, aR RandDelay aL, aR, gkpot4, gkpot1, gkpot6 
+	aL, aR RandDelay aL, aR, gkpot3, 0.4, 0.75 * gkswitch4 
 
-	; Revers arguments: time
-	;aL, aR Reverse aL, aR, gkpot5
+	; Reverse arguments: time, drywet/bypass
+	aL, aR Reverse aL, aR, 0.5, gkswitch5
 
-;	ResoFollow arguments: bf, bw, gain, num, ksep, ksep2, epmod, scalemode
-;	aL, aR ResonatorFollower aL, aR, gkpot0, gkpot1, 1,   gkpot2, gkpot3, gkpot4,   0,      2 
+	; MultiDelay arguments: multitap(on/off), dlytime, feed, cutoff, mix
+	;aL, aR MultiDelay aL, aR
 
+	; Hack arguments: drywet, freq
+	kHack = gkpot1 < 0.1 ? 0 : 1
+	;aL, aR Hack aL, aR, kHack, gkpot1
 
-;	adlyL, adlyR TriggerDelay aL, aR, gkpot0, gkpot1, gkpot2, gkpot3, gkpot4, 1, 0.5, 1, gkpot5, 0.8, 0.5
+	; Wobble arguments: freq, drywet
+	;aL, aR Wobble aL, aR	
+
+	; ResoFollow arguments: bf, bw, gain, num, ksep, ksep2, epmod, scalemode
+	;aL, aR ResonatorFollower aL, aR, gkpot0, gkpot1, 1,   gkpot2, gkpot3, gkpot4,   0,      2 
+
+	; TriggerDelay argumens: treshold, dly1, dly2, fb1, fb2, width, mix, level, porttime, centerfreq, bandwith 
+	;adlyL, adlyR TriggerDelay aL, aR, gkpot0, gkpot1, gkpot2, gkpot3, gkpot4, 1, 0.5, 1, gkpot5, 0.8, 0.5
+
+	; SineDelay arguments: range, feedback, drywet
+	kSinDly = gkpot3 > 0.5 ? 0.5 : gkpot3 
+	aL, aR SineDelay aL, aR, gkpot3, 0.3, kSinDly
+
+	; SquareMod arguments: freq, mix
+	kSquareMod = gkpot4 > 0.5 ? 0.5 : gkpot4 
+	aL, aR SquareMod aL, aR, gkpot4, kSquareMod
+
+	; Lowpass arguments: cutoff, resonance
+	aL, aR Lowpass aL, aR, gkpot5, 0.7, 0.5 ;gkpot2, gkpot3
+
+	; SolinaChorus arguments: lfo1-freq, lfo1-amp, lfo2-freq, lfo2-amp
+	;aL solina_chorus aL, 0.18, 0.6, 6, 0.2
+	;aR solina_chorus aR, 0.18, 0.6, 6, 0.2
+
+	; FakeGrainer arguments: drywet
+	;aL, aR FakeGrainer aL, aR, 0.5
+
+	; PartitionConv arguments: mix 
+	;aL, aR PartitionConv aL, aR, 0.8
 
 	; Reverb arguments: decay, cutoff, mix
-	aL, aR Reverb aL, aR, gkpot0, 0.5, gkswitch3
+	aL, aR Reverb aL, aR, 0.9, 0.5, gkpot6
 
-;	aL = 0
-;	aR = 0
+	; SimpleLooper arguments, rec/play/ovr, stop/start, clear, speed, reverse, through
+	aL, aR SimpleLooper aL, aR, gkswitch0, gkswitch1, 0, 1, gkswitch3, 1
 
 
-
-/*
-		adlyL, adlyR MultiDelay aL, aR, gkswitch3, gkpot5, gkpot6, 1, gkswitch2
-
-		aL, aR Reverb aL + adlyL, aR + adlyR, gkpot1, gkswitch0
-		aL, aR SquareMod aL, aR, gkpot0, gkswitch1
-		aL, aR Lowpass_Stereo aL, aR, gkpot2, gkpot4
-		aL, aR Reverb aL, aR, 0.8, 0.8, 0.3
-*/		
 	aOutL = (aL + adlyL)
 	aOutR = (aR + adlyR)
 

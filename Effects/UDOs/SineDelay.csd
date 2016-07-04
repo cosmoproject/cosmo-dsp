@@ -1,6 +1,18 @@
 
 ;SinMod Delay
 
+
+opcode SineDelay, aa, aakkk
+
+	ainL, ainR, kRange, kFeedback, kDryWet xin
+
+	aoutL SineDelay ainL, kRange, kFeedback, kDryWet
+	aoutR SineDelay ainR, kRange, kFeedback, kDryWet
+
+	xout aoutL, aoutR
+endop
+
+
 opcode SineDelay, a, akkk
 
 	ain, kRange, kFeedback, kDryWet xin
