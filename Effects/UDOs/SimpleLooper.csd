@@ -58,14 +58,14 @@
 ;*********************************************************************
 ; SimpleLooper
 ;*********************************************************************
-	opcode SimpleLooper, aa, aakkkkk
+	opcode SimpleLooper, aa, aakkkkkk
 
-	ainL, ainR, kRecPlayOvr, kStopStart, kClear, kSpeed, kReverse xin
+	ainL, ainR, kRecPlayOvr, kStopStart, kClear, kSpeed, kReverse, kThrough xin
 
 		kStopStart	init 0
 
 	  	kSpeed 		init 1
-	  	kReverse 	init 1 ; -1 or 1
+	  	keverse 	init 1 ; -1 or 1
 
 	 	kSpeed = kSpeed * kReverse
 
@@ -103,6 +103,11 @@
 		
 		;aoutL = ainL
 		;aoutR = ainR
+		if kThrough == 1 then 
+			aoutL = aoutL + ainL
+			aoutR = aoutR + ainR
+		endif
+
 
 	xout	aoutL, aoutR
 
