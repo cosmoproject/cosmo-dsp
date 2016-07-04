@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
-;-odac:hw:1,0 -d -+rtaudio=ALSA -b128 -B512 -+rtmidi=alsa -M hw:2 -m0
--odac -iadc0 -Ma
+-odac:hw:1,0 -d -+rtaudio=ALSA -b128 -B512 -+rtmidi=alsa -Ma -m0
+;-odac -iadc0 -Ma
 </CsOptions>
 <CsInstruments>
 sr      = 44100
@@ -13,6 +13,15 @@ nchnls 	= 2
 #include "../Effects/UDOs/Lowpass.csd"
 #include "../Effects/UDOs/SolinaChorus.csd"
 
+instr 999
+
+k1 poscil 1, 1
+
+gkled0 = k1
+gkled1 = k1
+
+
+endin
 
 opcode MarimbaEmulator, a, ii
 iAmplitude, iFrequency xin
@@ -57,7 +66,7 @@ endop
 
 instr 1
 
-	iamp ampmidi 0.3
+	iamp ampmidi 0.8
 	icps cpsmidi
 	kNoteOff = 0; release
 
@@ -95,7 +104,7 @@ instr 99
 	aR solina_chorus aR, 0.18, 0.6, 6, 0.2
 
 	; Reverb arguments: decay, cutoff, mix
-	arvbL, arvbR Reverb aL, aR, 0.85, 0.5, 1 ;gkpot0, gkpot1, gkswitch0
+	arvbL, arvbR Reverb aL, aR, gkpot0, gkpot1, gkpot7
 	
 	aL ntrpol aL, arvbL, 0.8
 	aR ntrpol aR, arvbR, 0.8
@@ -110,6 +119,7 @@ endin
 
 </CsInstruments>
 <CsScore>
+i999 0 3
 i99 0 86400
 </CsScore>
 </CsoundSynthesizer>
