@@ -66,20 +66,17 @@ instr 1
 
 	iamp ampmidi 0.8
 	icps cpsmidi
-	kNoteOff = 0; release
 
 	aL init 0
 	aR init 0
 
-	if kNoteOff == 0 then
-		StringSynth iamp, icps	
-		SineSynth1 iamp, icps
-		SineSynth1 iamp, icps*1.5
-	else
-		StringSynth 0, 0			
-		SineSynth1 0, 0					
-		SineSynth1 0, 0 
-	endif 
+	aL, aR SineSynth1 aL, aR, iamp, icps*1
+
+	aL, aR SineSynth1 aL, aR, iamp, icps*2.1
+
+	aL, aR SineSynth1 aL, aR, iamp, icps*3.3
+
+	xtratim 2
 
 endin
 
@@ -98,17 +95,34 @@ instr 99
 	chnset a0, "MasterR"
 
 
+	; Reverse arguments: time, drywet/bypass
+	aL, aR Reverse aL, aR, 0.6, gkswitch2
+
+	; Distortion arguments: level, drive, tone
+	aL, aR Distortion aL, aR, 0.8, gkpot0, 0.5
+
+	; Hack arguments: drywet, freq
+	kHack = gkpot1 < 0.1 ? 0 : 1
+	aL, aR Hack aL, aR, kHack, gkpot1
+
+	; RandDelay arguments: range, feedback, mix
+	kRandDly = gkpot3 > 0.5 ? 1 : gkpot3
+	kRandDly = kRandDly < 0.1 ? 0 : kRandDly
+	aL, aR RandDelay aL, aR, gkpot3, 0.4, kRandDly 
+
+
 	aL solina_chorus aL, 0.18, 0.6, 6, 0.2
 	aR solina_chorus aR, 0.18, 0.6, 6, 0.2
 
 	; Reverb arguments: decay, cutoff, mix
-	arvbL, arvbR Reverb aL, aR, gkpot0, gkpot1, gkpot7
-	
-	aL ntrpol aL, arvbL, 0.8
-	aR ntrpol aR, arvbR, 0.8
+	aL, aR Reverb aL, aR, 0.9, 0.5, gkpot6
 
 	; Lowpass arguments: cutoff, resonance
-	;aL, aR Lowpass aL, aR, gkpot2, gkpot3
+	aL, aR Lowpass aL, aR, gkpot5, 0.7, 0.5 ;gkpot2, gkpot3
+
+	; SimpleLooper arguments, rec/play/ovr, stop/start, clear, speed, reverse, through
+	aL, aR SimpleLooper aL, aR, gktoggle1, 0, 0, gkpot4, gkswitch4, 1
+
 
 	outs aL, aR
 

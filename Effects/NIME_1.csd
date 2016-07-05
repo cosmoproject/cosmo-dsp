@@ -31,6 +31,21 @@ nchnls 	= 2
 #include "UDOs/Wobble.csd"
 
 
+; --------------------------------------------------------
+; Status LED - set LEDs to ON for 3 seconds to 
+; indicate that Csound is running 
+; --------------------------------------------------------
+
+instr 999
+
+k1 poscil 1, 1
+
+gkled0 = k1
+gkled1 = k1
+
+
+endin
+
 instr 1 
 	#include "includes/adc_channels.inc"
 	#include "includes/gpio_channels.inc"
