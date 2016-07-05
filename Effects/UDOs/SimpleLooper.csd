@@ -65,12 +65,16 @@
 		kStopStart	init 0
 
 	  	kSpeed 		init 1
-	  	keverse 	init 1 ; -1 or 1
+	  	kReverse 	init 1 ; -1 or 1
+
+		kReverse scale kReverse, 1, -1
 
 	 	kSpeed = kSpeed * kReverse
 
 	  	kOverdub init 0
-
+		
+		Srec sprintfk "Recording: %f", kRecPlayOvr
+		   puts Srec, kRecPlayOvr+1
 
 	  	;kRecPlayOvr += kOverdub
 

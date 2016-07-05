@@ -18,7 +18,7 @@ opcode SquareMod, aa, aakk
 	Srev sprintfk "Freq: %f", kFreq
 
 	kMix scale kMix, 1, 0
-	Srev sprintfk "Reverb Mix: %f", kMix
+	Srev sprintfk "SquareMod Mix: %f", kMix
 		puts Srev, kMix+1
 		
 	kMix init 0.5

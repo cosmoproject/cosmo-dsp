@@ -1,12 +1,12 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B512 -j4
+-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024 --realtime -j2
 ;-odac -iadc0 
 ;-n -d -+rtmidi=NULL -M0 -m0d 
 </CsOptions>
 <CsInstruments>
 sr      = 44100
-ksmps  	= 64
+ksmps  	= 128
 0dbfs	= 1
 nchnls 	= 2
 
@@ -42,11 +42,9 @@ instr 1
 
 	;aL *= kgain
 	;aR *= kgain
-	adlyL = 0
-	adlyR = 0
 
-
-	gkpot6 = gkpot6 < 0.5 ? 0 : 1
+	adlyL init 0
+	adlyR init 0
 
 	; Lowpass arguments: cutoff, resonance
 	aL, aR Lowpass aL, aR, 0.8, 0.5, 0
@@ -58,40 +56,45 @@ instr 1
 	;aL, aR Blur aL, aR, 0.7, 0.5
 
 	; Octaver arguments: pitch (-12 to +12semi), mix
-	aL, aR Octaver aL, aR, 1, 0.5 * gkswitch2
+	aL, aR Octaver aL, aR, gkpot2, gkswitch3
 
 	; Chorus arguments: feed, mix
 	;aL, aR Chorus aL, aR, 0.3, 0.5
 
 	; RandDelay arguments: range, feedback, mix
-	aL, aR RandDelay aL, aR, gkpot3, 0.4, 0.75 * gkswitch4 
+	kRandDly = gkpot3 > 0.5 ? 1 : gkpot3
+	kRandDly = kRandDly < 0.1 ? 0 : kRandDly
+	aL, aR RandDelay aL, aR, gkpot3, 0.4, kRandDly 
 
 	; Reverse arguments: time, drywet/bypass
-	aL, aR Reverse aL, aR, 0.5, gkswitch5
+	aL, aR Reverse aL, aR, 0.6, gkswitch2
 
 	; MultiDelay arguments: multitap(on/off), dlytime, feed, cutoff, mix
 	;aL, aR MultiDelay aL, aR
 
 	; Hack arguments: drywet, freq
 	kHack = gkpot1 < 0.1 ? 0 : 1
-	;aL, aR Hack aL, aR, kHack, gkpot1
+	aL, aR Hack aL, aR, kHack, gkpot1
 
 	; Wobble arguments: freq, drywet
 	;aL, aR Wobble aL, aR	
 
 	; ResoFollow arguments: bf, bw, gain, num, ksep, ksep2, epmod, scalemode
-	;aL, aR ResonatorFollower aL, aR, gkpot0, gkpot1, 1,   gkpot2, gkpot3, gkpot4,   0,      2 
+	;aL, aR ResonatorFollower aL, aR, gkpot2, gkpot4, 1,  1, 1, 1, 0, 2; gkpot2, gkpot3, gkpot4,   0,      2 
 
 	; TriggerDelay argumens: treshold, dly1, dly2, fb1, fb2, width, mix, level, porttime, centerfreq, bandwith 
-	;adlyL, adlyR TriggerDelay aL, aR, gkpot0, gkpot1, gkpot2, gkpot3, gkpot4, 1, 0.5, 1, gkpot5, 0.8, 0.5
+	;adlyL, adlyR TriggerDelay aL, aR, 0.01, gkpot2, gkpot2 * 0.5, 0.1, 0.5, 1, 1, 1,  0.1, 0.8, 0.5
+	;aL = aL + adlyL
+	;aR = aR + adlyR
 
 	; SineDelay arguments: range, feedback, drywet
-	kSinDly = gkpot3 > 0.5 ? 0.5 : gkpot3 
-	aL, aR SineDelay aL, aR, gkpot3, 0.3, kSinDly
+	kSinDly = gkpot2 > 0.5 ? 0.5 : gkpot2 
+	kSinDly = kSinDly < 0.1 ? 0 : kSinDly
+	;aL, aR SineDelay aL, aR, gkpot2, 0.3, kSinDly
 
 	; SquareMod arguments: freq, mix
-	kSquareMod = gkpot4 > 0.5 ? 0.5 : gkpot4 
-	aL, aR SquareMod aL, aR, gkpot4, kSquareMod
+	;kSquareMod = gkpot4 > 0.5 ? 1 : gkpot4 
+	;aL, aR SquareMod aL, aR, gkpot4, kSquareMod
 
 	; Lowpass arguments: cutoff, resonance
 	aL, aR Lowpass aL, aR, gkpot5, 0.7, 0.5 ;gkpot2, gkpot3
@@ -106,15 +109,23 @@ instr 1
 	; PartitionConv arguments: mix 
 	;aL, aR PartitionConv aL, aR, 0.8
 
+	gaL = aL + adlyL
+	gaR = aR + adlyR
+
+endin
+
+instr 2
+	aL = gaL
+	aR = gaR
+
 	; Reverb arguments: decay, cutoff, mix
 	aL, aR Reverb aL, aR, 0.9, 0.5, gkpot6
 
 	; SimpleLooper arguments, rec/play/ovr, stop/start, clear, speed, reverse, through
-	aL, aR SimpleLooper aL, aR, gkswitch0, gkswitch1, 0, 1, gkswitch3, 1
+	aL, aR SimpleLooper aL, aR, gktoggle1, 0, 0, gkpot4, gkswitch4, 1
 
-
-	aOutL = (aL + adlyL)
-	aOutR = (aR + adlyR)
+	aOutL = aL;(aL + adlyL)
+	aOutR = aR;(aR + adlyR)
 
 	;aOutL limit aOutL, 0.8, 0.95
 	;aOutR limit aOutR, 0.8, 0.95
@@ -129,6 +140,7 @@ endin
 </CsInstruments>
 <CsScore>
 i1 0 86400
+i2 0 86400
 </CsScore>
 </CsoundSynthesizer>
 
