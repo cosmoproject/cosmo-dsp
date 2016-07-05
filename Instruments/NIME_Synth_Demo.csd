@@ -9,10 +9,25 @@ ksmps  	= 64
 0dbfs	= 1
 nchnls 	= 2
 
-#include "../Effects/UDOs/Reverb.csd"
+#include "../Effects/UDOs/Blur.csd"
+#include "../Effects/UDOs/Chorus.csd"
+#include "../Effects/UDOs/Convolution.csd"
+#include "../Effects/UDOs/Distortion.csd"
+#include "../Effects/UDOs/FakeGrainer.csd"
+#include "../Effects/UDOs/Hack.csd"
 #include "../Effects/UDOs/Lowpass.csd"
+#include "../Effects/UDOs/MultiDelay.csd"
+#include "../Effects/UDOs/Octaver.csd"
+#include "../Effects/UDOs/RandDelay.csd"
+#include "../Effects/UDOs/Resonator.csd"
+#include "../Effects/UDOs/Reverb.csd"
+#include "../Effects/UDOs/Reverse.csd"
+#include "../Effects/UDOs/SimpleLooper.csd"
+#include "../Effects/UDOs/SineDelay.csd"
 #include "../Effects/UDOs/SolinaChorus.csd"
-
+#include "../Effects/UDOs/SquareMod.csd"
+#include "../Effects/UDOs/TriggerDelay.csd"
+#include "../Effects/UDOs/Wobble.csd"
 ; --------------------------------------------------------
 ; Status LED - set LEDs to ON for 3 seconds to 
 ; indicate that Csound is running 
@@ -29,9 +44,9 @@ gkled1 = k1
 endin
 
 
-opcode StringSynth, 0, ii
+opcode StringSynth, aa, aaii
 
-iamp, icps xin
+ainL, ainR, iamp, icps xin
 
 
 	kampenv = madsr:k(1, 0.1, 0.95, 0.5)
@@ -40,44 +55,79 @@ iamp, icps xin
 
 	asig *= kampenv * iamp 
 
-	aL, aR pan2 asig, 0.5
+	aL, aR pan2 asig, 0.55
 
-	chnmix aL, "MasterL"
-	chnmix aR, "MasterR"
+;	chnmix aL, "MasterL"
+;	chnmix aR, "MasterR"
+
+	xout aL + ainL, aR + ainR
+
 
 endop
 
 
-opcode SineSynth1, 0, ii
 
-	iamp, icps xin
+opcode SineSynth1, aa, aaii
+
+ainL,ainR,iamp, icps xin
 
 	ampenv = madsr:a(1, 0.1, 0.95, 0.5)
 	a1 oscil 0.5, icps
 
 	a1 *= ampenv * iamp 
 
-	chnmix a1, "MasterL"
-	chnmix a1, "MasterR"
+	aL, aR pan2 a1, 0.55
+
+;	chnmix a1, "MasterL"
+;	chnmix a1, "MasterR"
+
+	xout aL + ainL, aR + ainR
 endop
+
+
+opcode PolySineSynth1, aa, aaii
+
+ainL,ainR,iamp, icps xin
+
+	ampenv = madsr:a(1, 0.1, 0.95, 0.5)
+	a1 oscil 0.5, icps
+	a2 oscil 0.3, icps * 1.5
+	a3 oscil 0.2, icps * 2
+
+	asynth = a1+a2+a3
+
+	asynth *= ampenv * iamp 
+
+	aL, aR pan2 asynth, 0.55
+
+;	chnmix a1, "MasterL"
+;	chnmix a1, "MasterR"
+
+	xout aL + ainL, aR + ainR
+endop
+
 
 
 instr 1
 
-	iamp ampmidi 0.8
+	iamp ampmidi 0.5
 	icps cpsmidi
 
 	aL init 0
 	aR init 0
 
-	aL, aR SineSynth1 aL, aR, iamp, icps*1
+	aL, aR PolySineSynth1 aL, aR, iamp, icps
 
-	aL, aR SineSynth1 aL, aR, iamp, icps*2.1
+	;aL, aR StringSynth aL, aR, iamp, icps
 
-	aL, aR SineSynth1 aL, aR, iamp, icps*3.3
+	;aL, aR SineSynth1 aL, aR, iamp, icps*2.1
+
+	;aL, aR SineSynth1 aL, aR, iamp, icps*3.3
 
 	xtratim 2
 
+	chnmix aL, "MasterL"
+	chnmix aR, "MasterR"
 endin
 
 
