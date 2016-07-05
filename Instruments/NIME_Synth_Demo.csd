@@ -134,7 +134,7 @@ endin
 instr 99
 	#include "includes/adc_channels.inc"
 	#include "includes/gpio_channels.inc"
-	#include "includes/switch2led.inc"
+	;#include "includes/switch2led.inc"
 
 	aL init 0
 	aR init 0
@@ -143,7 +143,6 @@ instr 99
 	a0 = 0
 	chnset a0, "MasterL"
 	chnset a0, "MasterR"
-
 
 	; Reverse arguments: time, drywet/bypass
 	aL, aR Reverse aL, aR, 0.6, gkswitch2
@@ -172,6 +171,8 @@ instr 99
 
 	; SimpleLooper arguments, rec/play/ovr, stop/start, clear, speed, reverse, through
 	aL, aR SimpleLooper aL, aR, gktoggle1, 0, 0, gkpot4, gkswitch4, 1
+	gkled0 = gktoggle0
+	gkled1 = gktoggle1
 
 
 	outs aL, aR
@@ -181,7 +182,7 @@ endin
 
 </CsInstruments>
 <CsScore>
-i999 0 3
+i999 0 2
 i99 0 86400
 </CsScore>
 </CsoundSynthesizer>
