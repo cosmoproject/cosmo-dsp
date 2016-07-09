@@ -63,6 +63,9 @@
 	ainL, ainR, kRecPlayOvr, kStopStart, kClear, kSpeed, kReverse, kThrough xin
 
 		kStopStart	init 0
+		kPlaying 	init 0
+	  	kOverdub init 0
+		
 
 	  	kSpeed 		init 1
 	  	kReverse 	init 1 ; -1 or 1
@@ -71,8 +74,7 @@
 
 	 	kSpeed = kSpeed * kReverse
 
-	  	kOverdub init 0
-		
+
 		Srec sprintfk "Recording: %f", kRecPlayOvr
 		   puts Srec, kRecPlayOvr+1
 
@@ -90,17 +92,21 @@
 	    kRestart	trigger	kRecPlayOvr,0.5,1	; if switched to 'play'
 
 	    if kRestart == 1 then
-	    	kStopStart = 0 
+	    	kPlaying = 1
 
 	    	;chnset kStopStart, "stopstart"
 	    endif
 
+	    if (changed(kStopStart) == 1) then
+	    	kPlaying = (kPlaying + 1) %2
+	    endif
+
 		
-		if (kRecPlayOvr == 0  && kStopStart == 0)  then
+		if (kRecPlayOvr == 0  && kStopStart == 1)  then
 
 			aoutL, aoutR Play kSpeed, kRestart
 
-		 else
+		else
 		 	aoutL = 0
 			aoutR = 0
 		endif

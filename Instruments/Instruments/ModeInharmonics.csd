@@ -19,7 +19,7 @@ Adaptation for COSMO DSP by: Bernt Isak Wærstad
 	0dbfs = 1
         massign 1,2
 
-	giSine		ftgen	0, 0, 65536, 10, 1	; sine
+giSine		ftgen	0, 0, 65536, 10, 1	; sine
 
 ;FUNCTION TABLES STORING MODAL FREQUENCY RATIOS===================================================================================================================================
 ;plucked string
@@ -71,32 +71,35 @@ giTypes         ftgen   0, 0, 32, -2, girtos1, girtos2, girtos3, girtos4, girtos
                                       girtos16, girtos17, girtos18, girtos19, girtos20, girtos21, girtos22
 
 opcode ModePartial2, a, aiiikkkkk
-        a1, itab, ipartial, inumpartials, ktransp, kQ, kdamp, kaDevamp, kfDevamp xin
-        ifq             table ipartial, itab
-        iaDevFq         random 1.0, 5.0
-        aDev            randi kaDevamp, iaDevFq
-        ifDevFq         random 1.0, 5.0
-        kfDev           randi kfDevamp, ifDevFq 
-        apartial        mode a1, limit(ifq*ktransp, 40, sr/4)*(1+kfDev), kQ
-        if kdamp >= 0.01 then
-	kamp	        = ((inumpartials-ipartial+2)^(-kdamp))*(kdamp+1)
-	else
-	kamp            = 1
-	endif
-	amp             interp tonek(kamp,10)
-        aout            = apartial*(1+aDev)*kamp
-        if ipartial < inumpartials then
-        anextsig        ModePartial2 a1, itab, ipartial+1, inumpartials, ktransp, kdamp, kQ, kaDevamp, kfDevamp
-        aout            = aout+anextsig
-        endif
-                        xout aout
-        endop
+    a1, itab, ipartial, inumpartials, ktransp, kQ, kdamp, kaDevamp, kfDevamp xin
+
+    ifq             table ipartial, itab
+    iaDevFq         random 1.0, 5.0
+    aDev            randi kaDevamp, iaDevFq
+    ifDevFq         random 1.0, 5.0
+    kfDev           randi kfDevamp, ifDevFq 
+    apartial        mode a1, limit(ifq*ktransp, 40, sr/4)*(1+kfDev), kQ
+    
+    if kdamp >= 0.01 then
+    	kamp	        = ((inumpartials-ipartial+2)^(-kdamp))*(kdamp+1)
+    else
+        kamp            = 1
+    endif
+    amp             interp tonek(kamp,10)
+    aout            = apartial*(1+aDev)*kamp
+    if ipartial < inumpartials then
+        anextsig    ModePartial2 a1, itab, ipartial+1, inumpartials, ktransp, kdamp, kQ, kaDevamp, kfDevamp
+        aout        = aout+anextsig
+    endif
+    
+    xout aout
+endop
 
 ;***************************************************
-	instr	1
+	instr	ModeInharmonics_AudioInput
 		ain     inch 2
-	ain     = ain * 1
-	        chnset ain, "audio"
+        ain     = ain * 1
+        chnset ain, "audio"
 
         afollow follow2 ain * 4, 0.1, 0.1
         kfollow downsamp afollow
@@ -108,13 +111,10 @@ opcode ModePartial2, a, aiiikkkkk
         ;printk2 kfreq
         ;printk2 kfollow
 
-        endin
-        
-	instr	2
+    endin
 
-    #include "includes/adc_channels.inc"
-    #include "includes/gpio_channels.inc"
-    #include "includes/switch2led.inc"
+        
+instr ModeInharmonics
 
     kfreq expcurve gkpot0, 10
     kfreq scale kfreq, 1000, 100
@@ -134,7 +134,7 @@ opcode ModePartial2, a, aiiikkkkk
 	amp		madsr	iattack, idecay, isustain, irelease
 
 ; external audio in
-        ain             chnget "audio"
+    ain             chnget "audio"
                         
     kQ expcurve gkpot1, 10
     kQ scale kQ, 4000, 1
@@ -145,37 +145,28 @@ opcode ModePartial2, a, aiiikkkkk
 ; mode
     ;kQ              chnget "Q"
     ;kQ = 600
-        kdamp           chnget "damp"
-        kdamp = 1
-        kdamp           = kdamp+0.01
-        itype           chnget "Instr"
-        itype = 5
-        itype           = itype-1
-        itabNum         table itype, giTypes
-        inumpartials    = ftlen(itabNum)
-        kaDevamp        chnget "devAmp"
-        kaDevamp = 0
-        kfDevamp        chnget "devFq"
-        kfDevamp = 0
-                        seed 0
-        a1              ModePartial2 ain, itabNum, 0, inumpartials, kcps, kQ, kdamp, kaDevamp, kfDevamp
+    kdamp           chnget "damp"
+    kdamp = 1
+    kdamp           = kdamp+0.01
+    itype           chnget "Instr"
+    itype = 5
+    itype           = itype-1
+    itabNum         table itype, giTypes
+    inumpartials    = ftlen(itabNum)
+    kaDevamp        chnget "devAmp"
+    kaDevamp = 0
+    kfDevamp        chnget "devFq"
+    kfDevamp = 0
+    
+    seed 0
+    a1  ModePartial2 ain, itabNum, 0, inumpartials, kcps, kQ, kdamp, kaDevamp, kfDevamp
 
 ; apply amp envelope
 	a1		= a1 * amp
+    aL, aR pan2 a1, 0.45
 
-; audio out
-	outs		a1, a1
-	endin
-;***************************************************
+    chnmix aL, "MasterL"
+    chnmix aR, "MasterR"
 
-</CsInstruments>
-<CsScore>
+endin
 
-; 	start	dur	
-i1	0	86400	
-i2  0   86400   
-e
-
-
-</CsScore>
-</CsoundSynthesizer>

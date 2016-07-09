@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
 ;-odac:hw:1,0 -d -+rtaudio=ALSA -b128 -B512 -+rtmidi=alsa -M hw:2 -m0
--odac -iadc0 -Ma
+-odac -iadc0 -Ma -d
 </CsOptions>
 <CsInstruments>
 sr      = 44100
@@ -9,117 +9,132 @@ ksmps  	= 64
 0dbfs	= 1
 nchnls 	= 2
 
-#include "../Effects/UDOs/Reverb.csd"
-#include "../Effects/UDOs/Lowpass.csd"
-#include "../Effects/UDOs/SolinaChorus.csd"
 
 
 
+	#include "../Effects/UDOs/Blur.csd"
+	#include "../Effects/UDOs/Chorus.csd"
+	#include "../Effects/UDOs/Convolution.csd"
+	#include "../Effects/UDOs/Distortion.csd"
+	#include "../Effects/UDOs/FakeGrainer.csd"
+	#include "../Effects/UDOs/Hack.csd"
+	#include "../Effects/UDOs/Lowpass.csd"
+	#include "../Effects/UDOs/MultiDelay.csd"
+	#include "../Effects/UDOs/Octaver.csd"
+	#include "../Effects/UDOs/RandDelay.csd"
+	#include "../Effects/UDOs/Resonator.csd"
+	#include "../Effects/UDOs/Reverb.csd"
+	#include "../Effects/UDOs/Reverse.csd"
+	#include "../Effects/UDOs/SimpleLooper.csd"
+	#include "../Effects/UDOs/SineDelay.csd"
+	#include "../Effects/UDOs/SolinaChorus.csd"
+	#include "../Effects/UDOs/SquareMod.csd"
+	#include "../Effects/UDOs/TriggerDelay.csd"
+	#include "../Effects/UDOs/Wobble.csd"
+
+#include "Instruments/StringSynth.csd"
+#include "Instruments/SineSynths.csd"
+#include "Instruments/Moogish.csd"
+#include "Instruments/CrazyPluck.csd"
+#include "Instruments/Scanned.csd"
+#include "Instruments/Simpler.csd"
+
+massign 1, 2
 
 instr 1
 
 	iamp ampmidi 0.5
 	icps cpsmidi
+	inum notnum
 
 	
-	i_instrnum[] init 3
-	i_instrnum fillarray 3, 4, 2
-
-	/*
-	i_instrnum[0] nstrnum "StringSynth"
-	i_instrnum[1] nstrnum "SineSynth1"
-	i_instrnum[2] nstrnum "SineSynth2"
-	*/
+	i_instrnum[] init 1
+	
+	i_instrnum[0] nstrnum "Simpler"
+;	i_instrnum[1] nstrnum "CrazyPluck"
+;	i_instrnum[2] nstrnum "Scanned"	
 
 
 	kndx init 0
 	ktrigger init 1
 
 	if (ktrigger == 1) then 
-;		event "i", 4, 0, -1, iamp, icps
+		kndx = 0
+		until (kndx == lenarray(i_instrnum)) do
+			kinstrNum = i_instrnum[kndx]
+			event "i", kinstrNum +(inum*0.001), 0, -1, iamp, icps
 
-		until kndx == lenarray(i_instrnum) do
-			event "i", i_instrnum[kndx], 0, -1, iamp, icps
-			kndx += 1
+			Sprint sprintfk "%f: Starting instrument %f", kndx, i_instrnum[kndx]
+				puts Sprint, kndx
+
+			kndx = kndx + 1
 		od
-
+		ktrigger = 0
 	endif
 
-	kNoteOff = 0; release
+	kNoteOff release
 
 
 	if kNoteOff == 1 then
-;		event "i", -4, 0, 1
-
 		kndx = 0
 		until kndx == lenarray(i_instrnum) do
-			event "i", -i_instrnum[kndx], 0, 1
+			kinstrNum = i_instrnum[kndx]
+			event "i", -kinstrNum-(inum*0.001), 0, 1
 			kndx += 1
-
 		od 
 
 	endif
+
+	xtratim 1/kr
 
 	ktrigger = 0
 
 endin
 
 
-instr 2, StringSynth
+instr 2
 
-	iamp = ampdbfs(p4)
-	icps = p5
+	iamp ampmidi 0.5
+	icps cpsmidi
+	inum notnum
 
-
-	ampenv = madsr:a(1, 0.1, 0.95, 0.5)
-	asig = vco2(0.5, icps)
-	asig = moogladder(asig, 6000, 0.1)
-
-	asig *= ampenv * iamp 
-
-	aL, aR pan2 asig, 0.55
-
-	chnmix aL, "MasterL"
-	chnmix aR, "MasterR"
-
-endin
-
-instr 3, SineSynth1
-
-	iamp = ampdbfs(p4)
-	icps = p5
-
-	ampenv = madsr:a(1, 0.1, 0.95, 0.5)
-	a1 oscil 0.5, icps
-
-	a1 *= ampenv * iamp 
-
-	chnmix a1, "MasterL"
-	chnmix a1, "MasterR"
-
-endin
+	
+	i_instrnum[] init 1
+	
+	i_instrnum[0] nstrnum "Simpler" ;+ (inum*0.001)
+;	i_instrnum[1] nstrnum "CrazyPluck"
+;	i_instrnum[2] nstrnum "Scanned"	
 
 
-instr 4, SineSynth2
+	kndx init 0
+	ktrigger init 1
 
-	iamp = ampdbfs(p4)
-	icps = p5
+	if (ktrigger == 1) then 
+		kinstrNum = i_instrnum[0]
+		event "i", kinstrNum +(inum*0.001), 0, -1, iamp, icps
 
-	ampenv = madsr:a(1, 0.1, 0.95, 0.5)
-	a1 oscil 0.5, icps * 1.5
+		ktrigger = 0
+	endif
 
-	a1 *= ampenv * iamp 
+	kNoteOff release
 
-	chnmix a1, "MasterL"
-	chnmix a1, "MasterR"
+
+	if kNoteOff == 1 then
+		kinstrNum = i_instrnum[0]
+		event "i", -kinstrNum-(inum*0.001), 0, 1
+	endif
+
+	xtratim 1/kr
+
+	ktrigger = 0
 
 endin
+
 
 
 instr 99
 	#include "includes/adc_channels.inc"
 	#include "includes/gpio_channels.inc"
-	#include "includes/switch2led.inc"
 
 	aL init 0
 	aR init 0
@@ -130,14 +145,11 @@ instr 99
 	chnset a0, "MasterR"
 
 
-	aL solina_chorus aL, 0.18, 0.6, 6, 0.2
-	aR solina_chorus aR, 0.18, 0.6, 6, 0.2
-
 	; Reverb arguments: decay, cutoff, mix
 	arvbL, arvbR Reverb aL, aR, 0.85, 0.5, 1 ;gkpot0, gkpot1, gkswitch0
 	
-	aL ntrpol aL, arvbL, 0.8
-	aR ntrpol aR, arvbR, 0.8
+	aL ntrpol aL, arvbL, 0.5
+	aR ntrpol aR, arvbR, 0.5
 
 	; Lowpass_Stereo arguments: cutoff, resonance
 	;aL, aR Lowpass_Stereo aL, aR, gkpot2, gkpot3

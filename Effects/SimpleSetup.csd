@@ -15,7 +15,6 @@ nchnls 	= 2
 instr 1 
 	#include "includes/adc_channels.inc"
 	#include "includes/gpio_channels.inc"
-	#include "includes/switch2led.inc"
 
 	aL, aR ins
 
@@ -24,7 +23,8 @@ instr 1
 
 
 	; Reverb arguments: decay, cutoff, mix
-	aL, aR Reverb aL, aR, 0.9, 0.5, 0.2 ; gkpot0, gkpot1, gkswitch0
+	aL, aR Reverb aL, aR, 0.9, 0.5, 0.2 ; gkpot0, gkpot1, gktoggle0
+	; gkled0 = gktoggle0
 
 	outs aL, aR
 
