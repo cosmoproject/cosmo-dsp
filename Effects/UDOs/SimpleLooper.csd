@@ -58,7 +58,7 @@
 ;*********************************************************************
 ; SimpleLooper
 ;*********************************************************************
-	opcode SimpleLooper, aa, aakkkkkk
+	opcode SimpleLooper, aakk, aakkkkkk
 
 	ainL, ainR, kRecPlayOvr, kStopStart, kClear, kSpeed, kReverse, kThrough xin
 
@@ -93,7 +93,6 @@
 
 	    if kRestart == 1 then
 	    	kPlaying = 1
-
 	    	;chnset kStopStart, "stopstart"
 	    endif
 
@@ -102,7 +101,10 @@
 	    endif
 
 		
-		if (kRecPlayOvr == 0  && kStopStart == 1)  then
+		if (kRecPlayOvr == 0  && kPlaying == 1)  then
+
+			Srec sprintfk "Playing: %f", kStopStart
+				puts Srec, kStopStart+1
 
 			aoutL, aoutR Play kSpeed, kRestart
 
@@ -119,7 +121,7 @@
 		endif
 
 
-	xout	aoutL, aoutR
+	xout	aoutL, aoutR, kRecPlayOvr, kPlaying
 
 	endop
 ;*********************************************************************
