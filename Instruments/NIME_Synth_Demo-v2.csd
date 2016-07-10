@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
-;-odac:hw:1,0 -d -+rtaudio=ALSA -b128 -B512 -+rtmidi=alsa -M hw:2 -m0
--odac -iadc0 -Ma
+-odac:hw:1,0 -iadc:hw:1,0 -d -+rtaudio=ALSA -b128 -B512 -+rtmidi=alsa -Ma -m0
+;-odac -iadc0 -Ma
 </CsOptions>
 <CsInstruments>
 sr      = 44100
@@ -103,6 +103,19 @@ instr 99
 	chnset a0, "MasterL"
 	chnset a0, "MasterR"
 
+	ainL, ainR ins
+	ainL atone ainL, 75
+	ainR atone ainR, 75
+
+	kgateL rms ainL
+	kgateR rms ainR
+	kmuteL = kgateL > 0.005 ? 1 : 0
+	kmuteR = kgateR > 0.005 ? 1 : 0
+	kmuteL port kmuteL, 0.3
+	kmuteR port kmuteR, 0.3
+
+	aL = aL + (ainL * kmuteL)
+	aR = aR + (ainR * kmuteR)
 
 	; Reverse arguments: time, drywet/bypass
 	aL, aR Reverse aL, aR, 0.6, gkswitch2
@@ -123,16 +136,27 @@ instr 99
 	aL solina_chorus aL, 0.18, 0.6, 6, 0.2
 	aR solina_chorus aR, 0.18, 0.6, 6, 0.2
 
+	kFeed scale gkpot7, 0.5, 0.3
+	kDlyTime scale gkpot7, 0, 1
+	aL, aR MultiDelay aL, aR, 1, kDlyTime, kFeed, 0.5, gkswitch5*0.5
+
 	; Reverb arguments: decay, cutoff, mix
-	aL, aR Reverb aL, aR, 0.9, 0.5, gkpot6
+	kRevDecay scale gkpot5, 0.98, 0.8
+	aL, aR Reverb aL, aR, kRevDecay, 0.5, gkpot5
 
 	; Lowpass arguments: cutoff, resonance
-	aL, aR Lowpass aL, aR, gkpot5, 0.7, 0.5 ;gkpot2, gkpot3
+	aL, aR Lowpass aL, aR, gkpot6, 0.7, 0.5 ;gkpot2, gkpot3
 
 	; SimpleLooper arguments, rec/play/ovr, stop/start, clear, speed, reverse, through
-	aL, aR SimpleLooper aL, aR, gktoggle1, 0, 0, gkpot4, gkswitch4, 1
-	; Connect LED to toggle switch
+	kSuperSpeed scale gkpot4, 1, 6
+	kSpeed = gkswitch3 < 1 ? gkpot4 : kSuperSpeed
+	gkswitch4 = gkswitch4 == 1 ? 0 : 1
+	aL, aR, kRec,kPlaying SimpleLooper aL, aR, gktoggle1, gktoggle0, 0, kSpeed, gkswitch4, 1
+	gkled0 = kPlaying
 	gkled1 = gktoggle1
+
+	; FOR MONO OUT
+	aL = (aL + aR) * 0.5
 
 	outs aL, aR
 

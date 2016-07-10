@@ -150,7 +150,8 @@ instr 99
 	aL solina_chorus aL, 0.18, 0.6, 6, 0.2
 	aR solina_chorus aR, 0.18, 0.6, 6, 0.2
 
-	aL, aR MultiDelay aL, aR, gkswitch3, gkpot7, gkpot7*0.5, 0.5, gkswitch5*0.5
+	kFeed scale gkpot7, 0.65, 0.3
+	aL, aR MultiDelay aL, aR, 1, gkpot7, kFeed, 0.5, gkswitch5*0.5
 
 	; Reverb arguments: decay, cutoff, mix
 	kRevDecay scale gkpot5, 0.98, 0.8
@@ -160,10 +161,15 @@ instr 99
 	aL, aR Lowpass aL, aR, gkpot6, 0.7, 0.5 ;gkpot2, gkpot3
 
 	; SimpleLooper arguments, rec/play/ovr, stop/start, clear, speed, reverse, through
-	aL, aR, kRec,kPlaying SimpleLooper aL, aR, gktoggle1, gktoggle0, 0, gkpot4, gkswitch4, 1
+	kSuperSpeed scale gkpot4, 1, 6
+	kSpeed = gkswitch3 < 1 ? gkpot4 : kSuperSpeed
+	gkswitch4 = gkswitch4 == 1 ? 0 : 1
+	aL, aR, kRec,kPlaying SimpleLooper aL, aR, gktoggle1, gktoggle0, 0, kSpeed, gkswitch4, 1
 	gkled0 = kPlaying
 	gkled1 = gktoggle1
 
+	; FOR MONO OUT
+	aL = (aL + aR) * 0.5
 
 	outs aL, aR
 

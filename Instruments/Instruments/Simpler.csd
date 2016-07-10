@@ -18,7 +18,7 @@ instr Simpler
 	kModFreq oscil 2, 5 
 
 	klfo lfo 0.01, kModFreq 
-	kpitch = ipitch * -1;+ (klfo)
+	kpitch = ipitch;+ (klfo)
 
 	aL, aR FilePlay Sfile3, kpitch, 0, 1
 
