@@ -58,7 +58,6 @@ instr 1
 
 	#include "includes/adc_channels.inc"
 	#include "includes/gpio_channels.inc"
-	#include "includes/switch2led.inc"
 
 	gaL, gaR ins
 	gadlyL = 0

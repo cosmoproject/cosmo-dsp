@@ -9,6 +9,31 @@ ksmps  	= 64
 0dbfs	= 1
 nchnls 	= 2
 
+<<<<<<< HEAD
+
+
+	#include "../Effects/UDOs/Blur.csd"
+	#include "../Effects/UDOs/Chorus.csd"
+	#include "../Effects/UDOs/Convolution.csd"
+	#include "../Effects/UDOs/Distortion.csd"
+	#include "../Effects/UDOs/FakeGrainer.csd"
+	#include "../Effects/UDOs/Hack.csd"
+	#include "../Effects/UDOs/Lowpass.csd"
+	#include "../Effects/UDOs/MultiDelay.csd"
+	#include "../Effects/UDOs/Octaver.csd"
+	#include "../Effects/UDOs/RandDelay.csd"
+	#include "../Effects/UDOs/Resonator.csd"
+	#include "../Effects/UDOs/Reverb.csd"
+	#include "../Effects/UDOs/Reverse.csd"
+	#include "../Effects/UDOs/SimpleLooper.csd"
+	#include "../Effects/UDOs/SineDelay.csd"
+	#include "../Effects/UDOs/SolinaChorus.csd"
+	#include "../Effects/UDOs/SquareMod.csd"
+	#include "../Effects/UDOs/TriggerDelay.csd"
+	#include "../Effects/UDOs/Wobble.csd"
+
+
+=======
 #include "../Effects/UDOs/Blur.csd"
 #include "../Effects/UDOs/Chorus.csd"
 #include "../Effects/UDOs/Convolution.csd"
@@ -28,8 +53,9 @@ nchnls 	= 2
 #include "../Effects/UDOs/SquareMod.csd"
 #include "../Effects/UDOs/TriggerDelay.csd"
 #include "../Effects/UDOs/Wobble.csd"
+>>>>>>> origin/master
 ; --------------------------------------------------------
-; Status LED - set LEDs to ON for 3 seconds to 
+; Status LED - set LEDs to ON for 2 seconds to 
 ; indicate that Csound is running 
 ; --------------------------------------------------------
 

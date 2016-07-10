@@ -24,7 +24,6 @@ nchnls 	= 2
 instr 1 
 	#include "includes/adc_channels.inc"
 	#include "includes/gpio_channels.inc"
-	#include "includes/switch2led.inc"
 
 	aL, aR ins
 
