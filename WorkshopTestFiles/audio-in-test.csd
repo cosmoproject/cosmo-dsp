@@ -1,12 +1,12 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac:hw:1,0 -iadc:hw:1 -b128 -B1024 -+rtaudio=ALSA -d -realtime --sched=99
+-odac:hw:2,0 -iadc:hw:2 -b512 -B1024 -+rtaudio=ALSA -d --sched=99
 </CsOptions>
 
 <CsInstruments>
 
 	sr = 44100  
-	ksmps = 64
+	ksmps = 128
 	nchnls = 2	
 	0dbfs = 1
 
@@ -19,10 +19,10 @@
 
 	asig = a1 + a2
 	krms rms asig
-	printk2 krms
+	;printk2 krms
 
 ; audio out
-	outs		a1, alpf
+	outs		a1, a2
 
 	endin
 

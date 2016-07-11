@@ -20,11 +20,17 @@ opcode Reverb, aa, aakkk
 	kRev_Cutoff init 7000
 	kRev_Mix init 0.5
 
-	arevL, arevR reverbsc ainL, ainR, kRev_Decay, kRev_Cutoff
+	if (kRev_Mix > 0.1) then
+		arevL, arevR reverbsc ainL, ainR, kRev_Decay, kRev_Cutoff
 
-	aoutL ntrpol ainL, arevL, kRev_Mix
-	aoutR ntrpol ainR, arevR, kRev_Mix
+		aoutL ntrpol ainL, arevL, kRev_Mix
+		aoutR ntrpol ainR, arevR, kRev_Mix
 
+	else
+		aoutL = ainL
+		aoutR = ainR
+	endif
+	
 	xout aoutL, aoutR
 endop
 

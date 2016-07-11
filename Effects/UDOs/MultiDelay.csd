@@ -10,7 +10,7 @@ opcode MultiDelay, aa, aakkkkk
 	Scut sprintfk "MultiDly time: %dms", kdlytime
 		puts Scut, kdlytime
 
-	kdlytime port kdlytime, 0.7
+	kdlytime port kdlytime, 1
 	adlytime interp kdlytime / 1000 
 
 	;kcutoff logcurve kcutoff, 0.05

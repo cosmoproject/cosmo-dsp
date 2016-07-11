@@ -1,6 +1,6 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac:hw:1,0 -iadc:hw:1,0 -d -+rtaudio=ALSA -b128 -B512 -+rtmidi=alsa -Ma -m0
+-odac:hw:2,0 -iadc:hw:2 -d -+rtaudio=ALSA -b128 -B1024 -+rtmidi=alsa -Ma -m0 --sched=99 
 ;-odac -iadc0 -Ma
 </CsOptions>
 <CsInstruments>
@@ -40,6 +40,8 @@ nchnls 	= 2
 #include "Instruments/Scanned.csd"
 #include "Instruments/Simpler.csd"
 
+massign 3, 3
+/*
 instr 1
 
 	iamp ampmidi 0.5
@@ -49,9 +51,9 @@ instr 1
 	
 	i_instrnum[] init 1
 	
-	i_instrnum[0] nstrnum "Simpler"
+;	i_instrnum[0] nstrnum "Simpler"
 ;	i_instrnum[1] nstrnum "CrazyPluck"
-;	i_instrnum[2] nstrnum "Scanned"	
+	i_instrnum[0] nstrnum "Scanned"	
 
 
 	kndx init 0
@@ -89,11 +91,52 @@ instr 1
 	ktrigger = 0
 
 endin
+*/
+gk60 init 0
+gk61 init 0
+gk62 init 0
+gk63 init 0
+gk64 init 0
+gk65 init 0
 
+instr 3
+
+inote notnum 
+
+if inote == 60 then
+	gk60 = 1
+	krel release 
+	if krel == 1 then
+		gk60 = 0
+	endif
+elseif inote == 61 then
+	gk61 = 0.5
+elseif inote == 62 then
+	gk62 = 1
+	krel release 
+	if krel == 1 then
+		gk62 = 0
+	endif
+elseif inote == 63 then
+	gk63 = 2
+elseif inote == 64 then
+	gk64 = 1
+	krel release 
+	if krel == 1 then
+		gk64 = 0
+	endif
+elseif inote == 65 then
+	gk65 = 1
+	krel release 
+	if krel == 1 then
+		gk65 = 0
+	endif
+endif
+endin
 
 instr 99
-	#include "includes/adc_channels.inc"
 	#include "includes/gpio_channels.inc"
+	#include "includes/adc_channels.inc"
 
 	aL init 0
 	aR init 0
@@ -102,7 +145,13 @@ instr 99
 	a0 = 0
 	chnset a0, "MasterL"
 	chnset a0, "MasterR"
-
+/*
+	aL solina_chorus aL, 0.18, 0.6, 6, 0.2
+	aR solina_chorus aR, 0.18, 0.6, 6, 0.2
+*/
+; --------------------------------------
+; AUDIO INPUT
+; --------------------------------------
 	ainL, ainR ins
 	ainL atone ainL, 75
 	ainR atone ainR, 75
@@ -113,47 +162,67 @@ instr 99
 	kmuteR = kgateR > 0.005 ? 1 : 0
 	kmuteL port kmuteL, 0.3
 	kmuteR port kmuteR, 0.3
+	kgain = 3
+	ainL *= kgain
+	ainR *= kgain
 
 	aL = aL + (ainL * kmuteL)
 	aR = aR + (ainR * kmuteR)
 
-	; Reverse arguments: time, drywet/bypass
-	aL, aR Reverse aL, aR, 0.6, gkswitch2
+; --------------------------------------
+	
+	kLoopSpeed init 1
+/*	kLoopSpeed *= gk61
+	kLoopSpeed *= gk63
+*/
+	; SimpleLooper arguments, rec/play/ovr, stop/start, clear, speed, reverse, through
+	kSuperSpeed scale gkpot4, 1, 6
+	kSpeed = gkswitch3 < 1 ? gkpot4 : kSuperSpeed
+	gkswitch4 = gkswitch4 == 1 ? 0 : 1
+	;aL, aR,kR,kP SimpleLooper aL, aR, gk60, gk62, 0, kLoopSpeed, gk64, 1
+	aL, aR, kRec,kPlaying SimpleLooper aL, aR, gktoggle1, gktoggle0, 0, kSpeed, gkswitch4, 1
+	gkled0 = kPlaying
+	gkled1 = gktoggle1
 
 	; Distortion arguments: level, drive, tone
 	aL, aR Distortion aL, aR, 0.8, gkpot0, 0.5
+
+	; Octaver arguments: pitch (-12 to +12semi), mix
+;	aL, aR Octaver aL, aR,1, 0.5;gkpot2, gk65*0.5 
 
 	; Hack arguments: drywet, freq
 	kHack = gkpot1 < 0.1 ? 0 : 1
 	aL, aR Hack aL, aR, kHack, gkpot1
 
 	; RandDelay arguments: range, feedback, mix
-	kRandDly = gkpot3 > 0.5 ? 1 : gkpot3
+	kRandDly = gkpot3 > 0.7 ? 1 : gkpot3
 	kRandDly = kRandDly < 0.1 ? 0 : kRandDly
-	aL, aR RandDelay aL, aR, gkpot3, 0.4, kRandDly 
+	aL, aR RandDelay aL, aR, gkpot3, 0.1, kRandDly 
 
-
-	aL solina_chorus aL, 0.18, 0.6, 6, 0.2
-	aR solina_chorus aR, 0.18, 0.6, 6, 0.2
+;gkpot7 = 0.5
 
 	kFeed scale gkpot7, 0.5, 0.3
 	kDlyTime scale gkpot7, 0, 1
 	aL, aR MultiDelay aL, aR, 1, kDlyTime, kFeed, 0.5, gkswitch5*0.5
 
+
+	; Reverse arguments: time, drywet/bypass
+	aL, aR Reverse aL, aR, 0.6, gkswitch2
+
+;	gkpot5 = 0.5
+
 	; Reverb arguments: decay, cutoff, mix
 	kRevDecay scale gkpot5, 0.98, 0.8
 	aL, aR Reverb aL, aR, kRevDecay, 0.5, gkpot5
 
+;	gkpot6 = 0.5
 	; Lowpass arguments: cutoff, resonance
 	aL, aR Lowpass aL, aR, gkpot6, 0.7, 0.5 ;gkpot2, gkpot3
 
 	; SimpleLooper arguments, rec/play/ovr, stop/start, clear, speed, reverse, through
-	kSuperSpeed scale gkpot4, 1, 6
-	kSpeed = gkswitch3 < 1 ? gkpot4 : kSuperSpeed
-	gkswitch4 = gkswitch4 == 1 ? 0 : 1
-	aL, aR, kRec,kPlaying SimpleLooper aL, aR, gktoggle1, gktoggle0, 0, kSpeed, gkswitch4, 1
-	gkled0 = kPlaying
-	gkled1 = gktoggle1
+	;aL, aR, kRec,kPlaying SimpleLooper aL, aR, gktoggle1, gktoggle0, 0, kSpeed, gkswitch4, 1
+	aL, aR,kR,kP SimpleLooper aL, aR, gk60, gk62, 0, kLoopSpeed, gk64, 1
+
 
 	; FOR MONO OUT
 	aL = (aL + aR) * 0.5
@@ -180,6 +249,7 @@ endin
 </CsInstruments>
 <CsScore>
 i999 0 2
+
 i99 0 86400
 </CsScore>
 </CsoundSynthesizer>

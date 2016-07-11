@@ -23,32 +23,31 @@ opcode RandDelay, aa, aakkk					 ;  Rand_Delay
 	aWetL init 0
 	aWetR init 0
 
-	if kDryWet == 0 then 
+	if kDryWet > 0.1 then 
+
+		aPulse lfo 0.5, 3, 1
+		aPulse butlp aPulse, 100
+
+		aInSigL = (ainL*aPulse)
+		aInSigR = (ainR*aPulse)
+
+		aRandomTimesL randh 0.4, 0.2 + kRange, 10, 0, 0.401
+		aRandomTimesL butlp aRandomTimesL, 2
+		aRandomTimesR randh 0.4, 0.25 + kRange, 0.6, 0, 0.401
+		aRandomTimesR butlp aRandomTimesR, 2
+
+		aDelayL delayr 1					;  a delayline, with 1 second maximum delay-time is initialised
+		aWetL deltapi aRandomTimesL			; data at a flexible position is read from the delayline 
+			 delayw aInSigL+(aWetL*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
+		aDelayR delayr 1					;  a delayline, with 1 second maximum delay-time is initialised
+		aWetR	deltapi aRandomTimesR		; data at a flexible position is read from the delayline 
+			  delayw aInSigR+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
+
+	else
 		aWetL = 0
 		aWetR = 0
-		kgoto skipProc
-	endif
-
-	aPulse lfo 0.5, 3, 1
-	aPulse butlp aPulse, 100
-
-	aInSigL = (ainL*aPulse)
-	aInSigR = (ainR*aPulse)
-
-	aRandomTimesL randh 0.4, 0.2 + kRange, 10, 0, 0.401
-	aRandomTimesL butlp aRandomTimesL, 2
-	aRandomTimesR randh 0.4, 0.25 + kRange, 0.6, 0, 0.401
-	aRandomTimesR butlp aRandomTimesR, 2
-
-	aDelayL delayr 1					;  a delayline, with 1 second maximum delay-time is initialised
-	aWetL deltapi aRandomTimesL			; data at a flexible position is read from the delayline 
-		 delayw aInSigL+(aWetL*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
-	aDelayR delayr 1					;  a delayline, with 1 second maximum delay-time is initialised
-	aWetR	deltapi aRandomTimesR		; data at a flexible position is read from the delayline 
-		  delayw aInSigR+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
-
-skipProc:
-
+	endif 
+	
 	aOutL ntrpol ainL, aWetL, kDryWet
 	aOutR ntrpol ainR, aWetR, kDryWet
 
