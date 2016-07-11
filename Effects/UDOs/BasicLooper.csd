@@ -12,7 +12,6 @@
 		kStopStart	init 0
 		kPlaying 	init 0
 		kOverdub 	init 0
-		;kRecTrigger init 0
 		kndx init 0
 
 		iLiveSamplAudioTableL	ftgen	0, 0, giLiveSamplTableLen, 2, 0	
@@ -21,21 +20,19 @@
 		iTmpAudioTableR			ftgen	0, 0, giLiveSamplTableLen, 2, 0	
 
 
-	  	kSpeed 		init 1
+	  	kSpeedMulti init 1
 	  	kReverse 	init 1 ; -1 or 1
-
-	  	; TEST THIS 
-	  	
-	  	if changed(kOctUp) == 1 then
-	  		kSpeed = kSpeed * 2
-	  	endif
-	  	if changed(kOctDown) == 1 then
-	  		kSpeed = kSpeed * 0.5
-	  	endif
-		
 
 		kReverse scale kReverse, 1, -1
 	 	kSpeed = kSpeed * kReverse
+
+	  	; TEST THIS 
+	  	printk2 kOctUp
+	  	if trigger(kOctUp, 0.5, 2) == 1 then
+	  		kSpeedMulti = kSpeedMulti * 2
+	 	elseif trigger(kOctDown, 0.5, 2) == 1 then
+	  		kSpeedMulti = kSpeedMulti * 0.5
+	  	endif
 
 		kndx 	= trigger(kRecPlayOvr,0.5,0) == 1 ? 0 : kndx
 
@@ -71,11 +68,13 @@
 	    kRestart trigger kRecPlayOvr,0.5,1	; if switched to 'play'
 	    if kRestart == 1 then
 	    	kPlaying = 1
+	    	kSpeedMulti = 1
 	    endif
 
 	    ; Toggle kPlaying if kStopStart is toggeled 
 	    if (changed(kStopStart) == 1) then
 	    	kPlaying = (kPlaying + 1) % 2
+	    	kRestart trigger kPlaying,0.5,0
 	    endif
 
 		Srec sprintfk "Playing: %f", kPlaying
@@ -86,7 +85,7 @@
 		;***********************************
 		if (kPlaying == 1)  then
 			; 1 over table length in seconds to get appropriate speed for phasor
-			kreadFreq divz kSpeed, (kLength/sr), 0.0000001 
+			kreadFreq divz kSpeed * kSpeedMulti, (kLength/sr), 0.0000001 
 
 			if kRestart == 1 then			; Restart loop playback from the beginning if play is retriggered
 				 reinit RESTART_PLAYBACK
@@ -97,21 +96,26 @@
 		  	aPlayIdx	= aPlayIdx*aLoopLen
 
 		  	if kOverdub == 0 then 
-			  	aoutL tablei aPlayIdx, iLiveSamplAudioTableL
-			 	aoutR tablei aPlayIdx, iLiveSamplAudioTableR
+			  	aLoopL tablei aPlayIdx, iLiveSamplAudioTableL
+			 	aLoopR tablei aPlayIdx, iLiveSamplAudioTableR
 			else
 			 	aPlayL tablei aPlayIdx, iLiveSamplAudioTableL
 			 	aPlayR tablei aPlayIdx, iLiveSamplAudioTableR
-			 	aoutL = aPlayL + ainL
-			 	aoutR = aPlayR + ainR
-			 	tablew aoutL/0dbfs,aPlayIdx,iLiveSamplAudioTableL
-    			tablew aoutR/0dbfs,aPlayIdx,iLiveSamplAudioTableR
+			 	aLoopL = aPlayL + ainL
+			 	aLoopR = aPlayR + ainR
+			 	tablew aLoopL/0dbfs,aPlayIdx,iLiveSamplAudioTableL
+    			tablew aLoopR/0dbfs,aPlayIdx,iLiveSamplAudioTableR
     		endif
-
+    		aoutL = aLoopL
+    		aoutR = aLoopR    		
 		else
+		 	aEmpty = 0
 		 	aoutL = 0
-			aoutR = 0
+    		aoutR = 0  
 		endif
+
+		; Add FlipSwitch code
+		;aoutL, aoutR FadeSwitch aEmpty, aEmpty, aLoopL, aLoopR, 0.1, kPlaying
 
 		if kThrough == 1 then 
 			aoutL = aoutL + ainL
