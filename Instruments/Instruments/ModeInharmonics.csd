@@ -115,6 +115,7 @@ instr ModeInharmonics
     ;itype           chnget "Instr"
     itype = 5
     itype           = itype-1
+    itype
     itabNum         table itype, giTypes
     inumpartials    = ftlen(itabNum)
     ;kaDevamp        chnget "devAmp"
@@ -130,6 +131,9 @@ instr ModeInharmonics
 ; apply amp envelope
 	a1		= (a1 + a2 )* amp
     aL, aR pan2 a1, 0.45
+
+    aL limit aL, 0.95, 1 
+    aR limit aR, 0.95, 1 
 
     chnmix aL, "MasterL"
     chnmix aR, "MasterR"

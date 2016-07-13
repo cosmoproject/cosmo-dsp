@@ -6,7 +6,7 @@ opcode	AudioAnalyzer, aa, aa
     chnset ainL, "AudioInLeft"
     chnset ainR, "AudioInRight"
 
-    ainMono     = ainL + ainR 
+    ainMono     = (ainL + ainR) * 0.75
     chnset ainMono, "AudioInMono"
 
     afollow follow2 ainMono * 4, 0.1, 0.1
