@@ -10,8 +10,11 @@ ksmps  	= 64
 nchnls 	= 2
 
 
+	#include "../Effects/UDOs/FadeSwitch.csd"
 
-
+	#include "../Effects/UDOs/AudioAnalyzer.csd"
+	
+	#include "../Effects/UDOs/AnalogDelay.csd"
 	#include "../Effects/UDOs/Blur.csd"
 	#include "../Effects/UDOs/Chorus.csd"
 	#include "../Effects/UDOs/Convolution.csd"
@@ -35,6 +38,7 @@ nchnls 	= 2
 #include "Instruments/StringSynth.csd"
 #include "Instruments/SineSynths.csd"
 #include "Instruments/Moogish.csd"
+#include "Instruments/ModeInharmonics.csd"
 #include "Instruments/CrazyPluck.csd"
 #include "Instruments/Scanned.csd"
 #include "Instruments/Simpler.csd"
@@ -51,8 +55,8 @@ instr 1
 	i_instrnum[] init 1
 	
 	i_instrnum[0] nstrnum "Simpler"
-;	i_instrnum[1] nstrnum "CrazyPluck"
-;	i_instrnum[2] nstrnum "Scanned"	
+	;	i_instrnum[1] nstrnum "CrazyPluck"
+	;	i_instrnum[2] nstrnum "Scanned"	
 
 
 	kndx init 0
@@ -101,7 +105,7 @@ instr 2
 	
 	i_instrnum[] init 1
 	
-	i_instrnum[0] nstrnum "Simpler" ;+ (inum*0.001)
+	i_instrnum[0] nstrnum "ModeInharmonics" ;+ (inum*0.001)
 ;	i_instrnum[1] nstrnum "CrazyPluck"
 ;	i_instrnum[2] nstrnum "Scanned"	
 
@@ -144,6 +148,7 @@ instr 99
 	chnset a0, "MasterL"
 	chnset a0, "MasterR"
 
+	aL, aR AudioAnalyzer aL, aR
 
 	; Reverb arguments: decay, cutoff, mix
 	arvbL, arvbR Reverb aL, aR, 0.85, 0.5, 1 ;gkpot0, gkpot1, gkswitch0
