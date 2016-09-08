@@ -49,7 +49,6 @@ endin
 instr 1 
 	#include "includes/adc_channels.inc"
 	#include "includes/gpio_channels.inc"
-	#include "includes/switch2led.inc"
 
 	aL, aR ins
 
@@ -89,7 +88,7 @@ instr 1
 
 	; Hack arguments: drywet, freq
 	kHack = gkpot1 < 0.1 ? 0 : 1
-	aL, aR Hack aL, aR, kHack, gkpot1
+	aL, aR Hack aL, aR, kHack, gkpot2
 
 	; Wobble arguments: freq, drywet
 	;aL, aR Wobble aL, aR	
@@ -134,10 +133,12 @@ instr 2
 	aR = gaR
 
 	; Reverb arguments: decay, cutoff, mix
-	aL, aR Reverb aL, aR, 0.9, 0.5, gkpot6
+	aL, aR Reverb aL, aR, 0.9, 0.5, gkpot1
 
 	; SimpleLooper arguments, rec/play/ovr, stop/start, clear, speed, reverse, through
-	aL, aR SimpleLooper aL, aR, gktoggle1, 0, 0, gkpot4, gkswitch4, 1
+	aL, aR, kRec, kPlay SimpleLooper aL, aR, gktoggle1, gktoggle0, 0, gkpot4, 0, 1
+	gkled1 = gktoggle1
+	gkled0 = kPlay 
 
 	aOutL = aL;(aL + adlyL)
 	aOutR = aR;(aR + adlyR)
