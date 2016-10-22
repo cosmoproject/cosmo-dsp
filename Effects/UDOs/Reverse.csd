@@ -40,7 +40,7 @@ opcode	Reverse, aa, aaKk				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A U
 		puts Scut, ktime
 
 
-	if kdrywet == 1 then
+;	if kdrywet == 1 then
 
 		ktrig	changed	ktime			;IF ktime CONTROL IS MOVED GENERATE A MOMENTARY '1' IMPULSE
 		if ktrig=1 then				;IF A TRIGGER HAS BEEN GENERATED IN THE LINE ABOVE...
@@ -63,12 +63,14 @@ opcode	Reverse, aa, aaKk				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A U
 			delayw	ainR			;WRITE AUDIO INTO DELAY BUFFER
 
 		rireturn				;RETURN FROM REINITIALISATION PASS
-		aoutL = atapL*aenv
-		aoutR = atapR*aenv
-	else
-		aoutL = ainL
-		aoutR = ainR
-	endif
+		arevL = atapL*aenv
+		arevR = atapR*aenv
+;	else
+;		aoutL = ainL
+;		aoutR = ainR
+;	endif
+
+	aoutL, aoutR FadeSwitch ainL, ainR, arevL, arevR, 5, kdrywet
 
 	xout	aoutL, aoutR			;SEND AUDIO BACK TO CALLER INSTRUMENT. APPLY AMPLITUDE ENVELOPE TO PREVENT CLICKS.
 endop

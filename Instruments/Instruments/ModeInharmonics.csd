@@ -7,6 +7,19 @@ Adaptation for COSMO DSP by: Bernt Isak Wærstad
 
 
 */
+<CsoundSynthesizer>
+<CsOptions>
+-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024 --sched=99 -+rtmidi=alsa ;-M hw:2
+</CsOptions>
+<CsInstruments>
+
+	sr = 44100  
+	ksmps = 64
+	nchnls = 2	
+	0dbfs = 1
+        massign 1,2
+
+giSine		ftgen	0, 0, 65536, 10, 1	; sine
 
 ;FUNCTION TABLES STORING MODAL FREQUENCY RATIOS===================================================================================================================================
 ;plucked string
@@ -82,11 +95,36 @@ opcode ModePartial2, a, aiiikkkkk
     xout aout
 endop
 
+;***************************************************
+	instr	ModeInharmonics_AudioInput
+		ain     inch 2
+        ain     = ain * 1
+        chnset ain, "audio"
 
+        afollow follow2 ain * 4, 0.1, 0.1
+        kfollow downsamp afollow
+        kfollow portk kfollow, 0.1
+
+        kfreq = 400 ;+ (kfollow * 3000)
+        chnset kfreq, "freq"
+
+        ;printk2 kfreq
+        ;printk2 kfollow
+
+    endin
+
+        
 instr ModeInharmonics
 
-	iamp		= p4 * 0.5;ampdbfs(-5)
-	icps		= p5 ;cpsmidinn(iNote)
+    kfreq expcurve gkpot0, 10
+    kfreq scale kfreq, 1000, 100
+    Scut sprintfk "Frequency: %dHz", kfreq
+        puts Scut, kfreq
+
+	iamp		= 0.8;ampdbfs(-5)
+	iNote		= 60;notnum
+	icps		= 440;cpsmidinn(iNote)
+    kcps = kfreq ;chnget "freq"
 
 ; amp envelope
 	iattack		= 0.001
@@ -96,44 +134,36 @@ instr ModeInharmonics
 	amp		madsr	iattack, idecay, isustain, irelease
 
 ; external audio in
-    ainL, ainR      ins ;       chnget "AudioInMono"
-    ain = ainL + ainR * 0.5 
-   /*                     
+    ain             chnget "audio"
+                        
     kQ expcurve gkpot1, 10
     kQ scale kQ, 4000, 1
     kQ init 600
     Scut sprintfk "Q: %d", kQ
         puts Scut, kQ
-    */
 
 ; mode
     ;kQ              chnget "Q"
-    kQ = 600
-    ;kdamp           chnget "damp"
+    ;kQ = 600
+    kdamp           chnget "damp"
     kdamp = 1
     kdamp           = kdamp+0.01
-    ;itype           chnget "Instr"
+    itype           chnget "Instr"
     itype = 5
     itype           = itype-1
-    itype
     itabNum         table itype, giTypes
     inumpartials    = ftlen(itabNum)
-    ;kaDevamp        chnget "devAmp"
+    kaDevamp        chnget "devAmp"
     kaDevamp = 0
-    ;kfDevamp        chnget "devFq"
+    kfDevamp        chnget "devFq"
     kfDevamp = 0
     
-    a2 oscil iamp * 0, icps
     seed 0
-    a1  ModePartial2 ain, itabNum, 0, inumpartials, icps, kQ, kdamp, kaDevamp, kfDevamp
-
+    a1  ModePartial2 ain, itabNum, 0, inumpartials, kcps, kQ, kdamp, kaDevamp, kfDevamp
 
 ; apply amp envelope
-	a1		= (a1 + a2 )* amp
+	a1		= a1 * amp
     aL, aR pan2 a1, 0.45
-
-    aL limit aL, 0.95, 1 
-    aR limit aR, 0.95, 1 
 
     chnmix aL, "MasterL"
     chnmix aR, "MasterR"

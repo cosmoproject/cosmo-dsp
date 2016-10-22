@@ -48,8 +48,8 @@ opcode RandDelay, aa, aakkk					 ;  Rand_Delay
 		aWetR = 0
 	endif 
 	
-	aOutL ntrpol ainL, aWetL, kDryWet
-	aOutR ntrpol ainR, aWetR, kDryWet
+	aOutL ntrpol ainL, aWetL*2, kDryWet
+	aOutR ntrpol ainR, aWetR*2, kDryWet
 
 
 	xout aOutL, aOutR

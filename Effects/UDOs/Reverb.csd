@@ -4,6 +4,7 @@ opcode Reverb, aa, aakkk
 	kRev_Decay scale kRev_Decay, 1, 0
 	Srev sprintfk "Reverb Decay: %f", kRev_Decay
 		puts Srev, kRev_Decay+1
+	kRev_Decay port kRev_Decay, 0.1
 
 
 	kRev_Cutoff scale kRev_Cutoff, 12000, 200
@@ -15,6 +16,7 @@ opcode Reverb, aa, aakkk
 	Srev sprintfk "Reverb Mix: %f", kRev_Mix
 		puts Srev, kRev_Mix+1 
 
+	kRev_Mix port kRev_Mix, 0.05
 
 	kRev_Decay init 0.85
 	kRev_Cutoff init 7000

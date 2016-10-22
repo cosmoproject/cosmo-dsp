@@ -1,6 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac:hw:2,0 -iadc:hw:2 -d -+rtaudio=ALSA -b128 -B1024 -+rtmidi=alsa -Ma -m0 --sched=99 
+;-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024 -+rtmidi=alsa -Ma -m0 --sched=99 
+-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024
 ;-odac -iadc0 -Ma
 </CsOptions>
 <CsInstruments>
@@ -43,8 +44,9 @@ nchnls 	= 2
 #include "Instruments/Scanned.csd"
 #include "Instruments/Simpler.csd"
 
+
 massign 3, 3
-/*
+
 instr 1
 
 	iamp ampmidi 0.5
@@ -55,8 +57,8 @@ instr 1
 	i_instrnum[] init 1
 	
 ;	i_instrnum[0] nstrnum "Simpler"
-;	i_instrnum[1] nstrnum "CrazyPluck"
-	i_instrnum[0] nstrnum "Scanned"	
+	i_instrnum[0] nstrnum "SineSynth1"
+;	i_instrnum[0] nstrnum "Scanned"	
 
 
 	kndx init 0
@@ -94,7 +96,7 @@ instr 1
 	ktrigger = 0
 
 endin
-*/
+
 gk60 init 0
 gk61 init 0
 gk62 init 0
@@ -166,6 +168,8 @@ elseif inote == 72 then
 endif
 endin
 
+
+
 instr 99
 	#include "includes/gpio_channels.inc"
 	#include "includes/adc_channels.inc"
@@ -188,25 +192,34 @@ instr 99
 	ainL atone ainL, 75
 	ainR atone ainR, 75
 
+
 	kgateL rms ainL
 	kgateR rms ainR
-	kmuteL = kgateL > 0.005 ? 1 : 0
-	kmuteR = kgateR > 0.005 ? 1 : 0
+	kmuteL = kgateL > 0.001 ? 1 : 0
+	kmuteR = kgateR > 0.001 ? 1 : 0
 	kmuteL port kmuteL, 0.3
 	kmuteR port kmuteR, 0.3
-	kgain = 3
-	ainL *= kgain
-	ainR *= kgain
+
+; bypass gate
+	kmuteL = 1
+	kmuteR = 1
 
 	aL = aL + (ainL * kmuteL)
 	aR = aR + (ainR * kmuteR)
 
+
+	kgain = 3
+	ainL *= kgain
+	ainR *= kgain
 ; --------------------------------------
 	
 	kLoopSpeed init 1
 /*	kLoopSpeed *= gk61
 	kLoopSpeed *= gk63
 */
+
+	gktoggle0 init 0
+
 	; SimpleLooper arguments, rec/play/ovr, stop/start, clear, speed, reverse, through
 	kSuperSpeed scale gkpot4, 1, 6
 	kSpeed = gkswitch3 < 1 ? gkpot4 : kSuperSpeed
@@ -219,20 +232,23 @@ instr 99
 	; Distortion arguments: level, drive, tone
 	aL, aR Distortion aL, aR, 0.8, gkpot0, 0.5
 
+
 	; Octaver arguments: pitch (-12 to +12semi), mix
 ;	aL, aR Octaver aL, aR,1, 0.5;gkpot2, gk65*0.5 
 
 	; Repeater arguments: range, on/off
-	aL, aR Repeater aL, aR, gkpot2, gk72
+;	aL, aR Repeater aL, aR, gkpot2, gk72
 
 	; Hack arguments: drywet, freq
 	kHack = gkpot1 < 0.1 ? 0 : 1
+	kHack port kHack, 0.05
 	aL, aR Hack aL, aR, kHack, gkpot1
 
 	; RandDelay arguments: range, feedback, mix
 	kRandDly = gkpot3 > 0.7 ? 1 : gkpot3
 	kRandDly = kRandDly < 0.1 ? 0 : kRandDly
-	aL, aR RandDelay aL, aR, gkpot3, 0.1, kRandDly 
+	kRandDly port kRandDly, 0.01
+	aL, aR RandDelay aL, aR, gkpot3, 0.4, kRandDly 
 
 	kFeed scale gkpot7, 0.5, 0.3
 	kDlyTime scale gkpot7, 0, 1
@@ -249,7 +265,7 @@ instr 99
 	aL, aR Reverb aL, aR, kRevDecay, 0.5, gkpot5
 
 	; Lowpass arguments: cutoff, resonance
-	aL, aR Lowpass aL, aR, gkpot6, 0.7, 0.5 ;gkpot2, gkpot3
+	aL, aR Lowpass aL, aR, gkpot6, 0.6, 0.5 ;gkpot2, gkpot3
 
 	; SimpleLooper arguments, rec/play/ovr, stop/start, clear, speed, reverse, through
 	;aL, aR, kRec,kPlaying SimpleLooper aL, aR, gktoggle1, gktoggle0, 0, kSpeed, gkswitch4, 1
@@ -260,14 +276,14 @@ instr 99
 
 
 	; FOR MONO OUT
-	aL = (aL + aR) * 0.5
+;	aL = (aL + aR) * 0.5
 
 	outs aL, aR
 
 endin
 
 ; --------------------------------------------------------
-; Status LED - set LEDs to ON for 3 seconds to 
+; Status LED - set LEDs to ON for 2 seconds to 
 ; indicate that Csound is running 
 ; --------------------------------------------------------
 

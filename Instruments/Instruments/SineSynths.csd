@@ -21,3 +21,33 @@ instr SineSynth1
 
 endin
 
+instr PolySineSynth1
+
+	iattack init 1
+	irelease init 0.5
+
+	iamp = ampdbfs(p4)
+	icps = p5
+	iattack = p6
+	irelease = p7 
+
+
+
+	print iattack
+	print irelease
+
+	kampenv = madsr:k(iattack, 0.1, iamp, irelease)
+	a1 oscil 0.5, icps
+	a2 oscil 0.3, icps * 1.5
+	a3 oscil 0.2, icps * 2
+
+	asynth = a1+a2+a3
+
+	asynth *= kampenv
+
+	aL, aR pan2 asynth, 0.55
+
+	chnmix aL, "MasterL"
+	chnmix aR, "MasterR"
+
+endin

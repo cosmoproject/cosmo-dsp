@@ -16,7 +16,10 @@ aout	clip	a1,0,0dbfs
 	
 kenv	adsr	0.01,.5,.2,.1	;inviluppo
 
-outs	aout*kenv,aout*kenv
+chnmix aout*kenv, "MasterL"
+chnmix aout*kenv, "MasterR"
+
+;outs	aout*kenv,aout*kenv
 
 endin
 

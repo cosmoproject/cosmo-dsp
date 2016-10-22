@@ -88,7 +88,7 @@ instr 1
 
 	; Hack arguments: drywet, freq
 	kHack = gkpot1 < 0.1 ? 0 : 1
-	aL, aR Hack aL, aR, kHack, gkpot2
+	aL, aR Hack aL, aR, kHack, gkpot1
 
 	; Wobble arguments: freq, drywet
 	;aL, aR Wobble aL, aR	
@@ -111,7 +111,7 @@ instr 1
 	;aL, aR SquareMod aL, aR, gkpot4, kSquareMod
 
 	; Lowpass arguments: cutoff, resonance
-	aL, aR Lowpass aL, aR, gkpot5, 0.7, 0.5 ;gkpot2, gkpot3
+	aL, aR Lowpass aL, aR, gkpot5, 0.6, 0.5 ;gkpot2, gkpot3
 
 	; SolinaChorus arguments: lfo1-freq, lfo1-amp, lfo2-freq, lfo2-amp
 	;aL solina_chorus aL, 0.18, 0.6, 6, 0.2
@@ -132,13 +132,17 @@ instr 2
 	aL = gaL
 	aR = gaR
 
-	; Reverb arguments: decay, cutoff, mix
-	aL, aR Reverb aL, aR, 0.9, 0.5, gkpot1
+	#include "includes/gpio_channels.inc"
 
+	; Reverb arguments: decay, cutoff, mix
+	aL, aR Reverb aL, aR, 0.9, 0.5, gkpot6
+
+	; ainL, ainR, kRecPlayOvr, kStopStart, kClear, kSpeed, kReverse, kThrough
 	; SimpleLooper arguments, rec/play/ovr, stop/start, clear, speed, reverse, through
-	aL, aR, kRec, kPlay SimpleLooper aL, aR, gktoggle1, gktoggle0, 0, gkpot4, 0, 1
-	gkled1 = gktoggle1
-	gkled0 = kPlay 
+	aL, aR, kRecPlayOvr, kPlaying SimpleLooper aL, aR, gktoggle1, gktoggle0, 0, gkpot4, gkswitch4, 1
+
+	gkled1 = kRecPlayOvr
+	gkled0 = kPlaying
 
 	aOutL = aL;(aL + adlyL)
 	aOutR = aR;(aR + adlyR)
