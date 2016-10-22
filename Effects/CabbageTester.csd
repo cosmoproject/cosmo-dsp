@@ -56,8 +56,8 @@ nchnls = 2
 
 instr 1
 
-	#include "includes/adc_channels.inc"
-	#include "includes/gpio_channels.inc"
+	#include "../Includes/adc_channels.inc"
+	#include "../Includes/gpio_channels.inc"
 
 	gaL, gaR ins
 	gadlyL = 0
