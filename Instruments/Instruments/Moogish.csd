@@ -86,8 +86,8 @@ instr Moogish
 
 	aoutL moogladder2 aout, kLPFfreq, kLPFres
 
-	; SolinaChorus arguments: lfo1-freq, lfo1-amp, lfo2-freq, lfo2-amp
-	aoutL solina_chorus aoutL, 0.18, 0.6, 6, 0.2
+	; SolinaChorus arguments: lfo1-freq, lfo1-amp, lfo2-freq, lfo2-amp, dry/wet
+	aoutL SolinaChorus aoutL, 0.18, 0.6, 6, 0.2, 1
 
 	aoutR = aoutL
 

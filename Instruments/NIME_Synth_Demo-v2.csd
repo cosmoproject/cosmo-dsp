@@ -10,20 +10,19 @@ ksmps  	= 64
 0dbfs	= 1
 nchnls 	= 2
 
+	#include "../Includes/cosmo_utilities.inc"
 
-	#include "../Effects/UDOs/FadeSwitch.csd"
 
 	#include "../Effects/UDOs/AnalogDelay.csd"
 	#include "../Effects/UDOs/BasicLooper.csd"
 	#include "../Effects/UDOs/Blur.csd"
 	#include "../Effects/UDOs/Chorus.csd"
-	#include "../Effects/UDOs/Convolution.csd"
 	#include "../Effects/UDOs/Distortion.csd"
 	#include "../Effects/UDOs/FakeGrainer.csd"
 	#include "../Effects/UDOs/Hack.csd"
 	#include "../Effects/UDOs/Lowpass.csd"
 	#include "../Effects/UDOs/MultiDelay.csd"
-	#include "../Effects/UDOs/Octaver.csd"
+	#include "../Effects/UDOs/PitchShifter.csd"
 	#include "../Effects/UDOs/RandDelay.csd"
 	#include "../Effects/UDOs/Repeater.csd"
 	#include "../Effects/UDOs/Resonator.csd"
@@ -234,11 +233,11 @@ instr 99
 
 	; SolinaChorus arguments: LFO1 Freq, LFO1 Amp, LFO2 Freq, LFO2 Amp, Dry/wet mix, [, Stereo mode on/off]
 
-	aL, aR SolinaChorus aL, aR 0.18, 0.6, 6, 0.2, gk72, 1
+	aL, aR SolinaChorus aL, aR, 0.18, 0.6, 6, 0.2, gk72, 1
 
 
 	; Octaver arguments: pitch (-12 to +12semi), mix
-;	aL, aR Octaver aL, aR,1, 0.5;gkpot2, gk65*0.5 
+;	aL, aR PitchShifter aL, aR,1, 0.5;gkpot2, gk65*0.5 
 
 	; Repeater arguments: range, on/off
 ;	aL, aR Repeater aL, aR, gkpot2, gk72

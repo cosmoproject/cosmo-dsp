@@ -18,9 +18,9 @@ instr StringSynth
 
 	aL, aR pan2 asig, 0.55
 
-	; SolinaChorus arguments: lfo1-freq, lfo1-amp, lfo2-freq, lfo2-amp
-	aL solina_chorus aL, 0.18, 0.6, 6, 0.2
-	aR solina_chorus aR, 0.18, 0.6, 6, 0.2
+	; SolinaChorus arguments: lfo1-freq, lfo1-amp, lfo2-freq, lfo2-amp dry/wet
+	aL SolinaChorus aL, 0.18, 0.6, 6, 0.2, 1
+	aR SolinaChorus aR, 0.18, 0.6, 6, 0.2, 1
 
 
 	chnmix aL, "MasterL"
