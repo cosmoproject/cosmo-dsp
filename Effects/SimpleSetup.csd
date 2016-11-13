@@ -9,6 +9,8 @@ ksmps  	= 128
 0dbfs	= 1
 nchnls 	= 2
 
+#include "../Includes/cosmo_utilities.inc"
+
 #include "UDOs/Reverb.csd"
 #include "UDOs/Lowpass.csd"
 
@@ -18,13 +20,17 @@ instr 1
 
 	aL, aR ins
 
-	; Lowpass_Stereo arguments: cutoff, resonance
-	aL, aR Lowpass aL, aR, 0.6, 0.7, 0.5 ;gkpot2, gkpot3
+	; Name of pots: gkpotX
+	; Name of switches: gkswitchX or gktoggleX
+	; Name of LEDs: gkledX
+
+	; Lowpass arguments: cutoff, resonance, distortion
+	aL, aR Lowpass aL, aR, 0.6, 0.7, 0.5 
 
 
 	; Reverb arguments: decay, cutoff, mix
-	aL, aR Reverb aL, aR, 0.9, 0.5, 0.2 ; gkpot0, gkpot1, gktoggle0
-	; gkled0 = gktoggle0
+	aL, aR Reverb aL, aR, 0.9, 0.5, 0.2 
+	
 
 	outs aL, aR
 
