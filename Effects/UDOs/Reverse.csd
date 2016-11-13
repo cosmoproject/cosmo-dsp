@@ -1,4 +1,21 @@
+/********************************************************
 
+	Reverse.csd
+	Author: Alex Hofmann
+	COSMO UDO adaptation: Bernt Isak Wærstad
+
+	Arguments: Reverse time, Dry/wet mix
+
+	A reverse effect
+
+********************************************************/
+
+
+; ********************************************************
+; 		MONO VERSION
+; ********************************************************
+
+#include "UDOs/FadeSwitch.csd" 
 
 opcode	Reverse, a, aK				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A USEFUL VALUE ALSO AT I-TIME
 	ain,ktime	xin			;READ IN INPUT ARGUMENTS
@@ -31,6 +48,10 @@ opcode Revers, a,a
 	aout Reverse a1, 0.5
 	xout aout
 endop 
+
+; ********************************************************
+; 		STEREO VERSION
+; ********************************************************
 
 opcode	Reverse, aa, aaKk				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A USEFUL VALUE ALSO AT I-TIME
 	ainL,ainR,ktime,kdrywet	xin			;READ IN INPUT ARGUMENTS
@@ -65,9 +86,10 @@ opcode	Reverse, aa, aaKk				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A U
 		rireturn				;RETURN FROM REINITIALISATION PASS
 		arevL = atapL*aenv
 		arevR = atapR*aenv
+
 ;	else
-;		aoutL = ainL
-;		aoutR = ainR
+		aoutL = ainL
+		aoutR = ainR
 ;	endif
 
 	aoutL, aoutR FadeSwitch ainL, ainR, arevL, arevR, 5, kdrywet

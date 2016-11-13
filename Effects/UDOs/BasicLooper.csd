@@ -1,4 +1,27 @@
 
+/********************************************************
+
+	EXPERIMENTAL! 
+
+	BasicLooper.csd
+	Author: Bernt Isak Wærstad
+
+	Arguments: Record/Play/Overdub, Stop/start, Clear, Speed, Reverse, Audio Through, Octave Down, Octave Up
+
+		* Record/Play: Send a 1 to start recording, send a 1 again to stop recording and start playing the loop
+		* Stop/start: Toggles between loop stopped and loop playing
+		* Clear: Not implemented
+		* Speed: Loop playback speed 
+		* Reverse: Toggles normal and reverse playback
+		* Audio Through: Toggles audio coming through or not
+		* Octave Down: Playback speed and pitch one octave down
+		* Octave Up: Playback speed and pitch one octave up
+
+	A basic looper with overdub (not properly implemented)
+
+********************************************************/
+
+
 	giLiveSamplTableLen 	init 882000;
 	; empty table, size 882000 equals 20 seconds at 44.1kHz sr
 

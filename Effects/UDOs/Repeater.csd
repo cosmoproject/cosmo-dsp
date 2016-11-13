@@ -1,9 +1,23 @@
+/********************************************************
+
+	Repeater.csd
+	Author: Alex Hofmann
+	COSMO UDO adaptation: Bernt Isak Wærstad
+
+	Arguments: Range, On/off
+
+	Repeater effect
+
+********************************************************/
+
+#include "UDOs/FadeSwitch.csd"
 
 opcode Repeater, aa, aakk
 
 	ainL, ainR, kRange, kOnOff xin
 
 	kRange scale kRange, 0.5, 0.1
+	kRange = kRange >= 0.5 ? 0.5 : kRange		; Make sure range value doesnt exceed delayline length
 	Scut sprintfk "Repeat range: %f", kRange	
 		puts Scut, kRange+1
 
@@ -48,6 +62,7 @@ opcode RepeaterLong, aa, aakk				 ; Repeat Long
 	ainL, ainR, kRange, kOnOff xin
 
 	kRange scale kRange, 6, 0.001
+	kRange = kRange >= 6 ? 6 : kRange		; Make sure range value doesnt exceed delayline length
 	Scut sprintfk "Repeat range: %f", kRange	
 		puts Scut, kRange+1
 
@@ -67,10 +82,10 @@ opcode RepeaterLong, aa, aakk				 ; Repeat Long
 		kFeedback = 1
 	endif
 
-	aDelayL delayr 6					;  a delayline, with 1 second maximum delay-time is initialised
+	aDelayL delayr 6.5					;  a delayline, with 1 second maximum delay-time is initialised
 	aWetL deltapi aRange		; data at a flexible position is read from the delayline 
 		 delayw (ainL*kInputVol)+(aWetL*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
-	aDelayR delayr 6				;  a delayline, with 1 second maximum delay-time is initialised
+	aDelayR delayr 6.5				;  a delayline, with 1 second maximum delay-time is initialised
 	aWetR	deltapi aRange				; data at a flexible position is read from the delayline 
 		  delayw (ainR*kInputVol)+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
 	aEmpty = 0.0

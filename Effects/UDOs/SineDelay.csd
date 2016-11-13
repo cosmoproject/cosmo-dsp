@@ -1,6 +1,14 @@
+/********************************************************
 
-;SinMod Delay
+	SineDelay.csd
+	Author: Alex Hofmann
+	COSMO UDO adaptation: Bernt Isak Wærstad
 
+	Arguments: Range(in seconds), Feedback, Dry/wet mix
+
+	A SinMod Delay
+
+********************************************************/
 
 opcode SineDelay, aa, aakkk
 

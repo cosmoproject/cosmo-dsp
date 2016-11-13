@@ -1,8 +1,18 @@
+/********************************************************
+
+	FakeGrainer.csd
+	Author: Alex Hofmann
+	COSMO UDO adaptation: Bernt Isak Wærstad
+
+	Arguments: Dry/wet mix
+
+	An effect that sounds like granular synthesis
+
+********************************************************/
 
 opcode FakeGrainer, aa, aak
 
 	ainL, ainR, kDryWet xin
-	;aMod lfo 20, 3, 1
 
 	kDryWet scale kDryWet, 1, 0
 	Srev sprintfk "FakeGrainer Mix: %f", kDryWet
@@ -10,7 +20,7 @@ opcode FakeGrainer, aa, aak
 
 	aMod lfo 1, 35, 3
 	aMod butlp aMod, 300
-	;outs gaOutL * (aMod), gaOutR * (aMod)
+
 	aGrainL = ainL * aMod
 	aGrainR = ainR * aMod
 

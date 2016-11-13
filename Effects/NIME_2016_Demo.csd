@@ -138,8 +138,8 @@ instr 2
 	aL, aR Reverb aL, aR, 0.9, 0.5, gkpot6
 
 	; ainL, ainR, kRecPlayOvr, kStopStart, kClear, kSpeed, kReverse, kThrough
-	; SimpleLooper arguments, rec/play/ovr, stop/start, clear, speed, reverse, through
-	aL, aR, kRecPlayOvr, kPlaying SimpleLooper aL, aR, gktoggle1, gktoggle0, 0, gkpot4, gkswitch4, 1
+	; SimpleLooper arguments, rec/play/ovr, stop/start, speed, reverse, through
+	aL, aR, kRecPlayOvr, kPlaying SimpleLooper aL, aR, gktoggle1, gktoggle0, gkpot4, gkswitch4, 1
 
 	gkled1 = kRecPlayOvr
 	gkled0 = kPlaying

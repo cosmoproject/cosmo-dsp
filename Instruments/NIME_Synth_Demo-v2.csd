@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
-;-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024 -+rtmidi=alsa -Ma -m0 --sched=99 
--odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024
+-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024 -+rtmidi=alsa -Ma -m0 --sched=99 
+;-odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024
 ;-odac -iadc0 -Ma
 </CsOptions>
 <CsInstruments>
@@ -181,10 +181,8 @@ instr 99
 	a0 = 0
 	chnset a0, "MasterL"
 	chnset a0, "MasterR"
-/*
-	aL solina_chorus aL, 0.18, 0.6, 6, 0.2
-	aR solina_chorus aR, 0.18, 0.6, 6, 0.2
-*/
+
+
 ; --------------------------------------
 ; AUDIO INPUT
 ; --------------------------------------
@@ -220,17 +218,23 @@ instr 99
 
 	gktoggle0 init 0
 
-	; SimpleLooper arguments, rec/play/ovr, stop/start, clear, speed, reverse, through
+	; SimpleLooper arguments, rec/play/ovr, stop/start, speed, reverse, through
 	kSuperSpeed scale gkpot4, 1, 6
 	kSpeed = gkswitch3 < 1 ? gkpot4 : kSuperSpeed
 	gkswitch4 = gkswitch4 == 1 ? 0 : 1
-	;aL, aR,kR,kP SimpleLooper aL, aR, gk60, gk62, 0, kLoopSpeed, gk64, 1
-	aL, aR, kRec,kPlaying SimpleLooper aL, aR, gktoggle1, gktoggle0, 0, kSpeed, gkswitch4, 1
+
+	aL, aR, kRec,kPlaying SimpleLooper aL, aR, gktoggle1, gktoggle0, kSpeed, gkswitch4, 1
+
 	gkled0 = kPlaying
 	gkled1 = gktoggle1
 
 	; Distortion arguments: level, drive, tone
 	aL, aR Distortion aL, aR, 0.8, gkpot0, 0.5
+
+
+	; SolinaChorus arguments: LFO1 Freq, LFO1 Amp, LFO2 Freq, LFO2 Amp, Dry/wet mix, [, Stereo mode on/off]
+
+	aL, aR SolinaChorus aL, aR 0.18, 0.6, 6, 0.2, gk72, 1
 
 
 	; Octaver arguments: pitch (-12 to +12semi), mix
@@ -252,7 +256,8 @@ instr 99
 
 	kFeed scale gkpot7, 0.5, 0.3
 	kDlyTime scale gkpot7, 0, 1
-	aL, aR MultiDelay aL, aR, 1, kDlyTime, kFeed, 0.5, gkswitch5*0.5
+	kMultiTap = gkpot7 < 0.2 ? 1 : 0
+	aL, aR MultiDelay aL, aR, kMultiTap, kDlyTime, kFeed, 0.5, gkswitch5*0.5
 
 
 	; Reverse arguments: time, drywet/bypass
@@ -272,7 +277,7 @@ instr 99
 	aL, aR,kR,kP BasicLooper aL, aR, gk60, gk62, 0, kLoopSpeed, gk64, 1, gk61, gk63
 
 	; Repeater arguments: range, on/off
-	aL, aR RepeaterLong aL, aR, gkpot2, gk70
+	aL, aR RepeaterLong aL, aR, 0.5, gk70
 
 
 	; FOR MONO OUT

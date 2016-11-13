@@ -1,3 +1,10 @@
+/********************************************************
+	Tremolo.csd
+	Author: Bernt Isak Wærstad
+
+	Arguments: Frequency, On/off
+********************************************************/
+
 opcode Tremolo, aa, aakk
 	ainL, ainR, kFreq, kOnOff xin
 

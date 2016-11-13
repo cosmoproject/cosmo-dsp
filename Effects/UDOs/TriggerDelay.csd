@@ -1,22 +1,33 @@
-; TriggerDelay.csd
-; Written by Iain McCurdy, 2012.
-; Adaption by Bernt Isak Wærstad, 2015.
+/********************************************************
+	TriggerDelay.csd
+	Author: Iain McCurdy 
+	COSMO UDO adaption: Bernt Isak Wærstad 
 
-; This example works best with sharp percussive sounds
+	Arguments: 	Threshold, DelayTime Min, DelayTime Max, Feedback Min, 
+				Feedback Max, Width, Mix, Level, Portamento time, 
+				Center frequency, Bandwidth
 
-; A trigger impulse is generated each time the rms of the input signal crosses the defined 'Threshold' value.
-; Each time a new trigger is generated a new random delay time (between user definable limits)
-; - and a new random feedback value (again between user definable limits) are generated.
+	This example works best with sharp percussive sounds
 
-; It is possible to generate feedback values of 1 and greater (which can lead to a continuous build-up of sound)
-;  this is included intentionally and the increasing sound will be clipped and can be filtered by reducing the 'Damping' control to produce increasing distortion of the sound within the delay buffer as it repeats 
+	A trigger impulse is generated each time the rms of the input signal 
+	crosses the defined 'Threshold' value. Each time a new trigger is generated
+	a new random delay time (between user definable limits) - and a new random 
+	feedback value (again between user definable limits) are generated.
 
-; Increasing the 'Portamento' control damps the otherwise abrupt changes in delay time.
+	It is possible to generate feedback values of 1 and greater (which can lead 
+	to a continuous build-up of sound) this is included intentionally and the
+	increasing sound will be clipped and can be filtered by reducing the 
+	'Damping' control to produce increasing distortion of the sound within 
+	the delay buffer as it repeats 
 
-; 'Width' allows the user to vary the delay from a simple monophonic delay to a ping-pong style delay
+	Increasing the 'Portamento' control damps the otherwise abrupt changes
+	in delay time.
 
-;Author: Iain McCurdy (2012)
-;COSMO UDO adaption: Bernt Isak Wærstad (2015)
+	'Width' allows the user to vary the delay from a simple monophonic 
+	delay to a ping-pong style delay
+
+
+********************************************************/
 
 opcode TriggerDelay, aa, aakkkkkkkkkkk
 

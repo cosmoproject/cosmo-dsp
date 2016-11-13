@@ -1,4 +1,15 @@
-/* Solina Chorus, based on Solina String Ensemble Chorus Module
+/********************************************************
+
+  SolinaChorus.csd
+  Author: Steven Yi
+  Stereo version: Kevin Welsh (tgrey)
+  COSMO UDO adaptation: Bernt Isak Wærstad
+
+  Arguments: LFO1 Frequency, LFO1 Amp, LFO2 Frequency, LFO2 Amp, Dry/wet mix, [, Stereo mode on/off]
+
+  Stereo mode is optional 
+
+  Solina Chorus, based on Solina String Ensemble Chorus Module
   
    based on:
 
@@ -11,12 +22,9 @@
    Parabola tabled shape borrowed from Iain McCurdy delayStereoChorus.csd:
    http://iainmccurdy.org/CsoundRealtimeExamples/Delays/delayStereoChorus.csd
 
-   Author: Steven Yi
-   Date: 2016.05.22
 
-   Stereo version by Kevin Welsh (tgrey)
+*********************************************************/
 
-   */
 
 
 gi_solina_parabola ftgen 0, 0, 65537, 19, 0.5, 1, 180, 1 
@@ -31,7 +39,7 @@ opcode sol_lfo_3, aaa, kkk
     kphase = 0
   endif
 
-  aphs phasor kfreq, 0;i(kphase)
+  aphs phasor kfreq, i(kphase)
 
   a0   = tablei:a(aphs, gi_solina_parabola, 1, 0, 1)
   a120 = tablei:a(aphs, gi_solina_parabola, 1, 0.333, 1)
@@ -40,9 +48,9 @@ opcode sol_lfo_3, aaa, kkk
   xout (a0 * kamp), (a120 * kamp), (a240 * kamp)
 endop
 
-opcode solina_chorus, a, akkkk
+opcode SolinaChorus, a, akkkkk
 
-  aLeft, klfo_freq1, klfo_amp1, klfo_freq2, klfo_amp2 xin
+  aLeft, klfo_freq1, klfo_amp1, klfo_freq2, klfo_amp2, kdrywet xin
 
   imax = 100
 
@@ -60,12 +68,16 @@ opcode solina_chorus, a, akkkk
   a2 vdelay3 aLeft, at2, imax 
   a3 vdelay3 aLeft, at3, imax 
 
-xout (a1 + a2 + a3) / 3
+  asolina = (a1 + a2 + a3) / 3
+
+  aout ntrpol asolina, aLeft, kdrywet
+
+xout aout
 endop
 
-opcode solina_chorus_stereo, aa, aakkkkk
+opcode SolinaChorus, aa, aakkkkko
 
-  aLeft, aRight, klfo_freq1, klfo_amp1, klfo_freq2, klfo_amp2, kstereo_mode xin
+  aLeft, aRight, klfo_freq1, klfo_amp1, klfo_freq2, klfo_amp2, kdrywet, kstereo_mode xin
 
   imax = 100
 
@@ -97,5 +109,12 @@ opcode solina_chorus_stereo, aa, aakkkkk
   aR2 vdelay3 aRight, atr2, imax 
   aR3 vdelay3 aRight, atr3, imax 
 
-xout (aL1 + aL2 + aL3) / 3, (aR1 + aR2 + aR3) / 3
+  aSolinaL = (aL1 + aL2 + aL3) / 3
+  aSolinaR = (aR1 + aR2 + aR3) / 3
+
+  aOutL ntrpol aSolinaL, aLeft
+  aOutR ntrpol aSolinaR, aRight
+
+  xout aOutL, aOutR 
+
 endop

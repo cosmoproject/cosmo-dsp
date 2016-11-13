@@ -1,3 +1,21 @@
+/********************************************************
+
+	Reverb.csd
+	Author: Bernt Isak Wærstad
+
+	Arguments: Decay time, Cutoff frequency, Dry/wet mix
+
+	This effect has default settings so that it can optionally 
+	also be used without arugments 
+
+	8 delay line stereo FDN reverb, with feedback matrix 
+	based upon physical modeling scattering junction of 8 
+	lossless waveguides of equal characteristic impedance. 
+
+	Based on Csound orchestra version by Sean Costello.
+
+********************************************************/
+
 opcode Reverb, aa, aakkk
 	ainL, ainR, kRev_Decay, kRev_Cutoff, kRev_Mix xin
 

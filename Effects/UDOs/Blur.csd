@@ -1,3 +1,14 @@
+/********************************************************
+
+	Blur.csd
+	Author: Bernt Isak Wærstad
+
+	Arguments: Blur time, Dry/wet mix
+
+	A spectral blur effect - very CPU intensive!
+
+********************************************************/
+
 opcode Blur, aa, aakk
 
 	ainL, ainR, kBlurTime, kDryWet xin

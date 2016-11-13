@@ -1,3 +1,15 @@
+/********************************************************
+
+	Chorus.csd
+	Author: Alex Hofmann
+	COSMO UDO adaptation: Bernt Isak Wærstad
+
+	Arguments: Feedback, Dry/wet mix
+
+	A chorus effect
+
+********************************************************/
+
 opcode Chorus, aa, aakk
 	ainL, ainR, kFeedback, kDryWet xin
 

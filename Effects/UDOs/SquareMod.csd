@@ -1,3 +1,12 @@
+/* ----------------------------------------------------
+	SquareMod.csd
+	Author: Alex Hofmann
+	COSMO UDO adaptaion: Bernt Isak Wærstad
+	
+	Arguments: Frequency, Mix
+
+---------------------------------------------------- */
+
 opcode MykLinExp, k, kiiii
 	kInValue, iInLow ,iInHigh, iOutLow, iOutHigh xin
 	

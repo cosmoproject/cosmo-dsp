@@ -1,16 +1,26 @@
+/* ----------------------------------------------------
 
+	RandDelay.csd
+	Author: Alex Hofmann
+	COSMO UDO adaptation: Bernt Isak Wærstad
 
-opcode RandDelay, aa, aakkk					 ;  Rand_Delay
+	Arguments: Range, Feedback, Dry/wet mix
+
+	Delay with random delay times
+
+----------------------------------------------------*/
+
+opcode RandDelay, aa, aakkk					 
 
 	ainL, ainR, kRange, kFeedback, kDryWet xin
 
 	kRange scale kRange, 15, 0.001
-	Sfb sprintfk "RandDLy Range: %f", kRange
+	Sfb sprintfk "RandDly Range: %f", kRange
 		puts Sfb, kRange+1  
 
 
 	kFeedback scale kFeedback, 1, 0
-	Sfb sprintfk "RandDLy Feedback: %f", kFeedback
+	Sfb sprintfk "RandDly Feedback: %f", kFeedback
 		puts Sfb, kFeedback+1  
 
 	kDryWet scale kDryWet, 1, 0

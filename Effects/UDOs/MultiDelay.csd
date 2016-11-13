@@ -1,3 +1,14 @@
+/********************************************************
+
+	MultiDelay.csd
+	Author: Bernt Isak Wærstad
+
+	Arguments: Multi tap on/off, Delay time, Feedback, Cutoff, Dry/wet mix
+
+	A multi tap delay effect
+
+********************************************************/
+
 opcode MultiDelay, aa, aakkkkk
 	ainL, ainR, kmultitap, kdlytime, kfeed, kcutoff, kDly_Mix xin
 
@@ -41,8 +52,6 @@ opcode MultiDelay, aa, aakkkkk
 	aDlyL = aDlyL + avDlyL
 	aFeedL tone aDlyL, kcutoff
 
-
-	;printk2 gkswitch3
 
 	abufR 	delayr 3 ; Right delay time in seconds
 	ad4		deltap3 adlytime

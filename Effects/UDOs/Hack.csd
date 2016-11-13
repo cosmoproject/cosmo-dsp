@@ -1,31 +1,15 @@
-/*
-#define PI #3.1592654#
+/********************************************************
 
-opcode MyDryWetSwitch, aa, aaaaik
-aInDryL, aInDryR, aInFxL, aInFxR, iFadetime, kend xin
-;iFadetime = 1
-;kend      release   ;get a "1" if instrument is turned off
+	Hack.csd
+	Author: Alex Hofmann
+	COSMO UDO adaptation: Bernt Isak Wærstad
 
-if kend == 0 then 
-	kFadeInOrOut = 1 
-	elseif kend == 1 then 
-	kFadeInOrOut = 0 
-	endif
-;printk 0.3, kend
-if kFadeInOrOut == 1 then
-	  	aDryWet linseg 0, iFadetime, 1
-	  elseif kFadeInOrOut == 0 then
-	    	aDryWet linseg 1, iFadetime, 0
-	  endif
-;printk 0.5, kFadeInOrOut
-aPiPos = $PI*0.5*aDryWet;
-aOutL = (aInDryL*cos(aPiPos)) + (aInFxL * sin(aPiPos))
-aOutR = (aInDryR*cos(aPiPos)) + (aInFxR * sin(aPiPos))
-xout aOutL, aOutR
-xtratim 1
-endop
+	Arguments: Dry/wet mix, Frequency
 
-*/
+	A square wave amplitude modulator
+
+********************************************************/
+
 opcode Hack, aa, aakk
 
 	ainL, ainR, kDryWet, kFreq  xin

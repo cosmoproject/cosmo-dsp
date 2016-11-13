@@ -1,14 +1,27 @@
+/********************************************************
+
+	EXPERIMENTAL!
+
+	AnalogDelay.csd
+	Author: Bernt Isak Wærstad
+
+	Arguments: Delay time, Feedback, Dry/wet mix
+
+	Analoge style delay 
+
+********************************************************/
+
 opcode AnalogDelay, aa, aakkk
 	ainL, ainR, kdlytime, kfeed, kDly_Mix xin
-
-	kfeed scale kfeed, 1, 0
-	Sfb sprintfk "AnalogDly Feedback: %f", kfeed
-		puts Sfb, kfeed+1  
 
 	kdlytime expcurve kdlytime, 10
 	kdlytime scale kdlytime, 2000, 1
 	Scut sprintfk "AnalogDly time: %dms", kdlytime
 		puts Scut, kdlytime
+
+	kfeed scale kfeed, 1, 0
+	Sfb sprintfk "AnalogDly Feedback: %f", kfeed
+		puts Sfb, kfeed+1  
 
 	kdlytime port kdlytime, 0.7
 	adlytime interp kdlytime  

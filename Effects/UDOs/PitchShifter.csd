@@ -1,6 +1,16 @@
+/********************************************************
 
+	PitchShifter.csd
+	Author: Alex Hofmann
+	COSMO UDO adaptation: Bernt Isak Wærstad
 
-opcode Octaver, aa, aakk 
+	Arguments: Seminotes (+/- 1 octave), Dry/wet mix
+
+	Pitch shifter with the range from -1 octave to +1 octave 
+
+********************************************************/
+
+opcode PitchShifter, aa, aakk 
 
 	ainL, ainR, k2PITCH_SHIFTER, kDryWet xin
 	;kscal	=		octave((int(k2PITCH_SHIFTER)/12)+k3PITCH_SHIFTER)			;DERIVE PITCH SCALING RATIO. NOTE THAT THE 'COARSE' PITCH DIAL BECOMES STEPPED IN SEMITONE INTERVALS

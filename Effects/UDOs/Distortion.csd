@@ -1,4 +1,18 @@
+/********************************************************
 
+	Distortion.csd
+	Author: Alex Hofmann
+	COSMO UDO adaptation: Bernt Isak Wærstad
+
+	Arguments: Level, Drive, Tone (low pass filter)
+
+	A distortion effect
+
+********************************************************/
+
+;*********************************************************************
+; Mono version
+;*********************************************************************
 
 opcode	Distortion, a, akkk
 
@@ -60,6 +74,9 @@ opcode	Distortion, a, a
 	xout	aOut							
 endop
 
+;*********************************************************************
+; Stereo version
+;*********************************************************************
 
 
 opcode	Distortion, aa, aakkk

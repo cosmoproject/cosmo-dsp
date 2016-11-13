@@ -1,3 +1,14 @@
+/********************************************************
+
+	Wobble.csd
+	Author: Alex Hofmann
+	COSMO UDO adaptation: Bernt Isak Wærstad
+
+	Arguments: Frequency, Dry/wet mix
+
+	Wobble effect
+
+********************************************************/
 
 opcode Wobble, aa, aakk
 

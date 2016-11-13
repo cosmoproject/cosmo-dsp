@@ -1,16 +1,57 @@
-;Resonator.csd
+/********************************************************
 
-;Resony is an implementation of a stack of second-order bandpass filters whose centre frequencies are arithmetically related. 
-;The 'bandwidth' and 'scaling mode' parameters are as they are in the reson opcode. 
-;'inum' (number of filters) defines the number of filters in the stack. 
-;'ksep' (separation) normally defines the separation between the lowest and highest filter in the stack in octaves. How this relates to what the actual centre frequencies of filters will be differs depending upon which separation mode has been selected. This is explained below. Note that in this example the operation of 'ksep' has been modified slightly to allow the opcode to be better controlled from the GUI. These modifications are clarified below. Separation can be defined in octaves using the knob 'Sep.oct.' or in semitones using the 'Sep.semi.' knob.
-;'kbf' (base frequency) defines the centre frequency of the first filter. In 'oct.total' separation mode the pitch interval between the base frequency and (base frequency + separation) is divided into equal intervals according to the number of filters that have been selected. Note that no filter is created at the frequency of (base frequency + separation). For example: if separation=1 and num.filters=2, filters will be created at the base frequency and a tritone above the base frequency (i.e. an interval of 1/2 and an octave). I suspect this is a mistake in the opcode implementation so in this example I rescale the separation interval before passing it to the resony opcode so that the interval between the lowest and highest filter in this mode will always be the interval defined in the GUI. A further option I have provided allows the defined interval to be the interval between adjacent filters rather than the interval from lowest to highest. If 'hertz' separation mode is selected behaviour is somewhat curious. I have made some modifications to the values passed to the opcode to make this mode more controllable. Without these modifications, if number of filters is '1' no filters would be created. The frequency relationship between filters in the stack always follows the harmonic series. Both 'Base Frequency' and 'Separation' normally shift this harmonic stack of filters up or down, for this reason I have disabled user control of 'Separation' in this example, instead a value equal to the 'Number of Filters' will always be used for 'Separation'. This ensures that a harmonic stack will always be created built upon 'Base Frequency' as the fundamental. Negative values for 'separation' are allowed whenever 'separation mode' is 'octaves' (if this is the case, the stack of frequencies will extend below the base frequency). Negative values for 'separation' when 'separation mode' is 'hertz' will cause filters to 'explode'. As 'Separation' is fixed at 'Number of Filters' in this example this explosion will not occur.
+	Resonantor.csd
+	Author: Iain McCurdy (2012)
+	COSMO UDO adaptation: Bernt Isak Wærstad (2015)
+
+	Arguments: Base frequency, Bandwidth, Number of filters, Separation octaves, Separation seminotes, Separation mode[0-2], 
+
+	NB!! THIS UDO DOES NOT HAVE NORMALIZED ARGUMENTS!!! 
+
+	Use either "Resonantor" or "ResonatorFollower" - the latter includes an envelope follower filter on the input signal
+
+	Resony is an implementation of a stack of second-order bandpass filters whose centre frequencies are arithmetically related. 
+
+	Original notes by Iain McCurdy (from Cabbage version)
+
+	*	Separation mode can be:
+		
+		0: Octaves (Total)
+		1: Herz
+		2: Octaves (Adjacent)
+
+	* 	The 'bandwidth' and 'scaling mode' parameters are as they are in the reson opcode. 
+	
+	*	'inum' (number of filters) defines the number of filters in the stack. 
+	
+	*	'ksep' (separation) normally defines the separation between the lowest and highest filter in the stack in octaves. 
+		How this relates to what the actual centre frequencies of filters will be differs depending upon which separation 
+		mode has been selected. This is explained below. Note that in this example the operation of 'ksep' has been modified 
+		slightly to allow the opcode to be better controlled from the GUI. These modifications are clarified below. Separation 
+		can be defined in octaves adjusting 'Sep.oct.' or in semitones adjusting 'Sep.semi.'.
+
+	*	'kbf' (base frequency) defines the centre frequency of the first filter. In 'oct.total' separation mode the pitch 
+		interval between the base frequency and (base frequency + separation) is divided into equal intervals according to 
+		the number of filters that have been selected. Note that no filter is created at the frequency of 
+		(base frequency + separation). For example: if separation=1 and num.filters=2, filters will be created at the base 
+		frequency and a tritone above the base frequency (i.e. an interval of 1/2 and an octave). I suspect this is a mistake 
+		in the opcode implementation so in this example I rescale the separation interval before passing it to the resony opcode 
+		so that the interval between the lowest and highest filter in this mode will always be the interval defined in the GUI.
+		A further option I have provided allows the defined interval to be the interval between adjacent filters rather than 
+		the interval from lowest to highest. If 'hertz' separation mode is selected behaviour is somewhat curious. I have made 
+		some modifications to the values passed to the opcode to make this mode more controllable. Without these modifications, 
+		if number of filters is '1' no filters would be created. The frequency relationship between filters in the stack always 
+		follows the harmonic series. Both 'Base Frequency' and 'Separation' normally shift this harmonic stack of filters up or
+		down, for this reason I have disabled user control of 'Separation' in this example, instead a value equal to the 
+		'Number of Filters' will always be used for 'Separation'. This ensures that a harmonic stack will always be created built
+		upon 'Base Frequency' as the fundamental. Negative values for 'separation' are allowed whenever 'separation mode' 
+		is 'octaves' (if this is the case, the stack of frequencies will extend below the base frequency). Negative values 
+		for 'separation' when 'separation mode' is 'hertz' will cause filters to 'explode'. As 'Separation' is fixed at 
+		'Number of Filters' in this example this explosion will not occur.
 
 
+********************************************************/
 
-;Original version: Iain McCurdy (2012)
-
-;COSMO UDO adapted version: Bernt Isak Wærstad (2015)
 
 ;A UDO IS CREATED WHICH ENCAPSULATES THE MODIFICATIONS TO THE resony OPCODE DISCUSSED IN THIS EXAMPLE 
 opcode	resony2,a,akkikii
