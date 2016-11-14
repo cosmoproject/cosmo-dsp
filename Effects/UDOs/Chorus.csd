@@ -40,7 +40,10 @@ opcode Chorus, aa, aakk
 	aWetR	deltapi aSinR+0.02+(0.1/2)				; data at a flexible position is read from the delayline 
 		  delayw ainR+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
 
-xout aWetL, aWetR
+	aOutL ntrpol aWetL, ainL, kDryWet
+	aOutR ntrpol aWetR, ainR, kDryWet
+
+xout aOutL, aOutR
 endop
 
 opcode Chorus, aa, aak
