@@ -1,6 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
--odac:hw:2,0 -iadc:hw:2 -b512 -B1024 -+rtaudio=ALSA -d --sched=99
+;-odac:hw:2,0 -iadc:hw:2 -b512 -B1024 -+rtaudio=ALSA -d --sched=99
+-odac:hw:1,0 -iadc:hw:1 -b512 -B1024 -+rtaudio=ALSA -d --sched=99
+
 </CsOptions>
 
 <CsInstruments>
