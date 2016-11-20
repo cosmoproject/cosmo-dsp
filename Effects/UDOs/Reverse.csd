@@ -15,8 +15,6 @@
 ; 		MONO VERSION
 ; ********************************************************
 
-#include "UDOs/FadeSwitch.csd" 
-
 opcode	Reverse, a, aK				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A USEFUL VALUE ALSO AT I-TIME
 	ain,ktime	xin			;READ IN INPUT ARGUMENTS
 
