@@ -5,7 +5,7 @@
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
 	Arguments: Feedback, Dry/wet mix
-
+    Defaults:  0.4, 0.5
 	A chorus effect
 
 ********************************************************/
@@ -20,7 +20,7 @@ opcode Chorus, aa, aakk
 
 	kDryWet scale kDryWet, 1, 0
 	Srev sprintfk "Chorus Mix: %f", kDryWet
-		puts Srev, kDryWet+1 
+		puts Srev, kDryWet+1
 
 	kDryWet init 0.5
 	kFeedback init 0.5
@@ -32,13 +32,13 @@ opcode Chorus, aa, aakk
 	aSinR poscil 0.001, 1
 
 	aDelayL delayr 5.25					;  a delayline, with 1 second maximum delay-time is initialised
-	aWetL deltapi aSinL+(0.1/2)		; data at a flexible position is read from the 
-		 delayw ainL+(aWetL*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
+	aWetL deltapi aSinL+(0.1/2)		; data at a flexible position is read from the
+		 delayw ainL+(aWetL*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
 
 	aDelayR delayr 5.25					;  a delayline, with 1 second maximum delay-time is initialised
-	;aWetR	deltapi aSinR+0.22+kgDelTim	
-	aWetR	deltapi aSinR+0.02+(0.1/2)				; data at a flexible position is read from the delayline 
-		  delayw ainR+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
+	;aWetR	deltapi aSinR+0.22+kgDelTim
+	aWetR	deltapi aSinR+0.02+(0.1/2)				; data at a flexible position is read from the delayline
+		  delayw ainR+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
 
 	aOutL ntrpol ainL, aWetL, kDryWet
 	aOutR ntrpol ainR, aWetR, kDryWet
@@ -61,7 +61,3 @@ opcode Chorus, aa, aa
 
 	xout aOutL, aOutR
 endop
-
-
-
-

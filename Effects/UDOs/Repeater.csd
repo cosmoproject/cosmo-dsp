@@ -5,6 +5,7 @@
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
 	Arguments: Range, On/off
+    Defaults:  0.8, 1
 
 	Repeater effect
 
@@ -18,7 +19,7 @@ opcode Repeater, aa, aakk
 
 	kRange scale kRange, 0.5, 0.1
 	kRange = kRange >= 0.5 ? 0.5 : kRange		; Make sure range value doesnt exceed delayline length
-	Scut sprintfk "Repeat range: %f", kRange	
+	Scut sprintfk "Repeat range: %f", kRange
 		puts Scut, kRange+1
 
 	;kRange portk kRange, 0.02
@@ -40,12 +41,12 @@ opcode Repeater, aa, aakk
 	endif
 
 	aDelayL delayr 0.55					;  a delayline, with 1 second maximum delay-time is initialised
-	aWetL deltapi aRange		; data at a flexible position is read from the delayline 
-		 delayw (ainL*kInputVol)+(aWetL*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
-		; delayw 	aDlInL	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
+	aWetL deltapi aRange		; data at a flexible position is read from the delayline
+		 delayw (ainL*kInputVol)+(aWetL*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
+		; delayw 	aDlInL	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
 	aDelayR delayr 0.55			;  a delayline, with 1 second maximum delay-time is initialised
-	aWetR	deltapi aRange				; data at a flexible position is read from the delayline 
-		  delayw (ainR*kInputVol)+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
+	aWetR	deltapi aRange				; data at a flexible position is read from the delayline
+		  delayw (ainR*kInputVol)+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
 	aOutLtemp = aWetL
 	aOutRtemp = aWetR
 
@@ -63,7 +64,7 @@ opcode RepeaterLong, aa, aakk				 ; Repeat Long
 
 	kRange scale kRange, 6, 0.001
 	kRange = kRange >= 6 ? 6 : kRange		; Make sure range value doesnt exceed delayline length
-	Scut sprintfk "Repeat range: %f", kRange	
+	Scut sprintfk "Repeat range: %f", kRange
 		puts Scut, kRange+1
 
 	;kRange portk kRange, 0.02
@@ -83,16 +84,15 @@ opcode RepeaterLong, aa, aakk				 ; Repeat Long
 	endif
 
 	aDelayL delayr 6.5					;  a delayline, with 1 second maximum delay-time is initialised
-	aWetL deltapi aRange		; data at a flexible position is read from the delayline 
-		 delayw (ainL*kInputVol)+(aWetL*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
+	aWetL deltapi aRange		; data at a flexible position is read from the delayline
+		 delayw (ainL*kInputVol)+(aWetL*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
 	aDelayR delayr 6.5				;  a delayline, with 1 second maximum delay-time is initialised
-	aWetR	deltapi aRange				; data at a flexible position is read from the delayline 
-		  delayw (ainR*kInputVol)+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
+	aWetR	deltapi aRange				; data at a flexible position is read from the delayline
+		  delayw (ainR*kInputVol)+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
 	aEmpty = 0.0
 
 	aWetL, aWetR FadeSwitch aEmpty, aEmpty, aWetL, aWetR, 0.5, kOnOff
 
-	xout ainL + aWetL, ainR + aWetR 
+	xout ainL + aWetL, ainR + aWetR
 
-endop 
-
+endop

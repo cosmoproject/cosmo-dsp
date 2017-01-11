@@ -4,13 +4,14 @@
 	Author: Bernt Isak Wærstad
 
 	Arguments: Decay time, Cutoff frequency, Dry/wet mix
+    Defaults:  0.85, 0.5, 0.5
 
-	This effect has default settings so that it can optionally 
-	also be used without arugments 
+	This effect has default settings so that it can optionally
+	also be used without arugments
 
-	8 delay line stereo FDN reverb, with feedback matrix 
-	based upon physical modeling scattering junction of 8 
-	lossless waveguides of equal characteristic impedance. 
+	8 delay line stereo FDN reverb, with feedback matrix
+	based upon physical modeling scattering junction of 8
+	lossless waveguides of equal characteristic impedance.
 
 	Based on Csound orchestra version by Sean Costello.
 
@@ -27,12 +28,12 @@ opcode Reverb, aa, aakkk
 
 	kRev_Cutoff scale kRev_Cutoff, 12000, 200
 	Srev sprintfk "Reverb Cutoff: %f", kRev_Cutoff
-		puts Srev, kRev_Cutoff 
+		puts Srev, kRev_Cutoff
 
 
 	kRev_Mix scale kRev_Mix, 1, 0
 	Srev sprintfk "Reverb Mix: %f", kRev_Mix
-		puts Srev, kRev_Mix+1 
+		puts Srev, kRev_Mix+1
 
 	kRev_Mix port kRev_Mix, 0.05
 
@@ -50,7 +51,7 @@ opcode Reverb, aa, aakkk
 		aoutL = ainL
 		aoutR = ainR
 	endif
-	
+
 	xout aoutL, aoutR
 endop
 

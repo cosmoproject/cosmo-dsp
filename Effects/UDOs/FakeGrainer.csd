@@ -5,6 +5,7 @@
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
 	Arguments: Dry/wet mix
+    Defaults:  1
 
 	An effect that sounds like granular synthesis
 
@@ -16,7 +17,7 @@ opcode FakeGrainer, aa, aak
 
 	kDryWet scale kDryWet, 1, 0
 	Srev sprintfk "FakeGrainer Mix: %f", kDryWet
-		puts Srev, kDryWet+1 
+		puts Srev, kDryWet+1
 
 	aMod lfo 1, 35, 3
 	aMod butlp aMod, 300

@@ -5,27 +5,28 @@
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
 	Arguments: Range, Feedback, Dry/wet mix
+    Defaults:  0.5, 0.2, 0.5
 
 	Delay with random delay times
 
 ----------------------------------------------------*/
 
-opcode RandDelay, aa, aakkk					 
+opcode RandDelay, aa, aakkk
 
 	ainL, ainR, kRange, kFeedback, kDryWet xin
 
 	kRange scale kRange, 15, 0.001
 	Sfb sprintfk "RandDly Range: %f", kRange
-		puts Sfb, kRange+1  
+		puts Sfb, kRange+1
 
 
 	kFeedback scale kFeedback, 1, 0
 	Sfb sprintfk "RandDly Feedback: %f", kFeedback
-		puts Sfb, kFeedback+1  
+		puts Sfb, kFeedback+1
 
 	kDryWet scale kDryWet, 1, 0
 	Srev sprintfk "RandDly Mix: %f", kDryWet
-		puts Srev, kDryWet+1 
+		puts Srev, kDryWet+1
 
 	kRange init 5
 	kFeedback init 0.2
@@ -33,7 +34,7 @@ opcode RandDelay, aa, aakkk
 	aWetL init 0
 	aWetR init 0
 
-	if kDryWet > 0.1 then 
+	if kDryWet > 0.1 then
 
 		aPulse lfo 0.5, 3, 1
 		aPulse butlp aPulse, 100
@@ -47,17 +48,17 @@ opcode RandDelay, aa, aakkk
 		aRandomTimesR butlp aRandomTimesR, 2
 
 		aDelayL delayr 1					;  a delayline, with 1 second maximum delay-time is initialised
-		aWetL deltapi aRandomTimesL			; data at a flexible position is read from the delayline 
-			 delayw aInSigL+(aWetL*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
+		aWetL deltapi aRandomTimesL			; data at a flexible position is read from the delayline
+			 delayw aInSigL+(aWetL*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
 		aDelayR delayr 1					;  a delayline, with 1 second maximum delay-time is initialised
-		aWetR	deltapi aRandomTimesR		; data at a flexible position is read from the delayline 
-			  delayw aInSigR+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback 
+		aWetR	deltapi aRandomTimesR		; data at a flexible position is read from the delayline
+			  delayw aInSigR+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
 
 	else
 		aWetL = 0
 		aWetR = 0
-	endif 
-	
+	endif
+
 	aOutL ntrpol ainL, aWetL*2, kDryWet
 	aOutR ntrpol ainR, aWetR*2, kDryWet
 

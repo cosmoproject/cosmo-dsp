@@ -5,6 +5,7 @@
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
 	Arguments: Reverse time, Dry/wet mix
+    Defaults:  0.5, 0.5
 
 	A reverse effect
 
@@ -33,7 +34,7 @@ opcode	Reverse, a, aK				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A USEF
 	aptr	phasor	2/itime			;CREATE A MOVING PHASOR THAT WITH BE USED TO TAP THE DELAY BUFFER
 	aptr	=	aptr*itime		;SCALE PHASOR ACCORDING TO THE LENGTH OF THE DELAY TIME CHOSEN BY THE USER
 	ienv	ftgentmp	0,0,1024,7,0,(1024*0.01),1,(1024*0.98),1,(0.01*1024),0	;ANTI-CLICK ENVELOPE SHAPE
- 	aenv	poscil	1, 2/itime, ienv	;CREATE A CYCLING AMPLITUDE ENVELOPE THAT WILL SYNC TO THE TAP DELAY TIME PHASOR 
+ 	aenv	poscil	1, 2/itime, ienv	;CREATE A CYCLING AMPLITUDE ENVELOPE THAT WILL SYNC TO THE TAP DELAY TIME PHASOR
  	abuffer	delayr	5			;CREATE A DELAY BUFFER
 	atap	deltap3	aptr			;READ AUDIO FROM A TAP WITHIN THE DELAY BUFFER
 		delayw	ain			;WRITE AUDIO INTO DELAY BUFFER
@@ -45,7 +46,7 @@ opcode Revers, a,a
 	a1 xin
 	aout Reverse a1, 0.5
 	xout aout
-endop 
+endop
 
 ; ********************************************************
 ; 		STEREO VERSION
@@ -55,7 +56,7 @@ opcode	Reverse, aa, aaKk				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A U
 	ainL,ainR,ktime,kdrywet	xin			;READ IN INPUT ARGUMENTS
 
 	ktime scale ktime, 3, 0.1
-	Scut sprintfk "Reverse time: %dms", ktime*1000	
+	Scut sprintfk "Reverse time: %dms", ktime*1000
 		puts Scut, ktime
 
 

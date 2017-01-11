@@ -4,6 +4,7 @@
 	Author: Bernt Isak Wærstad
 
 	Arguments: Blur time, Dry/wet mix
+    Defaults:  0.2, 0.8
 
 	A spectral blur effect - very CPU intensive!
 
@@ -13,7 +14,7 @@ opcode Blur, aa, aakk
 
 	ainL, ainR, kBlurTime, kDryWet xin
 
-	ain = ainL + ainR 
+	ain = ainL + ainR
 
 	kBlurTime expcurve kBlurTime, 10
 	kBlurTime scale kBlurTime, 2, 0.1
@@ -22,7 +23,7 @@ opcode Blur, aa, aakk
 
 	kDryWet scale kDryWet, 1, 0
 	Srev sprintfk "Blur Mix: %f", kDryWet
-		puts Srev, kDryWet+1 
+		puts Srev, kDryWet+1
 
 	ifftsize	=		4096
 	ioverlap	=		ifftsize / 4
@@ -46,24 +47,21 @@ opcode Blur, a, akk
 
 	ain, kBlurTime, kDryWet xin
 
-	aOut1, aOut2 Blur ain, ain, kBlurTime, kDryWet 
+	aOut1, aOut2 Blur ain, ain, kBlurTime, kDryWet
 
 	xout aOut1
 endop
 
 /*
-True Stereo version - much CPU for little effect 
+True Stereo version - much CPU for little effect
 
 opcode Blur, aa, aakk
 
 	ainL, ainR, kBlurTime, kDryWet xin
 
-	aOutL Blur ainL, kBlurTime, kDryWet 
+	aOutL Blur ainL, kBlurTime, kDryWet
 	aOutR Blur ainR, kBlurTime, kDryWet
 
 	xout aOutL, aOutR
 endop
 */
-
-
-

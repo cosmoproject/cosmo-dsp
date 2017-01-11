@@ -3,6 +3,7 @@
 	Author: Bernt Isak Wærstad
 
 	Arguments: Frequency, On/off
+    Defaults:  0.8, 1
 ********************************************************/
 
 opcode Tremolo, aa, aakk
@@ -14,10 +15,10 @@ opcode Tremolo, aa, aakk
 
 	aMod oscil 1, kFreq
 
-	aCarL oscil 0.45, 4.21*aMod 
+	aCarL oscil 0.45, 4.21*aMod
 	aCarR oscil 0.5, 4.7*aMod*0.98
 
-	aRML = ainL* aCarL 
+	aRML = ainL* aCarL
 	aRMR = ainR * aCarR
 
 	aoutL, aoutR FadeSwitch ainL, ainR, aRML, aRMR, 0.2, kOnOff
@@ -25,4 +26,3 @@ opcode Tremolo, aa, aakk
 	xout aoutL, aoutR
 
 endop
-

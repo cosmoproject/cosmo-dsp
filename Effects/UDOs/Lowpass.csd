@@ -5,6 +5,7 @@
 	Author: Bernt Isak Wærstad
 
 	Arguments: Cutoff frequency, Resonance, Distortion
+    Defaults:  0.8, 0.3, 0
 
 	A resonant lowpass filter with distortion
 
@@ -20,17 +21,17 @@ opcode Lowpass, a, akkk
 	kfco expcurve kfco, 30
 	kfco scale kfco, 12000, 30
 	Srev sprintfk "LPF Cutoff: %f", kfco
-		puts Srev, kfco 
+		puts Srev, kfco
 	kfco port kfco, 0.1
 
 	kres scale kres, 0.9, 0
 	Srev sprintfk "LPF Reso: %f", kres
-		puts Srev, kres 
+		puts Srev, kres
 	kres port kres, 0.01
 
 	kdist scale kdist, 0.9, 0
 	Srev sprintfk "LPF Dist: %f", kdist
-		puts Srev, kdist 
+		puts Srev, kdist
 	kdist port kdist, 0.01
 
 	aout lpf18 ain, kfco, kres, kdist
@@ -72,17 +73,17 @@ opcode Lowpass, aa, aakkk
 	kfco expcurve kfco, 30
 	kfco scale kfco, 12000, 30
 	Srev sprintfk "LPF Cutoff: %f", kfco
-		puts Srev, kfco 
+		puts Srev, kfco
 	kfco port kfco, 0.1
 
 	kres scale kres, 0.9, 0
 	Srev sprintfk "LPF Reso: %f", kres
-		puts Srev, kres 
+		puts Srev, kres
 	kres port kres, 0.01
 
 	kdist scale kdist, 0.9, 0
 	Srev sprintfk "LPF Dist: %f", kdist
-		puts Srev, kdist 
+		puts Srev, kdist
 	kdist port kdist, 0.01
 
 	aoutL lpf18 ainL, kfco, kres, kdist
@@ -114,4 +115,3 @@ opcode Lowpass, aa, aa
 
 	xout aoutL, aoutR
 endop
-

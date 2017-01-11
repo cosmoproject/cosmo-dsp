@@ -5,6 +5,7 @@
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
 	Arguments: Frequency, Dry/wet mix
+    Defaults:  0.2, 0.5
 
 	Wobble effect
 
@@ -17,12 +18,12 @@ opcode Wobble, aa, aakk
 	kFreq expcurve kFreq, 30
 	kFreq scale kFreq, 20, 0.3
 	Srev sprintfk "Wobble Freq: %fHz", kFreq
-		puts Srev, kFreq 
+		puts Srev, kFreq
 	kFreq port kFreq, 0.1
 
 	kDryWet scale kDryWet, 1, 0
 	Srev sprintfk "Wobble Mix: %f", kDryWet
-		puts Srev, kDryWet+1 
+		puts Srev, kDryWet+1
 
 
 	aMod lfo 2000, kFreq, 0
@@ -36,4 +37,3 @@ opcode Wobble, aa, aakk
 
 	xout aOutL, aOutR
 endop
-

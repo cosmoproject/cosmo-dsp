@@ -6,8 +6,9 @@
 	Author: Bernt Isak Wærstad
 
 	Arguments: Delay time, Feedback, Dry/wet mix
+    Defaults:  0.2, 0.4, 0.5
 
-	Analoge style delay 
+	Analoge style delay
 
 ********************************************************/
 
@@ -21,14 +22,14 @@ opcode AnalogDelay, aa, aakkk
 
 	kfeed scale kfeed, 1, 0
 	Sfb sprintfk "AnalogDly Feedback: %f", kfeed
-		puts Sfb, kfeed+1  
+		puts Sfb, kfeed+1
 
 	kdlytime port kdlytime, 0.7
-	adlytime interp kdlytime  
+	adlytime interp kdlytime
 
 	kDly_Mix scale kDly_Mix, 1, 0
 	Srev sprintfk "AnalogDly Mix: %f", kDly_Mix
-		puts Srev, kDly_Mix+1 
+		puts Srev, kDly_Mix+1
 
 	; Delay code
 	aFeedL init 0
@@ -42,13 +43,8 @@ opcode AnalogDelay, aa, aakkk
 
 	;----------------------
 
-	aoutL ntrpol ainL, avDlyL, kDly_Mix 
+	aoutL ntrpol ainL, avDlyL, kDly_Mix
 	aoutR ntrpol ainR, avDlyR, kDly_Mix
 
 	xout aoutL, aoutR
 endop
-
-
-
-
-

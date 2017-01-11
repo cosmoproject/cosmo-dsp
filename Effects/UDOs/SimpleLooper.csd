@@ -5,9 +5,12 @@
 
 	Arguments: Record/Play, Stop/start, Speed, Reverse, Audio Through
 
+    DANGER..THESE ARE RANDOM DEFAULT VALUES!
+    Defaults:  1, 1, 1, 0, 1
+
 		* Record/Play: Send a 1 to start recording, send a 1 again to stop recording and start playing the loop
 		* Stop/start: Toggles between loop stopped and loop playing
-		* Speed: Loop playback speed 
+		* Speed: Loop playback speed
 		* Reverse: Toggles normal and reverse playback
 		* Audio Through: Toggles audio coming through or not
 
@@ -18,8 +21,8 @@
 
 	; empty table, size 882000 equals 20 seconds at 44.1kHz sr
 	giLiveSamplTableLen 	init 882000;
-	;giLiveSamplAudioTableL	ftgen	0, 0, giLiveSamplTableLen, 2, 0	
-	;giLiveSamplAudioTableR	ftgen	0, 0, giLiveSamplTableLen, 2, 0	
+	;giLiveSamplAudioTableL	ftgen	0, 0, giLiveSamplTableLen, 2, 0
+	;giLiveSamplAudioTableR	ftgen	0, 0, giLiveSamplTableLen, 2, 0
 
 ;*********************************************************************
 ; SimpleLooper
@@ -32,9 +35,9 @@
 		kPlaying 	init 0
 	  	kOverdub init 0
 
-	  	iLiveSamplAudioTableL ftgen 0, 0, giLiveSamplTableLen, 2, 0	
-	  	iLiveSamplAudioTableR ftgen 0, 0, giLiveSamplTableLen, 2, 0	
-		
+	  	iLiveSamplAudioTableL ftgen 0, 0, giLiveSamplTableLen, 2, 0
+	  	iLiveSamplAudioTableR ftgen 0, 0, giLiveSamplTableLen, 2, 0
+
 
 	  	kSpeed 		init 1
 	  	kReverse 	init 1 ; -1 or 1
@@ -58,12 +61,12 @@
 
 		kndx init 0
 		kndx 	= trigger(kRecPlayOvr,0.5,0) == 1 ? 0 : kndx
-		if kRecPlayOvr == 1 then 
+		if kRecPlayOvr == 1 then
 
 	        	tablew	ainL/0dbfs,a(kndx),iLiveSamplAudioTableL
 	        	tablew	ainR/0dbfs,a(kndx),iLiveSamplAudioTableR
 	        kndx	+=	ksmps
-		endif 
+		endif
 
 		kLength	= kndx
 
@@ -79,7 +82,7 @@
 	    	kPlaying = (kPlaying + 1) %2
 	    endif
 
-		
+
 		if (kRecPlayOvr == 0  && kPlaying == 1)  then
 
 			Srec sprintfk "Playing: %f", kStopStart
@@ -88,13 +91,13 @@
 			;aoutL, aoutR Play kSpeed, kRestart
 
 			; 1 over table length in seconds to get appropriate speed for phasor
-			kreadFreq divz kSpeed, (kLength/sr), 0.0000001 
+			kreadFreq divz kSpeed, (kLength/sr), 0.0000001
 
 			if kRestart == 1 then			; Restart loop playback from the beginning if play is retriggered
 				 reinit RESTART_PLAYBACK
 			endif
 		RESTART_PLAYBACK:
-		  	aPlayIdx    phasor  kreadFreq  
+		  	aPlayIdx    phasor  kreadFreq
 		  	aLoopLen	interp kLength
 		  	aPlayIdx	= aPlayIdx*aLoopLen
 
@@ -106,10 +109,10 @@
 		 	aoutL = 0
 			aoutR = 0
 		endif
-		
+
 		;aoutL = ainL
 		;aoutR = ainR
-		if kThrough == 1 then 
+		if kThrough == 1 then
 			aoutL = aoutL + ainL
 			aoutR = aoutR + ainR
 		endif
@@ -135,13 +138,13 @@
 
 		kndx 	= trigger(kRecord,0.5,0) == 1 ? 0 : kndx
 
-		if kRecord == 1 then 
+		if kRecord == 1 then
 
 	        	tablew	ainL/0dbfs,a(kndx),giLiveSamplAudioTableL
 	        	tablew	ainR/0dbfs,a(kndx),giLiveSamplAudioTableR
 	        kndx	+=	ksmps
 
-		endif 
+		endif
 
 		gkLength	= kndx
 
@@ -156,13 +159,13 @@
 		kSpeed, kRestart xin
 
 		; 1 over table length in seconds to get appropriate speed for phasor
-		kreadFreq divz kSpeed, (gkLength/sr), 0.0000001 
+		kreadFreq divz kSpeed, (gkLength/sr), 0.0000001
 
 		if kRestart == 1 then			; Restart loop playback from the beginning if play is retriggered
 			 reinit RESTART_PLAYBACK
 		endif
 	RESTART_PLAYBACK:
-	  	aPlayIdx    phasor  kreadFreq  
+	  	aPlayIdx    phasor  kreadFreq
 	  	aLoopLen	interp gkLength
 	  	aPlayIdx	= aPlayIdx*aLoopLen
 
@@ -173,10 +176,3 @@
 
  	endop
 */
-
-
-
-
-
-
-

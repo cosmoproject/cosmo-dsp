@@ -6,18 +6,19 @@
   COSMO UDO adaptation: Bernt Isak Wærstad
 
   Arguments: LFO1 Frequency, LFO1 Amp, LFO2 Frequency, LFO2 Amp, Dry/wet mix, [, Stereo mode on/off]
+  Defaults:  0.2, 0.3, 0.4, 0.3, 0.5
 
-  Stereo mode is optional 
+  Stereo mode is optional
 
   Solina Chorus, based on Solina String Ensemble Chorus Module
-  
+
    based on:
 
    J. Haible: Triple Chorus
    http://jhaible.com/legacy/triple_chorus/triple_chorus.html
 
    Hugo Portillo: Solina-V String Ensemble
-   http://www.native-instruments.com/en/reaktor-community/reaktor-user-library/entry/show/4525/ 
+   http://www.native-instruments.com/en/reaktor-community/reaktor-user-library/entry/show/4525/
 
    Parabola tabled shape borrowed from Iain McCurdy delayStereoChorus.csd:
    http://iainmccurdy.org/CsoundRealtimeExamples/Delays/delayStereoChorus.csd
@@ -27,7 +28,7 @@
 
 
 
-gi_solina_parabola ftgen 0, 0, 65537, 19, 0.5, 1, 180, 1 
+gi_solina_parabola ftgen 0, 0, 65537, 19, 0.5, 1, 180, 1
 
 ;; 3 sine wave LFOs, 120 degrees out of phase
 opcode sol_lfo_3, aaa, kkk
@@ -63,10 +64,10 @@ opcode SolinaChorus, a, akkkkk
   at1 = limit(as1 + af1 + 5, 0.0, imax)
   at2 = limit(as2 + af2 + 5, 0.0, imax)
   at3 = limit(as3 + af3 + 5, 0.0, imax)
-    
-  a1 vdelay3 aLeft, at1, imax 
-  a2 vdelay3 aLeft, at2, imax 
-  a3 vdelay3 aLeft, at3, imax 
+
+  a1 vdelay3 aLeft, at1, imax
+  a2 vdelay3 aLeft, at2, imax
+  a3 vdelay3 aLeft, at3, imax
 
   asolina = (a1 + a2 + a3) / 3
 
@@ -100,14 +101,14 @@ opcode SolinaChorus, aa, aakkkkko
   atr1 = limit(asr1 + afr1 + 5, 0.0, imax)
   atr2 = limit(asr2 + afr2 + 5, 0.0, imax)
   atr3 = limit(asr3 + afr3 + 5, 0.0, imax)
-    
-  aL1 vdelay3 aLeft, at1, imax 
-  aL2 vdelay3 aLeft, at2, imax 
-  aL3 vdelay3 aLeft, at3, imax 
 
-  aR1 vdelay3 aRight, atr1, imax 
-  aR2 vdelay3 aRight, atr2, imax 
-  aR3 vdelay3 aRight, atr3, imax 
+  aL1 vdelay3 aLeft, at1, imax
+  aL2 vdelay3 aLeft, at2, imax
+  aL3 vdelay3 aLeft, at3, imax
+
+  aR1 vdelay3 aRight, atr1, imax
+  aR2 vdelay3 aRight, atr2, imax
+  aR3 vdelay3 aRight, atr3, imax
 
   aSolinaL = (aL1 + aL2 + aL3) / 3
   aSolinaR = (aR1 + aR2 + aR3) / 3
@@ -115,6 +116,6 @@ opcode SolinaChorus, aa, aakkkkko
   aOutL ntrpol aSolinaL, aLeft
   aOutR ntrpol aSolinaR, aRight
 
-  xout aOutL, aOutR 
+  xout aOutL, aOutR
 
 endop
