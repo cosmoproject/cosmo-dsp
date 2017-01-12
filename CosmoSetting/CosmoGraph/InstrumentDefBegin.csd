@@ -1,6 +1,6 @@
 
 instr 1
-	#include "../Includes/midi_cc.inc"
+	#include "../Includes/all_midi_cc.inc"
 
 	aL, aR ins
 

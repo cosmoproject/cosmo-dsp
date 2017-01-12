@@ -1,14 +1,14 @@
 {"CosmoController": {
-    "gkpot0":
+    "gkCC28":
         {
             "Lowpass": "Cutoff",
             "RandDelay": "Feedback"
         },
-    "gkpot1":
+    "gkCC29":
         {
             "RandDelay": "Dry/wet mix"
         },
-    "gkpot2":
+    "gkCC30":
         {
             "Reverb": "Dry/wet mix",
             "RandDelay": "Range"
