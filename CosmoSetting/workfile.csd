@@ -1,8 +1,8 @@
 <CsoundSynthesizer>
 <CsOptions>
 ;-odac:hw:2,0 -iadc:hw:2 -d -+rtaudio=ALSA -b128 -B512 -j1 -+rtmidi=alsa -Ma
-;-odac -iadc0
--odac:hw:0,0 -iadc:hw:0 -d -+rtaudio=ALSA -b128 -B512 -j1 -+rtmidi=alsa -Ma ;ubuntu
+-odac -iadc -+rtmidi=coremidi -Ma ;Mac OSX 10.12.2
+;-odac:hw:0,0 -iadc:hw:0 -d -+rtaudio=ALSA -b128 -B512 -j1 -+rtmidi=alsa -Ma ;ubuntu
 ;-n -d -+rtmidi=NULL -M0 -m0d
 </CsOptions>
 <CsInstruments>

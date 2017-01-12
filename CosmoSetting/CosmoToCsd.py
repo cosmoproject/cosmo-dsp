@@ -7,7 +7,7 @@ output_filename = sys.argv[2]
 C_set = CosmoSettingGraph()
 
 print 'Load Json file ' + input_filename
-C_set.read_settings_json('CosmoSetting.json')
+C_set.read_settings_json(input_filename)
 
 print 'Convert Json to Graph / csd structure.'
 C_set.cosmo_settings_to_graph()
