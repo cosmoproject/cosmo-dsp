@@ -1,12 +1,12 @@
 import json
 import os
 import networkx as nx
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import string
 from collections import OrderedDict
 
 
-class CosmoSettingGraph(nx.Graph):
+class CosmoSettingGraph(nx.DiGraph):
     # Topics will be stored as Nodes in a Graph
     def __init__(self):
         super(CosmoSettingGraph, self).__init__()
@@ -31,8 +31,8 @@ class CosmoSettingGraph(nx.Graph):
                     self.add_node(fx, type='UDO')
                     if lastFX:
                         self.add_edge(lastFX, fx, type='a')
-                        # print 'combined' + str(lastFX) + 'and' + str(fx)
-                lastFX = fx
+                        print 'combined ' + str(lastFX) + ' and ' + str(fx)
+                    lastFX = fx
                 # connect UDOS and Controllers
                 self.add_edge(fx, ctrl, type='k', input=self.jdata['CosmoController'][ctrl][fx])
 
@@ -43,7 +43,6 @@ class CosmoSettingGraph(nx.Graph):
         print list(udos)
 
     def _open_COSMO_UDO_read_args(self, udoName):
-        # Todo .. add default values to UDOS.csd, to replace None
         print '..reading csd ' + str(udoName)
         fileDir = os.path.dirname(__file__)
         filename = os.path.join(fileDir, '../../Effects/UDOs/' + str(udoName) + '.csd')
@@ -117,21 +116,51 @@ class CosmoSettingGraph(nx.Graph):
                         csd_file.write(outro.read())
                         csd_file.close
 
+    def plot(self):
+        myPos = nx.shell_layout(self)
+        # nx.draw_networkx(self, pos=myPos)
+        udos = [ u for u in self.nodes() if self.node[u]['type'] == 'UDO']
+        nx.draw_networkx_nodes(self, myPos,
+                       nodelist=udos,
+                       node_color='r',
+                       node_size=500,
+                       alpha=0.8)
+        nx.draw_networkx_labels(self, myPos)
+        ctrls = [ c for c in self.nodes() if self.node[c]['type'] == 'ctrl']
+        # nx.draw_networkx_nodes(self, myPos,
+        #                nodelist=ctrls,
+        #                node_color='g',
+        #                node_size=500,
+        #                alpha=0.8)
+        # nx.draw_networkx_edge_labels(self, pos=myPos)
+        plt.show()
+        return
 
 
 
 
 
-# C_set = CosmoSettingGraph()
-# # C_set.open_COSMO_UDO_read_args('Lowpass')
-# print 'Load Json'
-# C_set.read_settings_json('CosmoSetting.json')
-# print 'Json to Graph'
-# C_set.cosmo_settings_to_graph()
+
+C_set = CosmoSettingGraph()
+# C_set.open_COSMO_UDO_read_args('Lowpass')
+print 'Load Json'
+# json is read correctly, using 'OrderedDict'
+C_set.read_settings_json('2CosmoSetting.json')
+
+print 'Json to Graph'
+# graph connects FX modules in correct order (lastfx in correct if statement)
+C_set.cosmo_settings_to_graph()
+
+
+
+
+C_set.plot()
+# print C_set.successors('Wobble')
+# print C_set.out_edges()
 #
 # print 'All nodes and edges'
 # print C_set.nodes()
 # print C_set.edges(data = True)
 #
-# C_set.generate_csound_code_from_graph()
+C_set.generate_csound_code_from_graph()
 # C_set.write_csd()
