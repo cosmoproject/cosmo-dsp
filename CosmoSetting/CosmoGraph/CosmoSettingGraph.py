@@ -1,5 +1,5 @@
 import json
-import sys, os
+import os
 import networkx as nx
 # import matplotlib.pyplot as plt
 import string
@@ -11,38 +11,36 @@ class CosmoSettingGraph(nx.Graph):
     def __init__(self):
         super(CosmoSettingGraph, self).__init__()
 
-
     def read_settings_json(self, path):
         with open(path) as data_file:
             self.jdata = json.load(data_file, object_pairs_hook=OrderedDict)
-            print json.dumps(self.jdata, indent = 2)
+            print json.dumps(self.jdata, indent=2)
 
     def cosmo_settings_to_graph(self):
         controllers = [ctrl for ctrl in self.jdata['CosmoController']]
         lastFX = None
         for ctrl in controllers:
             # controllers to nodes
-            self.add_node(ctrl, type = 'ctrl')
+            self.add_node(ctrl, type='ctrl')
             for fx in self.jdata['CosmoController'][ctrl]:
                 # print data['CosmoController'][ctrl][fx]
                 # udos to nodes
                 print fx
                 if fx not in self.nodes():
                     # print fx
-                    self.add_node(fx, type = 'UDO')
+                    self.add_node(fx, type='UDO')
                     if lastFX:
-                        self.add_edge(lastFX, fx, type = 'a')
+                        self.add_edge(lastFX, fx, type='a')
                         # print 'combined' + str(lastFX) + 'and' + str(fx)
                 lastFX = fx
                 # connect UDOS and Controllers
-                self.add_edge(fx, ctrl, type = 'k', input = self.jdata['CosmoController'][ctrl][fx])
+                self.add_edge(fx, ctrl, type='k', input=self.jdata['CosmoController'][ctrl][fx])
 
     def print_UDOS(self):
         print 'UDOS:'
-        #highSentiment = (n for n in self if self.node[n]['sentiment'] in positive)
+        # highSentiment = (n for n in self if self.node[n]['sentiment'] in positive)
         udos = (u for u in self.node if self.node[u]['type'] == 'UDO')
         print list(udos)
-
 
     def _open_COSMO_UDO_read_args(self, udoName):
         # Todo .. add default values to UDOS.csd, to replace None
@@ -74,7 +72,7 @@ class CosmoSettingGraph(nx.Graph):
 
     def _fill_none_with_defaults(self, udo_inputs, args):
         for idx, arg in enumerate(args):
-            if arg == None:
+            if arg is None:
                 args[idx] = udo_inputs['defaultValues'][idx]
         return args
 
@@ -83,13 +81,13 @@ class CosmoSettingGraph(nx.Graph):
         self.csnd_code_includes = []
         self.csnd_code_lines = []
         for u in self.nodes():
-            if self.node[u]['type'] == 'UDO': # find UDOS
+            if self.node[u]['type'] == 'UDO':  # find UDOS
                 edges = self.edges(u, data=True)
                 print u
                 print edges
                 udo_inputs = self._open_COSMO_UDO_read_args(u)
                 args = [None] * len(udo_inputs['argNames'])
-                if len(edges) > 0: #some nodes have zero edges going into it
+                if len(edges) > 0:  # some nodes have zero edges going into it
                     for edge in edges:
                         if edge[2]['type'] == 'k':  # k-connections from each UDO
                             argNameInUDO = edge[2]['input']
@@ -102,7 +100,6 @@ class CosmoSettingGraph(nx.Graph):
                 self.csnd_code_includes.append('\t \t #include "../Effects/UDOs/' + u + '.csd" \n')
                 self.csnd_code_lines.append('\t aL, aR ' + str(u) + ' aL, aR, ' + argsSt + '\n')
         # print self.csnd_code_lines
-
 
     def write_csd(self, csd_file_name):
         fileDir = os.path.dirname(__file__)
