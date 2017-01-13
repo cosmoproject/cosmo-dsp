@@ -1,8 +1,9 @@
 import json
 import sys, os
 import networkx as nx
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import string
+from collections import OrderedDict
 
 
 class CosmoSettingGraph(nx.Graph):
@@ -13,7 +14,8 @@ class CosmoSettingGraph(nx.Graph):
 
     def read_settings_json(self, path):
         with open(path) as data_file:
-            self.jdata = json.load(data_file)
+            self.jdata = json.load(data_file, object_pairs_hook=OrderedDict)
+            print json.dumps(self.jdata, indent = 2)
 
     def cosmo_settings_to_graph(self):
         controllers = [ctrl for ctrl in self.jdata['CosmoController']]
@@ -24,7 +26,9 @@ class CosmoSettingGraph(nx.Graph):
             for fx in self.jdata['CosmoController'][ctrl]:
                 # print data['CosmoController'][ctrl][fx]
                 # udos to nodes
+                print fx
                 if fx not in self.nodes():
+                    # print fx
                     self.add_node(fx, type = 'UDO')
                     if lastFX:
                         self.add_edge(lastFX, fx, type = 'a')
@@ -75,12 +79,14 @@ class CosmoSettingGraph(nx.Graph):
         return args
 
     def generate_csound_code_from_graph(self):
+        print '-- Graph to CSD --'
         self.csnd_code_includes = []
         self.csnd_code_lines = []
         for u in self.nodes():
             if self.node[u]['type'] == 'UDO': # find UDOS
                 edges = self.edges(u, data=True)
-                # print u
+                print u
+                print edges
                 udo_inputs = self._open_COSMO_UDO_read_args(u)
                 args = [None] * len(udo_inputs['argNames'])
                 if len(edges) > 0: #some nodes have zero edges going into it
