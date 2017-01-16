@@ -1,5 +1,33 @@
 ; Based on code by Steven Yi
 
+
+opcode StringSynth, aa, aaiii
+	aL, aR, iamp, icps, irel xin
+
+	Sprint sprintfk "Starting instrument 2: %f", icps
+		puts Sprint, k(icps)
+
+
+	kampenv = madsr:k(1, 0.1, 0.95, irel)
+	asig = vco2(0.5, icps)
+	asig = moogladder2(asig, 6000, 0.1)
+
+	asig *= kampenv * iamp 
+
+	asig_L, asig_R pan2 asig, 0.55
+
+	aL += asig_L
+	aR += asig_R
+
+	; SolinaChorus arguments: lfo1-freq, lfo1-amp, lfo2-freq, lfo2-amp dry/wet
+	aL SolinaChorus aL, 0.18, 0.6, 6, 0.2, 1
+	aR SolinaChorus aR, 0.18, 0.6, 6, 0.2, 1
+
+	xout aL, aR
+
+endop
+
+/*
 instr StringSynth
 
 	iamp = ampdbfs(p4)
@@ -27,3 +55,4 @@ instr StringSynth
 	chnmix aR, "MasterR"
 
 endin
+*/

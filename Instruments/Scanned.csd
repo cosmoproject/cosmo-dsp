@@ -5,7 +5,7 @@ giInit		ftgen 0, 0, 128, 10, 1
 ; Masses
 giMasses 	ftgen 0, 0, 128, -7,  1, 128, .8
 ; Spring matrices
-giSpring 	ftgen 0, 0, 16384, -23, "data/string-128"
+giSpring 	ftgen 0, 0, 16384, -23, "Instruments/data/string-128"
 ; Centering force
 giCenter 	ftgen 0, 0, 128, -7, 0, 64, 6, 64, 0
 ; Damping

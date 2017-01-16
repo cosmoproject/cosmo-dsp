@@ -17,7 +17,7 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-#include "../UDOs/Hack.csd"
+#include "../Hack.csd"
 
 instr 1
 

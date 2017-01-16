@@ -43,9 +43,8 @@ gkFileLen	init	0
 
 
 instr	1
-  #include "includes/adc_channels.inc"
-  #include "includes/gpio_channels.inc"
-  #include "includes/switch2led.inc"
+  #include "Includes/adc_channels.inc"
+  #include "Includes/gpio_channels.inc"
 
  /* PORTAMENTO TIME FUNCTION */
  kporttimeW	chnget	"portamento"

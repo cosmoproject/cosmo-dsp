@@ -42,7 +42,7 @@ class CosmoSettingGraph(nx.DiGraph):
     def _open_COSMO_UDO_read_args(self, udoName):
         print '..reading csd ' + str(udoName)
         fileDir = os.path.dirname(__file__)
-        filename = os.path.join(fileDir, '../../Effects/UDOs/'
+        filename = os.path.join(fileDir, '../../Effects/'
                                 + str(udoName)
                                 + '.csd')
         with open(filename) as UDO_file:
@@ -108,7 +108,7 @@ class CosmoSettingGraph(nx.DiGraph):
                 args = self._fill_none_with_defaults(udo_inputs, args)
                 argsSt = ', '.join(str(x) for x in args)
                 self.csnd_code_includes.append(
-                                    '\t \t #include "../Effects/UDOs/'
+                                    '\t \t #include "../Effects/'
                                     + udo
                                     + '.csd" \n'
                                     )

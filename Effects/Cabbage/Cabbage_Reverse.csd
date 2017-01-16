@@ -17,7 +17,7 @@ nchnls = 2
 0dbfs = 1
 
 #include "../../Includes/cosmo_utilities.inc"
-#include "../UDOs/Reverse.csd"
+#include "../Reverse.csd"
 
 instr 1
 

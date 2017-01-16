@@ -76,7 +76,7 @@ opcode SolinaChorus, a, akkkkk
 xout aout
 endop
 
-opcode SolinaChorus, aa, aakkkkko
+opcode SolinaChorus, aa, aakkkkkP
 
   aLeft, aRight, klfo_freq1, klfo_amp1, klfo_freq2, klfo_amp2, kdrywet, kstereo_mode xin
 
@@ -113,8 +113,8 @@ opcode SolinaChorus, aa, aakkkkko
   aSolinaL = (aL1 + aL2 + aL3) / 3
   aSolinaR = (aR1 + aR2 + aR3) / 3
 
-  aOutL ntrpol aSolinaL, aLeft
-  aOutR ntrpol aSolinaR, aRight
+  aOutL ntrpol aSolinaL, aLeft, kdrywet
+  aOutR ntrpol aSolinaR, aRight, kdrywet
 
   xout aOutL, aOutR
 

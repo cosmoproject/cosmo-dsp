@@ -18,7 +18,7 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-#include "../UDOs/Reverb.csd"
+#include "../Reverb.csd"
 
 instr 1
 

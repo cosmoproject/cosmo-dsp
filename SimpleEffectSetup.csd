@@ -9,14 +9,14 @@ ksmps  	= 128
 0dbfs	= 1
 nchnls 	= 2
 
-#include "../Includes/cosmo_utilities.inc"
+#include "Includes/cosmo_utilities.inc"
 
-#include "UDOs/Reverb.csd"
-#include "UDOs/Lowpass.csd"
+#include "Effects/Reverb.csd"
+#include "Effects/Lowpass.csd"
 
 instr 1 
-	#include "../Includes/adc_channels.inc"
-	#include "../Includes/gpio_channels.inc"
+	#include "Includes/adc_channels.inc"
+	#include "Includes/gpio_channels.inc"
 
 	aL, aR ins
 

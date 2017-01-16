@@ -1,3 +1,4 @@
+/*
 instr SineSynth1
 
 	iamp = ampdbfs(p4)
@@ -20,7 +21,29 @@ instr SineSynth1
 	chnmix aR, "MasterR"
 
 endin
+*/
 
+opcode SineSynth1, aa, aaiii
+	aL, aR, iamp, icps, irel xin
+
+	Sprint sprintfk "Starting instrument 3: %f", icps
+		puts Sprint, k(icps)
+
+	kampenv = madsr:k(1, 0.1, 0.95, irel)
+	a1 oscil 0.5, icps * 1.5
+	a2 oscil 0.3, icps * 2
+	a3 oscil 0.2, icps * 3
+	a4 oscil 0.1, icps * 5
+
+	a1 *= kampenv * iamp 
+
+	a1_L, a1_R pan2 a1, 0.45
+
+	xout aL + a1_L, aR + a1_R
+
+endop
+
+/*
 instr PolySineSynth1
 
 	iattack init 1
@@ -51,3 +74,4 @@ instr PolySineSynth1
 	chnmix aR, "MasterR"
 
 endin
+*/

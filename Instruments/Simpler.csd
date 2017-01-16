@@ -1,4 +1,4 @@
-#include "../Effects/UDOs/FilePlay.csd"
+#include "Instruments/FilePlay.csd"
 
 instr Simpler
 

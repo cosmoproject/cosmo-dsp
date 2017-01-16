@@ -1,2 +1,2 @@
-python CosmoToCsd.py CosmoSetting.json workfile.csd
+python CosmoToCsd.py 2CosmoSetting.json workfile.csd
 csound workfile.csd
