@@ -1,6 +1,12 @@
 This configuration script allows to map Controllers (Knobs/Pots) directly to effect parameters, without manually editing a Csound file.
 From the CosmoSetting.json the controller mappings are used to generate a .csd, based on the used UDOs in this cosmo-dsp repository.
 
+## Install
+
+    pip install -r CosmoGraph/requirements.txt
+
+    ('pip' - is the package manager for python, you can install it via apt-get or homebrew )
+
 ## Run
 
     ./run.sh
