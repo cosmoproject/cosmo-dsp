@@ -1,7 +1,7 @@
 <Cabbage>
-form caption("COSMO DSP: Blur") size(240, 140), colour("white"), pluginID("cblu")
+form caption("COSMO DSP: Reverse") size(240, 140), colour("white"), pluginID("crev")
 
-rslider bounds(20, 20, 100, 100), channel("time"), range(0, 1, 0.5), text("Blur time"), trackercolour("navy"), textcolour("black")
+rslider bounds(20, 20, 100, 100), channel("time"), range(0, 1, 0.5), text("Reverse time"), trackercolour("navy"), textcolour("black")
 rslider bounds(120, 20,  100, 100), channel("mix"), range(0, 1, 0.5), text("Mix"), trackercolour("navy"), outlinecolour(0, 0, 0, 50), textcolour("black")
 
 </Cabbage>
@@ -16,7 +16,8 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-#include "../Blur.csd"
+#include "../Includes/cosmo_utilities.inc"
+#include "../Effects/Reverse.csd"
 
 instr 1
 
@@ -26,8 +27,8 @@ instr 1
 
 	aL,aR ins
 
-	; Blur arguments: blur time, mix
-	aL, aR Blur aL, aR, kTime, kMix 
+	; Reverse arguments: reverse time, mix
+	aL, aR Reverse aL, aR, kTime, kMix 
 
 
 outs aL, aR

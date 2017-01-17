@@ -16,7 +16,7 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-#include "../FakeGrainer.csd"
+#include "../Effects/FakeGrainer.csd"
 
 instr 1
 

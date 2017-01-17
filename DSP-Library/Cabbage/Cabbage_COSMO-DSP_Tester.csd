@@ -43,15 +43,15 @@ nchnls = 2
 0dbfs = 1
 
 
-#include "UDOs/Reverb.csd"
-#include "UDOs/Lowpass.csd"
-#include "UDOs/SquareMod.csd"
-#include "UDOs/MultiDelay.csd"
-#include "UDOs/TriggerDelay.csd"
-#include "UDOs/Resonator.csd"
-#include "UDOs/LiveLooper.csd"
-#include "UDOs/SimpleLooper.csd"
-#include "UDOs/SolinaChorus.csd"
+#include "../Effects/Reverb.csd"
+#include "../Effects/Lowpass.csd"
+#include "../Effects/SquareMod.csd"
+#include "../Effects/MultiDelay.csd"
+#include "../Effects/TriggerDelay.csd"
+#include "../Effects/Resonator.csd"
+#include "../Effects/LiveLooper.csd"
+#include "../Effects/SimpleLooper.csd"
+#include "../Effects/SolinaChorus.csd"
 
 
 instr 1

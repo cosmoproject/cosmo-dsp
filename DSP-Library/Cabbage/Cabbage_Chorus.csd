@@ -16,7 +16,7 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-#include "../UDOs/Chorus.csd"
+#include "../Effects/Chorus.csd"
 
 instr 1
 

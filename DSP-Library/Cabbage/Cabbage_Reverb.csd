@@ -18,7 +18,7 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-#include "../Reverb.csd"
+#include "../Effects/Reverb.csd"
 
 instr 1
 

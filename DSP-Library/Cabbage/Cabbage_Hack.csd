@@ -17,7 +17,7 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-#include "../Hack.csd"
+#include "../Effects/Hack.csd"
 
 instr 1
 
