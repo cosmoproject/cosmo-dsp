@@ -23,5 +23,5 @@ From the CosmoSetting.json the controller mappings are used to generate a .csd, 
 
 ## Run with filenames
 
-        python CosmoToCsd.py CosmoSetting.json workfile.csd
+        python CosmoGraph/CosmoToCsd.py CosmoSetting.json workfile.csd
         csound workfile.csd
