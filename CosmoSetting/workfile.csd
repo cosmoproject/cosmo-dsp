@@ -12,14 +12,14 @@ ksmps  	= 64
 nchnls 	= 2
 
  
-	 	 #include "../Effects/Wobble.csd" 
-	 	 #include "../Effects/RandDelay.csd" 
-	 	 #include "../Effects/Chorus.csd" 
-	 	 #include "../Effects/Reverb.csd" 
-	 	 #include "../Effects/Volume.csd" 
+	 	 #include "../DSP-Library/Effects/Wobble.csd" 
+	 	 #include "../DSP-Library/Effects/RandDelay.csd" 
+	 	 #include "../DSP-Library/Effects/Chorus.csd" 
+	 	 #include "../DSP-Library/Effects/Reverb.csd" 
+	 	 #include "../DSP-Library/Effects/Volume.csd" 
 
 instr 1
-	#include "../Includes/all_midi_cc.inc"
+	#include "../DSP-Library/Includes/all_midi_cc.inc"
 
 	aL, aR ins
 

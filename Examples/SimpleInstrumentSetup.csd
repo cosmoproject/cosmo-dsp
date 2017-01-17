@@ -9,38 +9,17 @@ ksmps  	= 64
 0dbfs	= 1
 nchnls 	= 2
 
-	#include "Includes/cosmo_utilities.inc"	
+	#include "../DSP-Library/Includes/cosmo_utilities.inc"	
 
-	#include "Effects/Blur.csd"
-	#include "Effects/Chorus.csd"
-	#include "Effects/Distortion.csd"
-	#include "Effects/FakeGrainer.csd"
-	#include "Effects/Hack.csd"
-	#include "Effects/Lowpass.csd"
-	#include "Effects/MultiDelay.csd"
-	#include "Effects/RandDelay.csd"
-	#include "Effects/Resonator.csd"
-	#include "Effects/Reverb.csd"
-	#include "Effects/Reverse.csd"
-	#include "Effects/SimpleLooper.csd"
-	#include "Effects/SineDelay.csd"
-	#include "Effects/SolinaChorus.csd"
-	#include "Effects/SquareMod.csd"
-	#include "Effects/TriggerDelay.csd"
-	#include "Effects/Wobble.csd"
+	#include "../DSP-Library/Effects/Reverb.csd"
+	#include "../DSP-Library/Effects/SolinaChorus.csd"
+
 
 massign 1, 90
 massign 1, 91
 
-	#include "Instruments/SineSynths.csd"
-	#include "Instruments/StringSynth.csd"
-	/*
-	#include "Instruments/Moogish.csd"
-	#include "Instruments/CrazyPluck.csd"
-	#include "Instruments/Scanned.csd"
-	#include "Instruments/Simpler.csd"
-*/
-
+	#include "../DSP-Library/Instruments/SineSynths.csd"
+	#include "../DSP-Library/Instruments/StringSynth.csd"
 
 
 instr 90
@@ -100,8 +79,8 @@ instr 91
 
 endin
 instr 99
-	#include "Includes/adc_channels.inc"
-	#include "Includes/gpio_channels.inc"
+	#include "../DSP-Library/Includes/adc_channels.inc"
+	#include "../DSP-Library/Includes/gpio_channels.inc"
 
 	aL init 0
 	aR init 0

@@ -12,8 +12,8 @@ nchnls 	= 2
 
 instr 1
 
-	#include "../Includes/adc_channels.inc"
-	#include "../Includes/gpio_channels.inc"
+	#include "../DSP-Library/Includes/adc_channels.inc"
+	#include "../DSP-Library/Includes/gpio_channels.inc"
 
 	aAddSynth[] init 8 ;{0, 0, 0, 0, 0, 0, 0, 0}
 

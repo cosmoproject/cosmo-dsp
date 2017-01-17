@@ -11,13 +11,13 @@ ksmps  	= 64
 nchnls 	= 2
 
 
-#include "UDOs/Lowpass.csd"
-#include "UDOs/RandDelay.csd"
-#include "UDOs/Reverb.csd"
+#include "../DSP-Library/Effects/Lowpass.csd"
+#include "../DSP-Library/Effects/RandDelay.csd"
+#include "../DSP-Library/Effects/Reverb.csd"
 
 
 instr 1 
-	#include "../Includes/midi_cc.inc"
+	#include "../DSP-Library/Includes/midi_cc.inc"
 	
 	aL, aR ins
 

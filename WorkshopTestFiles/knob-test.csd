@@ -14,7 +14,7 @@ giSine ftgen 0, 0, 4096, 10, 1
 
 instr 1
 
-	#include "../Includes/adc_channels.inc"
+	#include "../DSP-Library/Includes/adc_channels.inc"
 
 
 ; FM
