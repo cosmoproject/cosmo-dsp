@@ -30,14 +30,14 @@ class CosmoSettingGraph(nx.DiGraph):
                     # print fx
                     self.add_node(fx, type='UDO')
                     if lastFX:
-                        self.add_edge(lastFX, fx, type='a')
+                        self.add_edge(lastFX, fx, type='a', color='red')
                         print 'combined ' + str(lastFX) + ' and ' + str(fx)
                     lastFX = fx
                 # connect UDOS and Controllers
-                self.add_edge(fx, ctrl, type='k',
+                self.add_edge(ctrl, fx, type='k', color='blue',
                               input=self.jdata['CosmoController'][ctrl][fx])
         self.add_node('Out', type='UDO')
-        self.add_edge(lastFX, 'Out', type='a')
+        self.add_edge(lastFX, 'Out', type='a', color='red')
 
     def _open_COSMO_UDO_read_args(self, udoName):
         print '..reading csd ' + str(udoName)
