@@ -4,8 +4,8 @@
 	Author: Alex Hofmann
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
-	Arguments: Dry/wet mix, Frequency
-    Defaults:  0.5, 0.3
+	Arguments: Frequency, Dry/wet mix
+    Defaults:  0.3, 0.5
 
 	A square wave amplitude modulator
 
@@ -13,7 +13,7 @@
 
 opcode Hack, aa, aakk
 
-	ainL, ainR, kDryWet, kFreq  xin
+	ainL, ainR, kFreq, kDryWet  xin
 
 
 	kFreq expcurve kFreq, 30

@@ -4,11 +4,13 @@
 	COSMO UDO adaption: Bernt Isak Wærstad
 
 	Arguments: 	Threshold, DelayTime Min, DelayTime Max, Feedback Min,
-				Feedback Max, Width, Mix, Level, Portamento time,
-				Center frequency, Bandwidth
+				Feedback Max, Width, Level, Portamento time,
+				Cutoff frequency, Bandwidth, Dry/wet mix
 
     DANGER..THESE ARE RANDOM DEFAULT VALUES!
-    Defaults:  0.8, 0.3, 0.1, 0.3, 0.5, 0.6, 0.7, 0.8, 0.9, 0.1, 0.2
+    Defaults:	0.8, 0.1, 0.3, 0.3, 
+    			0.5, 0.2, 0.5, 0.2, 
+    			0.5, 0.1, 0.3
 
 	This example works best with sharp percussive sounds
 
@@ -34,7 +36,7 @@
 
 opcode TriggerDelay, aa, aakkkkkkkkkkk
 
-	ainL, ainR, kthreshold, kdly1, kdly2, kfback1, kfback2, kwidth, kmix, klevel, kporttime, kcf, kbw xin
+	ainL, ainR, kthreshold, kdly1, kdly2, kfback1, kfback2, kwidth, klevel, kporttime, kcf, kbw, kmix xin
 
 	kthreshold expcurve kthreshold, 10
 	kthreshold scale kthreshold, 1, 0

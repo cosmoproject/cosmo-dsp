@@ -5,13 +5,11 @@
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
 	Arguments: Range, On/off
-    Defaults:  0.8, 1
+    Defaults:  0.8, 0
 
 	Repeater effect
 
 ********************************************************/
-
-#include "UDOs/FadeSwitch.csd"
 
 opcode Repeater, aa, aakk
 

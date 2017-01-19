@@ -3,7 +3,7 @@
 	Author: Alex Hofmann
 	COSMO UDO adaptaion: Bernt Isak Wærstad
 
-	Arguments: Frequency, Mix
+	Arguments: Frequency, Dry/wet mix
     Defaults:  0.8, 0.5
 
 ---------------------------------------------------- */

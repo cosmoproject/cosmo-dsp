@@ -42,16 +42,34 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
+#include "../Includes/cosmo_utilities.inc"
 
-#include "../Effects/Reverb.csd"
+#include "../Effects/AnalogDelay.csd"
+#include "../Effects/AudioAnalyzer.csd"
+#include "../Effects/Blur.csd"
+#include "../Effects/Chorus.csd"
+#include "../Effects/Distortion.csd"
+#include "../Effects/FakeGrainer.csd"
+#include "../Effects/Hack.csd"
+#include "../Effects/Looper.csd"
 #include "../Effects/Lowpass.csd"
-#include "../Effects/SquareMod.csd"
 #include "../Effects/MultiDelay.csd"
-#include "../Effects/TriggerDelay.csd"
+#include "../Effects/PitchShifter.csd"
+#include "../Effects/RandDelay.csd"
+#include "../Effects/Repeater.csd"
+#include "../Effects/Reverb.csd"
+#include "../Effects/Reverse.csd"
 #include "../Effects/Resonator.csd"
-#include "../Effects/LiveLooper.csd"
 #include "../Effects/SimpleLooper.csd"
+#include "../Effects/SineDelay.csd"
 #include "../Effects/SolinaChorus.csd"
+#include "../Effects/SquareMod.csd"
+#include "../Effects/Tremolo.csd"
+#include "../Effects/TriggerDelay.csd"
+#include "../Effects/Volume.csd"
+#include "../Effects/Wobble.csd"
+
+
 
 
 instr 1
@@ -59,44 +77,38 @@ instr 1
 	#include "../Includes/adc_channels.inc"
 	#include "../Includes/gpio_channels.inc"
 
-	gaL, gaR ins
-	gadlyL = 0
-	gadlyR = 0
+	aL, aR ins
+	adlyL = 0
+	adlyR = 0
 ;										bf 		bw	  gain   num     ksep    ksep2 sepmode scalemode
 	;gaL, gaR Resonator gaL, gaR, gkpot0, gkpot1, 1,   gkpot2, gkpot3, gkpot4,   0,      2 
 
 ;	gadlyL, gadlyR TriggerDelay gaL, gaR, gkpot0, gkpot1, gkpot2, gkpot3, gkpot4, 1, 0.5, 0.5, gkpot5, gkpot6, gkpot7
 
 
-
 ;	Solina Chorus parameters:
-;	aLeft, aRight, klfo_freq1, klfo_amp1, klfo_freq2, klfo_amp2, kstereo_mode xin
-;	gaL, gaR solina_chorus_stereo gaL, gaR, 0.18, 0.6, 6, 0.2, 1
+;	Arguments: LFO1 Frequency, LFO1 Amp, LFO2 Frequency, LFO2 Amp, Dry/wet mix, [, Stereo mode on/off]
+ 	aL, aR SolinaChorus aL, aR, 0.18, 0.6, 6, 0.2, 1, 1
 
 
-	gaL solina_chorus gaL, 0.18, 0.6, 6, 0.2
-	gaR solina_chorus gaR, 0.18, 0.6, 6, 0.2
+	aL, aR Reverb aL, aR, 0.8, 0.5, 0.3
 
-
-	gaL, gaR Reverb gaL, gaR, 0.8, 0.5, 0.3
-
-;  	SimpleLooper parameters: 
-;	ainL, ainR, kRecPlay, kStop, kStart, kClear, kSpeed
-	gaLoopL, gaLoopR SimpleLooper gaL, gaR, gkswitch0, gkswitch1, 0, gkpot0, 1
-	gaL = gaL + gaLoopL
-	gaR = gaR + gaLoopR
+;  	SimpleLooper  
+;	Arguments: Record/Play, Stop/start, Speed, Reverse, Audio Through
+	aLoopL, aLoopR, kPlaying, kRecing SimpleLooper aL, aR, gkswitch0, gkswitch1, 1, 0, 1
+	aL = aL + aLoopL
+	aR = aR + aLoopR
 
 
 	;aOutL = (gaL + gadlyL + gaLoopL)
 	;aOutR = (gaR + gadlyR + gaLoopR)
 
-	aOutL = gaL 
-	aOutR = gaR 
+	aOutL = aL 
+	aOutR = aR 
 	
-	aOutL, aOutR Lowpass_Stereo aOutL, aOutR, 0.5
+	aOutL, aOutR Lowpass aOutL, aOutR, 0.5
 
-	;aOutL limit aOutL, 0.8, 0.95
-	;aOutR limit aOutR, 0.8, 0.95
+
 	outs aOutL, aOutR
 	
 

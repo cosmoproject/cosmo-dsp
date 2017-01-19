@@ -5,7 +5,7 @@
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
 	Arguments: Seminotes (+/- 1 octave), Dry/wet mix
-    Defaults:  0, 0.7
+    Defaults:  1, 0.5
 
 	Pitch shifter with the range from -1 octave to +1 octave
 

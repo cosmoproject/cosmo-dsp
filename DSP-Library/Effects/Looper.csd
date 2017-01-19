@@ -3,11 +3,14 @@
 
 	EXPERIMENTAL!
 
-	BasicLooper.csd
+	Looper.csd
 	Author: Bernt Isak Wærstad
 
 	Arguments: Record/Play/Overdub, Stop/start, Clear, Speed, Reverse, Audio Through, Octave Down, Octave Up
-    Defaults:  1, 1, 0, 1, 0, 1, 0, 0
+    Defaults:  0, 0, 0, 1, 0, 1, 0, 0
+    Output arguments: Record/Play/Overdub, Playing
+    Defaults: 0, 0
+
 
 		* Record/Play: Send a 1 to start recording, send a 1 again to stop recording and start playing the loop
 		* Stop/start: Toggles between loop stopped and loop playing
@@ -18,7 +21,7 @@
 		* Octave Down: Playback speed and pitch one octave down
 		* Octave Up: Playback speed and pitch one octave up
 
-	A basic looper with overdub (not properly implemented)
+	A looper with overdub (not properly implemented)
 
 ********************************************************/
 
@@ -29,7 +32,7 @@
 ;*********************************************************************
 ; BasicLooper
 ;*********************************************************************
-	opcode BasicLooper, aakk, aakkkkkkkk
+	opcode Looper, aakk, aakkkkkkkk
 
 	ainL, ainR, kRecPlayOvr, kStopStart, kClear, kSpeed, kReverse, kThrough, kOctDown, kOctUp xin
 

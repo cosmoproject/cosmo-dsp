@@ -10,7 +10,7 @@ opcode Tremolo, aa, aakk
 	ainL, ainR, kFreq, kOnOff xin
 
 	kFreq scale kFreq, 5, 0.001
-	Sfreq sprintf "Tremolo freq: %fHz", kFreq
+	Sfreq sprintfk "Tremolo freq: %fHz", kFreq
 		puts Sfreq, kFreq + 1
 
 	aMod oscil 1, kFreq
