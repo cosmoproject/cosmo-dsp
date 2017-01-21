@@ -1,19 +1,19 @@
 {"CosmoController": {
-    "gkCC21_ch1":
+    "gkCC21":
         {
             "Wobble": "Frequency",
             "RandDelay": "Feedback"
         },
-    "gkCC22_ch1":
+    "gkCC22":
         {
             "Chorus": "Dry/wet mix"
         },
-    "gkCC23_ch1":
+    "gkCC23":
         {
             "Reverb": "Dry/wet mix",
             "RandDelay": "Range"
         },
-    "gkCC24_ch1":
+    "gkCC24":
         {
             "Volume": "Level"
         }

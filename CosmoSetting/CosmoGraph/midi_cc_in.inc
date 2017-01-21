@@ -1,4 +1,3 @@
-;name  ctrl7  midi-ch, midi-cc, min, max
 gkCC1_ch1 ctrl7 1, 1, 0, 1
 gkCC2_ch1 ctrl7 1, 2, 0, 1
 gkCC3_ch1 ctrl7 1, 3, 0, 1
