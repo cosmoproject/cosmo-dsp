@@ -1,14 +1,14 @@
-{"CosmoController": {
-    "gkCC28":
+{"COSMO-Patch": {
+    "gkpot0":
         {
             "Lowpass": "Cutoff",
             "RandDelay": "Feedback"
         },
-    "gkCC29":
+    "gkpot1":
         {
             "RandDelay": "Dry/wet mix"
         },
-    "gkCC30":
+    "gkpot2":
         {
             "Reverb": "Dry/wet mix",
             "RandDelay": "Range"

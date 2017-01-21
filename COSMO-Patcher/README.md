@@ -10,21 +10,34 @@ From the CosmoSetting.json the controller mappings are used to generate a Csound
 
     ('pip' - is the package manager for python, you can install it via apt-get or homebrew )
 
-## Run
+## Run with a MIDI-Controller
 
-    ./run.sh
+    ./MIDI-Patch-run.sh
 
 ## Edit Knob Mapping
 
-    nano CosmoSetting.json
+    nano MIDI-Patch.json
 
 
 ## Edit Csound Settings
 
     nano CosmoGraph/Intro.csd
 
+## Run with a Cosmo-Box
+
+        ./COSMO-Patch-run.sh
+
+## Edit Knob Mapping
+
+        nano COSMO-Patch.json
+
+
+## Edit Csound Settings
+
+        nano CosmoGraph/Intro.csd
+
 
 ## Run with filenames
 
-        python CosmoGraph/CosmoToCsd.py CosmoSetting.json workfile.csd
+        python CosmoGraph/CosmoToCsd.py MIDI-Patch.json workfile.csd
         csound workfile.csd

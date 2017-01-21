@@ -1,0 +1,16 @@
+{"CosmoController": {
+    "gkCC0":
+        {
+            "Lowpass": "Cutoff",
+            "RandDelay": "Feedback"
+        },
+    "gkCC1":
+        {
+            "RandDelay": "Dry/wet mix"
+        },
+    "gkCC2":
+        {
+            "Reverb": "Dry/wet mix",
+            "RandDelay": "Range"
+        }
+}}

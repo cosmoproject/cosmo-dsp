@@ -5,11 +5,11 @@ import string
 from collections import OrderedDict
 
 
-class CosmoSettingGraph(nx.DiGraph):
+class CosmoPatcherGraph(nx.DiGraph):
     # Topics will be stored as Nodes in a Graph
     midi_ctrls = []
     def __init__(self):
-        super(CosmoSettingGraph, self).__init__()
+        super(CosmoPatcherGraph, self).__init__()
 
     def read_settings_json(self, path):
         with open(path) as data_file:
@@ -17,7 +17,7 @@ class CosmoSettingGraph(nx.DiGraph):
             print json.dumps(self.jdata, indent=2)
 
     def cosmo_settings_to_graph(self):
-        controllers = [ctrl for ctrl in self.jdata['CosmoController']]
+        controllers = [ctrl for ctrl in self.jdata['MIDI-Patch']]
         lastFX = 'In'
         self.add_node('In', type='UDO')
         for ctrl in controllers:
@@ -29,10 +29,10 @@ class CosmoSettingGraph(nx.DiGraph):
             chn = midi_ctrl[1]
             ctrl_var = "gk%s_%s" % (cc,chn)
             self.midi_ctrls.append(midi_ctrl)
-            
+
             self.add_node(ctrl, type='ctrl')
-            for fx in self.jdata['CosmoController'][ctrl]:
-                # print data['CosmoController'][ctrl][fx]
+            for fx in self.jdata['MIDI-Patch'][ctrl]:
+                # print data['MIDI-Patch'][ctrl][fx]
                 # udos to nodes
                 print fx
                 if fx not in self.nodes():
@@ -44,7 +44,7 @@ class CosmoSettingGraph(nx.DiGraph):
                     lastFX = fx
                 # connect UDOS and Controller Variables
                 self.add_edge(fx, ctrl_var, type='k', color='blue',
-                              input=self.jdata['CosmoController'][ctrl][fx])
+                              input=self.jdata['MIDI-Patch'][ctrl][fx])
         self.add_node('Out', type='UDO')
         self.add_edge(lastFX, 'Out', type='a', color='red')
 
@@ -175,11 +175,11 @@ class CosmoSettingGraph(nx.DiGraph):
 
 
 # -- debugging
-# C_set = CosmoSettingGraph()
+# C_set = CosmoPatcherGraph()
 # # C_set.open_COSMO_UDO_read_args('Lowpass')
 # print 'Load Json'
 # # json is read correctly, using 'OrderedDict'
-# C_set.read_settings_json('2CosmoSetting.json')
+# C_set.read_settings_json('MIDI-Patch.json')
 #
 # print 'Json to Graph'
 # # graph connects FX modules in correct order (lastfx in correct if statement)

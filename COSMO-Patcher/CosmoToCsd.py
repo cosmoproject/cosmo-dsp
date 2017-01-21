@@ -1,10 +1,10 @@
 import sys
-from CosmoGraph.CosmoSettingGraph import CosmoSettingGraph
+from CosmoGraph.CosmoPatcherGraph import CosmoPatcherGraph
 
 input_filename = sys.argv[1]
 output_filename = sys.argv[2]
 
-C_set = CosmoSettingGraph()
+C_set = CosmoPatcherGraph()
 
 print 'Load Json file ' + input_filename
 C_set.read_settings_json(input_filename)
