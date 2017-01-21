@@ -19,17 +19,22 @@ nchnls 	= 2
 	 	 #include "../DSP-Library/Effects/Volume.csd" 
 
 instr 1
-	#include "../DSP-Library/Includes/all_midi_cc.inc"
 
 	aL, aR ins
 
 	adlyL = 0
 	adlyR = 0
-	 aL, aR Wobble aL, aR, gkCC21, 0.5
-	 aL, aR RandDelay aL, aR, gkCC23, gkCC21, 0.5
-	 aL, aR Chorus aL, aR, 0.4, gkCC22
-	 aL, aR Reverb aL, aR, 0.85, 0.5, gkCC23
-	 aL, aR Volume aL, aR, gkCC24
+
+	gkCC21_CH1 ctrl7 1, 21, 0, 1
+	gkCC22_CH1 ctrl7 1, 22, 0, 1
+	gkCC23_CH1 ctrl7 1, 23, 0, 1
+	gkCC24_CH1 ctrl7 1, 24, 0, 1
+
+	 aL, aR Wobble aL, aR, gkCC21_CH1, 0.5
+	 aL, aR RandDelay aL, aR, gkCC23_CH1, gkCC21_CH1, 0.5
+	 aL, aR Chorus aL, aR, 0.4, gkCC22_CH1
+	 aL, aR Reverb aL, aR, 0.85, 0.5, gkCC23_CH1
+	 aL, aR Volume aL, aR, gkCC24_CH1
 
 aOutL = (aL + adlyL)
 aOutR = (aR + adlyR)

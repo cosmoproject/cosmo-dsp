@@ -7,6 +7,7 @@ from collections import OrderedDict
 
 class CosmoSettingGraph(nx.DiGraph):
     # Topics will be stored as Nodes in a Graph
+    midi_ctrls = []
     def __init__(self):
         super(CosmoSettingGraph, self).__init__()
 
@@ -21,6 +22,14 @@ class CosmoSettingGraph(nx.DiGraph):
         self.add_node('In', type='UDO')
         for ctrl in controllers:
             # controllers to nodes
+
+            # make Csound variables of ctrl args
+            midi_ctrl = ctrl.split("_")
+            cc = midi_ctrl[0]
+            chn = midi_ctrl[1]
+            ctrl_var = "gk%s_%s" % (cc,chn)
+            self.midi_ctrls.append(midi_ctrl)
+            
             self.add_node(ctrl, type='ctrl')
             for fx in self.jdata['CosmoController'][ctrl]:
                 # print data['CosmoController'][ctrl][fx]
@@ -33,8 +42,8 @@ class CosmoSettingGraph(nx.DiGraph):
                         self.add_edge(lastFX, fx, type='a', color='red')
                         print 'combined ' + str(lastFX) + ' and ' + str(fx)
                     lastFX = fx
-                # connect UDOS and Controllers
-                self.add_edge(fx, ctrl, type='k', color='blue',
+                # connect UDOS and Controller Variables
+                self.add_edge(fx, ctrl_var, type='k', color='blue',
                               input=self.jdata['CosmoController'][ctrl][fx])
         self.add_node('Out', type='UDO')
         self.add_edge(lastFX, 'Out', type='a', color='red')
@@ -131,6 +140,12 @@ class CosmoSettingGraph(nx.DiGraph):
                         for idx, item in enumerate(self.csnd_code_includes):
                             csd_file.write(self.csnd_code_includes[idx])
                         csd_file.write(instrDef.read())
+                        for idx in range(len(self.midi_ctrls)):
+                            midi_ctrl = self.midi_ctrls[idx]
+                            cc = midi_ctrl[0]
+                            chn = midi_ctrl[1]
+                            csd_file.write("\tgk%s_%s ctrl7 %s, %s, 0, 1\n" % (cc, chn, chn.strip("CHN"), cc.strip("CC")))
+                        csd_file.write("\n")
                         for idx, item in enumerate(self.csnd_code_lines):
                             csd_file.write(self.csnd_code_lines[idx])
                         csd_file.write(outro.read())
