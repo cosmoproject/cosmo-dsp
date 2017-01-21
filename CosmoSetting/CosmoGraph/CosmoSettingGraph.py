@@ -34,7 +34,7 @@ class CosmoSettingGraph(nx.DiGraph):
                         print 'combined ' + str(lastFX) + ' and ' + str(fx)
                     lastFX = fx
                 # connect UDOS and Controllers
-                self.add_edge(ctrl, fx, type='k', color='blue',
+                self.add_edge(fx, ctrl, type='k', color='blue',
                               input=self.jdata['CosmoController'][ctrl][fx])
         self.add_node('Out', type='UDO')
         self.add_edge(lastFX, 'Out', type='a', color='red')
@@ -98,6 +98,7 @@ class CosmoSettingGraph(nx.DiGraph):
                 if len(edges) > 0:  # some nodes have zero edges going into it
                     for edge in edges:
                         if edge[2]['type'] == 'k':  # k-connections from UDOs
+                            print '-- are we here?'
                             argNameInUDO = edge[2]['input']
                             pos = self._find_pos_in_args(
                                             udo_inputs['argNames'],
@@ -172,7 +173,7 @@ class CosmoSettingGraph(nx.DiGraph):
 # C_set.print_fx_in_order()
 # C_set.generate_csound_code_from_graph()
 # # C_set.write_csd()
-#
+
 
 
 # ---- test
