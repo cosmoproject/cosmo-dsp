@@ -98,7 +98,6 @@ class CosmoSettingGraph(nx.DiGraph):
                 if len(edges) > 0:  # some nodes have zero edges going into it
                     for edge in edges:
                         if edge[2]['type'] == 'k':  # k-connections from UDOs
-                            print '-- are we here?'
                             argNameInUDO = edge[2]['input']
                             pos = self._find_pos_in_args(
                                             udo_inputs['argNames'],
