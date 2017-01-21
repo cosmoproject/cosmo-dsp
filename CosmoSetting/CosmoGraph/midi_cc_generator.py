@@ -12,9 +12,10 @@ print gen()
 
 def write_csd():
 	fileDir = os.path.dirname(__file__)
-	filename = os.path.join(fileDir, "midi_cc_in.inc")
+	filename = os.path.join(fileDir, "all_midi_cc.inc")
 	var = gen() 
 	with open(filename, 'w+') as midi_cc_file:
+		midi_cc_file.write(";name  ctrl7  midi-ch, midi-cc, min, max\n")
 		for i in range(len(var)):
 			midi_cc_file.write(var[i] + "\n")
 		midi_cc_file.close
