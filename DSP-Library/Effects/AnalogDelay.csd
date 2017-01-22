@@ -9,7 +9,7 @@
     Defaults:  0.2, 0.4, 0.5
 
 	Delay time: 1ms - 2s
-	Feedback: 0% - 100%
+	Feedback: 0% - 120%
 	Dry/wet mix: 0% - 100%
 
 	Description:
@@ -27,10 +27,9 @@ opcode AnalogDelay, aa, aakkk
 	kdlytime port kdlytime, 0.7
 	adlytime interp kdlytime
 
-	kfeed scale kfeed, 1, 0
+	kfeed scale kfeed, 1.2, 0
 	Sfb sprintfk "AnalogDly Feedback: %f", kfeed
 		puts Sfb, kfeed+1
-
 
 
 	kDly_Mix scale kDly_Mix, 1, 0
@@ -41,11 +40,11 @@ opcode AnalogDelay, aa, aakkk
 	aFeedL init 0
 	aFeedR init 0
 
-	avDlyL vdelay3 ainL + (aFeedL * kfeed * 1.05), adlytime, 3000
-	avDlyR vdelay3 ainR + (aFeedR * kfeed), adlytime*1.05, 3000
+	avDlyL vdelay3 ainL + (aFeedL * kfeed), adlytime, 3000
+	avDlyR vdelay3 ainR + (aFeedR * kfeed), adlytime*1.02, 3000
 
-	aFeedL lpf18 aFeedL, 3500, 0.5, 0.75
-	aFeedR lpf18 aFeedR, 3800, 0.55, 0.7
+	aFeedL lpf18 avDlyL, 4500, 0, 0.15
+	aFeedR lpf18 avDlyR, 4800, 0, 0.15
 
 	;----------------------
 
