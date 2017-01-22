@@ -40,7 +40,7 @@ def _open_COSMO_UDO_read_args(udoName):
 
 def write_json(fileName, content_json):
     fileDir = os.path.dirname(__file__)
-    filename = os.path.join(fileDir, 'json/' + fileName + '.json')
+    filename = os.path.join(fileDir, 'json/' + fileName[:-4] + '.json')
     with open(filename, 'w+') as json_file:
         json_file.write(content_json)
         json_file.close
