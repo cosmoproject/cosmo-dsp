@@ -1,0 +1,10 @@
+{
+  "MIDI-Patch": {
+    "CC29_CH1": {
+      "Tremolo": " On/off"
+    }, 
+    "CC28_CH1": {
+      "Tremolo": " Frequency"
+    }
+  }
+}

@@ -3,14 +3,10 @@
 	Author: Iain McCurdy
 	COSMO UDO adaption: Bernt Isak Wærstad
 
-	Arguments: 	Threshold, DelayTime Min, DelayTime Max, Feedback Min,
-				Feedback Max, Width, Level, Portamento time,
-				Cutoff frequency, Bandwidth, Dry/wet mix
+	Arguments: 	Threshold, DelayTime Min, DelayTime Max, Feedback Min, Feedback Max, Width, Level, Portamento time, Cutoff frequency, Bandwidth, Dry/wet mix
 
     DANGER..THESE ARE RANDOM DEFAULT VALUES!
-    Defaults:	0.8, 0.1, 0.3, 0.3, 
-    			0.5, 0.2, 0.5, 0.2, 
-    			0.5, 0.1, 0.3
+    Defaults:	0.8, 0.1, 0.3, 0.3, 0.5, 0.2, 0.5, 0.2, 0.5, 0.1, 0.3
 
 	This example works best with sharp percussive sounds
 

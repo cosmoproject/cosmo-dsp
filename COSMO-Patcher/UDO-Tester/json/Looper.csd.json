@@ -1,0 +1,28 @@
+{
+  "MIDI-Patch": {
+    "CC31_CH1": {
+      "Looper": " Speed"
+    }, 
+    "CC34_CH1": {
+      "Looper": " Octave Down"
+    }, 
+    "CC29_CH1": {
+      "Looper": " Stop/start"
+    }, 
+    "CC28_CH1": {
+      "Looper": " Record/Play/Overdub"
+    }, 
+    "CC30_CH1": {
+      "Looper": " Clear"
+    }, 
+    "CC35_CH1": {
+      "Looper": " Octave Up"
+    }, 
+    "CC32_CH1": {
+      "Looper": " Reverse"
+    }, 
+    "CC33_CH1": {
+      "Looper": " Audio Through"
+    }
+  }
+}

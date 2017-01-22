@@ -1,0 +1,10 @@
+{
+  "MIDI-Patch": {
+    "CC29_CH1": {
+      "Chorus": " Dry/wet mix"
+    }, 
+    "CC28_CH1": {
+      "Chorus": " Feedback"
+    }
+  }
+}

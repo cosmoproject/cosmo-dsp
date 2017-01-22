@@ -1,0 +1,25 @@
+{
+  "MIDI-Patch": {
+    "CC31_CH1": {
+      "Resonator": " Separation octaves"
+    }, 
+    "CC34_CH1": {
+      "Resonator": " "
+    }, 
+    "CC29_CH1": {
+      "Resonator": " Bandwidth"
+    }, 
+    "CC28_CH1": {
+      "Resonator": " Base frequency"
+    }, 
+    "CC30_CH1": {
+      "Resonator": " Number of filters"
+    }, 
+    "CC32_CH1": {
+      "Resonator": " Separation seminotes"
+    }, 
+    "CC33_CH1": {
+      "Resonator": " Separation mode[0-2]"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "MIDI-Patch": {
+    "CC29_CH1": {
+      "Lowpass": " Resonance"
+    }, 
+    "CC28_CH1": {
+      "Lowpass": " Cutoff frequency"
+    }, 
+    "CC30_CH1": {
+      "Lowpass": " Distortion"
+    }
+  }
+}
