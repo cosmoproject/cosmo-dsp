@@ -8,6 +8,7 @@ from collections import OrderedDict
 class CosmoPatcherGraph(nx.DiGraph):
     # Topics will be stored as Nodes in a Graph
     midi_ctrls = []
+    dsp_path = '../DSP-Library/'
     def __init__(self):
         super(CosmoPatcherGraph, self).__init__()
 
@@ -51,7 +52,7 @@ class CosmoPatcherGraph(nx.DiGraph):
     def _open_COSMO_UDO_read_args(self, udoName):
         print '..reading csd ' + str(udoName)
         fileDir = os.path.dirname(__file__)
-        filename = os.path.join(fileDir, '../../DSP-Library/Effects/'
+        filename = os.path.join(fileDir, '../' + self.dsp_path + 'Effects/'
                                 + str(udoName)
                                 + '.csd')
         with open(filename) as UDO_file:
@@ -117,12 +118,12 @@ class CosmoPatcherGraph(nx.DiGraph):
                 args = self._fill_none_with_defaults(udo_inputs, args)
                 argsSt = ', '.join(str(x) for x in args)
                 self.csnd_code_includes.append(
-                                    '\t \t #include "../DSP-Library/Effects/'
+                                    '\t#include "' + self.dsp_path + 'Effects/'
                                     + udo
                                     + '.csd" \n'
                                     )
                 self.csnd_code_lines.append(
-                                    '\t aL, aR '
+                                    '\t\taL, aR '
                                     + str(udo)
                                     + ' aL, aR, '
                                     + argsSt + '\n'
@@ -137,6 +138,7 @@ class CosmoPatcherGraph(nx.DiGraph):
                                        'InstrumentDefBegin.csd')) as instrDef:
                     with open(os.path.join(fileDir, 'Outro.csd')) as outro:
                         csd_file.write(intro.read())
+                        csd_file.write('\t#include "' + self.dsp_path + 'Includes/cosmo_utilities.inc"\n\n')
                         for idx, item in enumerate(self.csnd_code_includes):
                             csd_file.write(self.csnd_code_includes[idx])
                         csd_file.write(instrDef.read())
@@ -144,7 +146,7 @@ class CosmoPatcherGraph(nx.DiGraph):
                             midi_ctrl = self.midi_ctrls[idx]
                             cc = midi_ctrl[0]
                             chn = midi_ctrl[1]
-                            csd_file.write("\tgk%s_%s ctrl7 %s, %s, 0, 1\n" % (cc, chn, chn.strip("CHN"), cc.strip("CC")))
+                            csd_file.write("\t\tgk%s_%s ctrl7 %s, %s, 0, 1\n" % (cc, chn, chn.strip("CHN"), cc.strip("CC")))
                         csd_file.write("\n")
                         for idx, item in enumerate(self.csnd_code_lines):
                             csd_file.write(self.csnd_code_lines[idx])

@@ -1,10 +1,10 @@
 
-aOutL = (aL + adlyL)
-aOutR = (aR + adlyR)
+		aOutL = (aL + adlyL)
+		aOutR = (aR + adlyR)
 
-outs aOutL, aOutR
+		outs aOutL, aOutR
 
-endin
+	endin
 
 </CsInstruments>
 <CsScore>

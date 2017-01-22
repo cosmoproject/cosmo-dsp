@@ -1,8 +1,8 @@
 
-instr 1
+	instr 1
 
-	aL, aR ins
+		aL, aR ins
 
-	adlyL = 0
-	adlyR = 0
+		adlyL = 0
+		adlyR = 0
 

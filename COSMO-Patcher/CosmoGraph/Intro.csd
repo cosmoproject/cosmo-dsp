@@ -6,9 +6,10 @@
 ;-n -d -+rtmidi=NULL -M0 -m0d
 </CsOptions>
 <CsInstruments>
-sr      = 44100
-ksmps  	= 64
-0dbfs	= 1
-nchnls 	= 2
+
+	sr      = 44100
+	ksmps  	= 64
+	0dbfs	= 1
+	nchnls 	= 2
 
  
