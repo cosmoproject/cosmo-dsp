@@ -4,9 +4,14 @@
 	Author: Alex Hofmann
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
-	Arguments: Range(in seconds), Feedback, Dry/wet mix
+	Arguments: Range, Feedback, Dry/wet mix
     Defaults:  0.8, 0.3, 0.5
 
+	Range: 0.001s - 0.5s
+	Feedback: 0% - 100%
+	Dry/wet mix: 0% - 100%
+
+	Description:
 	A SinMod Delay
 
 ********************************************************/

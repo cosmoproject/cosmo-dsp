@@ -6,6 +6,10 @@
 	Arguments: Blur time, Dry/wet mix
     Defaults:  0.2, 0.8
 
+	Blur time: 0.1s - 2s
+	Dry/wet mix: 0% - 100%
+
+	Description:
 	A spectral blur effect - very CPU intensive!
 
 ********************************************************/

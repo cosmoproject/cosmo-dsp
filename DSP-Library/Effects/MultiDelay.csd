@@ -6,12 +6,23 @@
 	Arguments: Multi tap on/off, Delay time, Feedback, Cutoff, Dry/wet mix
     Defaults:  1, 0.5, 0.4, 0.9, 0.5
 
+	Multi tap on/off: 0 - 1 (1 above 0.5, 0 below 0.5)
+	Delay time: 1ms - 1s
+	Feedback: 0% - 100%
+	Cutoff: 500Hz - 12000Hz
+	Dry/wet mix: 0 - 100%
+
+	Description:
 	A multi tap delay effect
 
 ********************************************************/
 
 opcode MultiDelay, aa, aakkkkk
 	ainL, ainR, kmultitap, kdlytime, kfeed, kcutoff, kDly_Mix xin
+
+	kmultitap = kmultitap > 0.5 ? 1 : 0 
+	Stap sprintfk "MultiDly MultTap on/off: %d", kmultitap
+		puts Stap, kmultitap+1
 
 	kfeed scale kfeed, 1, 0
 	Sfb sprintfk "MultiDly Feedback: %f", kfeed

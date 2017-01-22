@@ -6,6 +6,11 @@
 
 	Arguments: Feedback, Dry/wet mix
     Defaults:  0.4, 0.5
+
+	Feedback: 0.001% - 100%
+	Dry/wet mix: 0% - 100%
+
+	Description: 
 	A chorus effect
 
 ********************************************************/

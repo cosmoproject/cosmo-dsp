@@ -7,6 +7,9 @@
 	Arguments: Frequency, Dry/wet mix
     Defaults:  0.2, 0.5
 
+	Frequency: 0.3Hz - 20Hz
+
+	Description:
 	Wobble effect
 
 ********************************************************/

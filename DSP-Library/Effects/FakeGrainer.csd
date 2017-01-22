@@ -7,6 +7,9 @@
 	Arguments: Dry/wet mix
     Defaults:  1
 
+	Dry/wet mix: 0% - 100%
+
+	Description:
 	An effect that sounds like granular synthesis
 
 ********************************************************/

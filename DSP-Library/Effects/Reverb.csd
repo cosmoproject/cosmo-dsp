@@ -6,6 +6,11 @@
 	Arguments: Decay time, Cutoff frequency, Dry/wet mix
     Defaults:  0.85, 0.5, 0.5
 
+	Decay time: 0 - 1
+	Cutoff frequency: 200Hz - 12000Hz
+	Dry/wet mix: 0% - 100%
+
+	Description:
 	This effect has default settings so that it can optionally
 	also be used without arugments
 

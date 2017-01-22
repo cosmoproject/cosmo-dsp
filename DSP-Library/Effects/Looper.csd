@@ -12,6 +12,9 @@
     Defaults: 0, 0
 
 
+	Description:
+	A looper with overdub (not properly implemented)
+	
 		* Record/Play: Send a 1 to start recording, send a 1 again to stop recording and start playing the loop
 		* Stop/start: Toggles between loop stopped and loop playing
 		* Clear: Not implemented
@@ -20,8 +23,6 @@
 		* Audio Through: Toggles audio coming through or not
 		* Octave Down: Playback speed and pitch one octave down
 		* Octave Up: Playback speed and pitch one octave up
-
-	A looper with overdub (not properly implemented)
 
 ********************************************************/
 

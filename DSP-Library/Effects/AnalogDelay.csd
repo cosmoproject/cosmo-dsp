@@ -8,6 +8,11 @@
 	Arguments: Delay time, Feedback, Dry/wet mix
     Defaults:  0.2, 0.4, 0.5
 
+	Delay time: 1ms - 2s
+	Feedback: 0% - 100%
+	Dry/wet mix: 0% - 100%
+
+	Description:
 	Analoge style delay
 
 ********************************************************/
@@ -19,13 +24,14 @@ opcode AnalogDelay, aa, aakkk
 	kdlytime scale kdlytime, 2000, 1
 	Scut sprintfk "AnalogDly time: %dms", kdlytime
 		puts Scut, kdlytime
+	kdlytime port kdlytime, 0.7
+	adlytime interp kdlytime
 
 	kfeed scale kfeed, 1, 0
 	Sfb sprintfk "AnalogDly Feedback: %f", kfeed
 		puts Sfb, kfeed+1
 
-	kdlytime port kdlytime, 0.7
-	adlytime interp kdlytime
+
 
 	kDly_Mix scale kDly_Mix, 1, 0
 	Srev sprintfk "AnalogDly Mix: %f", kDly_Mix

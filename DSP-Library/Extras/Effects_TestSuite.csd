@@ -46,6 +46,7 @@ instr 1
 
 	aL, aR ins
 
+
 ;	AnalogDelay
 ;	Arguments: Delay time, Feedback, Dry/wet mix
 	aL, aR AnalogDelay aL, aR, 0.5, 0.5, 0.5
@@ -74,6 +75,7 @@ instr 1
 ;	Arguments: Frequency, Dry/wet mix
 	aL, aR Hack aL, aR, 0.3, 0.5
 
+
 ;	Looper
 ;	Arguments: Record/Play/Overdub, Stop/start, Clear, Speed, Reverse, Audio Through, Octave Down, Octave Up
 ;   Output arguments: Record/Play/Overdub, Playing
@@ -81,6 +83,7 @@ instr 1
 	aL = aL + aLoopL
 	aR = aR + aLoopR
 	
+
 ;	Lowpass
 ;	Arguments: Cutoff frequency, Resonance, Distortion
 	aL, aR Lowpass aL, aR, 0.8, 0.4, 0
@@ -90,8 +93,8 @@ instr 1
 	aL, aR MultiDelay aL, aR, 1, 0.5, 0.4, 0.9, 0.5
 
 ;	PitchShifter
-;	Arguments: Seminotes (+/- 1 octave), Dry/wet mix
-	aL, aR PitchShifter aL, aR, 1, 0.5
+;	Arguments: Seminotes (+/- 1 octave), Stereo mode, Dry/wet mix
+	aL, aR PitchShifter aL, aR, 1, 0, 0.5
 
 ;	RandDelay
 ;	Arguments: Range, Feedback, Dry/wet mix
@@ -149,6 +152,7 @@ instr 1
 ;	Wobble
 ;	Arguments: Frequency, Dry/wet mix
 	aL, aR Wobble aL, aR, 0.5, 0.5
+
 
 	aOutL = aL 
 	aOutR = aR 

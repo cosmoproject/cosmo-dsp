@@ -4,10 +4,21 @@
 	COSMO UDO adaption: Bernt Isak Wærstad
 
 	Arguments: 	Threshold, DelayTime Min, DelayTime Max, Feedback Min, Feedback Max, Width, Level, Portamento time, Cutoff frequency, Bandwidth, Dry/wet mix
+    Defaults:	0.1, 0.1, 0.2, 0.5, 0.9, 1, 1, 0.1, 0.5, 0.1, 0.5
 
-    DANGER..THESE ARE RANDOM DEFAULT VALUES!
-    Defaults:	0.8, 0.1, 0.3, 0.3, 0.5, 0.2, 0.5, 0.2, 0.5, 0.1, 0.3
+	Treshold: 0 - 1
+	DelayTime Min: 0.0001s - 2s
+	DelayTime Max: 0.0001s - 2s
+	Feedback Min: 0% - 120%
+	Feedback Max: 0% - 120%
+	Width: 0 - 1
+	Level: 0 - 1 
+	Portamento time: 0 - 5
+	Cutoff frequency: 50Hz - 10000Hz
+	Bandwidth: 600Hz - 22050Hz
+	Dry/wet mix: 0% - 100%
 
+	Description:
 	This example works best with sharp percussive sounds
 
 	A trigger impulse is generated each time the rms of the input signal
@@ -67,21 +78,14 @@ opcode TriggerDelay, aa, aakkkkkkkkkkk
 	Smix sprintfk "Stereo Width: %f", kwidth
 		puts Smix, kwidth+1
 
-	kmix scale kmix, 1, 0
-	kmix init 0.5
-	Smix sprintfk "Delay Mix: %f", kmix
-		puts Smix, kmix+1
-
 	klevel scale klevel, 1, 0
 	klevel init 1
 	Smix sprintfk "Level: %f", klevel
 		puts Smix, klevel+1
 
-	klevel = 0.1
-
 	kporttime expcurve kporttime, 10
 	kporttime scale kporttime, 5, 0
-	kporttime init 0
+	kporttime init 0.01
 	Smix sprintfk "Port time: %f", kporttime
 		puts Smix, kporttime+1
 
@@ -95,6 +99,13 @@ opcode TriggerDelay, aa, aakkkkkkkkkkk
 	kbw init 4000
 	Slpf sprintfk "Bandwidth: %d", kbw
 		puts Slpf, kbw
+
+	kmix scale kmix, 1, 0
+	kmix init 0.5
+	Smix sprintfk "Delay Mix: %f", kmix
+		puts Smix, kmix+1
+
+;	klevel = 0.1
 
 	krms	rms	(ainL+ainR)*0.5
 

@@ -7,6 +7,11 @@
 	Arguments: Range, Feedback, Dry/wet mix
     Defaults:  0.5, 0.2, 0.5
 
+	Range: 0.001 - 15
+	Feedback: 0% - 100%
+	Dry/wet mix: 0% - 100%
+
+	Description:
 	Delay with random delay times
 
 ----------------------------------------------------*/

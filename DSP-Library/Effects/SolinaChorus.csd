@@ -76,9 +76,9 @@ opcode SolinaChorus, a, akkkkk
 xout aout
 endop
 
-opcode SolinaChorus, aa, aakkkkkP
+opcode SolinaChorus, aa, aakkkkPk
 
-  aLeft, aRight, klfo_freq1, klfo_amp1, klfo_freq2, klfo_amp2, kdrywet, kstereo_mode xin
+  aLeft, aRight, klfo_freq1, klfo_amp1, klfo_freq2, klfo_amp2, kstereo_mode, kdrywet  xin
 
   imax = 100
 

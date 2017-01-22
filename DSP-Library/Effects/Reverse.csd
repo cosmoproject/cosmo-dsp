@@ -7,6 +7,10 @@
 	Arguments: Reverse time, Dry/wet mix
     Defaults:  0.5, 0.5
 
+	Reverse time: 0.1s - 3s
+	Dry/wet mix: 0% - 100%
+	
+	Description:
 	A reverse effect
 
 ********************************************************/

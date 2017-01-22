@@ -7,6 +7,11 @@
 	Arguments: Cutoff frequency, Resonance, Distortion
     Defaults:  0.8, 0.3, 0
 
+	Cutoff frequency: 30Hz - 12000Hz
+	Resonance: 0 - 0.9
+	Distortion: 0 - 0.9
+
+	Description:
 	A resonant lowpass filter with distortion
 
 ********************************************************/

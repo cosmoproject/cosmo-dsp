@@ -4,25 +4,25 @@
 	Author: Bernt Isak Wærstad
 
 	Arguments: Record/Play, Stop/start, Speed, Reverse, Audio Through
+    Defaults:  0, 0, 0.5, 0, 1
 
-    DANGER..THESE ARE RANDOM DEFAULT VALUES!
-    Defaults:  1, 1, 1, 0, 1
+	Description:
 
-		* Record/Play: Send a 1 to start recording, send a 1 again to stop recording and start playing the loop
-		* Stop/start: Toggles between loop stopped and loop playing
-		* Speed: Loop playback speed
-		* Reverse: Toggles normal and reverse playback
-		* Audio Through: Toggles audio coming through or not
+	A simple looper with speed control, but without overdub
 
-	A simple looper without overdub
+		* Record/Play: 0 - 1 (Send a 1 to start recording, send a 1 again to 
+							  stop recording and start playing the loop)
+		* Stop/start: 0 - 1 (Toggles between loop stopped and loop playing)
+		* Speed: 0x - 2x (Loop playback speed)
+		* Reverse: 0 - 1 (Toggles normal and reverse playback)
+		* Audio Through: 0 - 1 (Toggles audio coming through or not)
+
 
 ********************************************************/
 
 
 	; empty table, size 882000 equals 20 seconds at 44.1kHz sr
 	giLiveSamplTableLen 	init 882000;
-	;giLiveSamplAudioTableL	ftgen	0, 0, giLiveSamplTableLen, 2, 0
-	;giLiveSamplAudioTableR	ftgen	0, 0, giLiveSamplTableLen, 2, 0
 
 ;*********************************************************************
 ; SimpleLooper
@@ -39,25 +39,25 @@
 	  	iLiveSamplAudioTableR ftgen 0, 0, giLiveSamplTableLen, 2, 0
 
 
-	  	kSpeed 		init 1
+	  	kSpeed 		init 0.5
 	  	kReverse 	init 1 ; -1 or 1
 
-		kReverse scale kReverse, 1, -1
 
+		kReverse scale kReverse, 1, -1
+	 	Srev sprintfk "Reverse on/off %d", kReverse
+	 		puts Srev, kReverse + 1 
+
+
+	 	kSpeed scale kSpeed, 2, 0
 	 	kSpeed = kSpeed * kReverse
+	 	Sspeed sprintfk "Loop speed %f", kSpeed
+	 		puts Sspeed, kSpeed + 1 
 	 	kSpeed port kSpeed, 0.05
 
 
 		Srec sprintfk "Recording: %f", kRecPlayOvr
 		   puts Srec, kRecPlayOvr+1
 
-	  	;kRecPlayOvr += kOverdub
-
-	  	; This if wont work as kRecPlayOvr needs to be check by Record all the time. The triggering
-	  	; could be moved out to the main instrument.
-	  	; The whole programatic flow should be re-thought
-
-		;Record ainL, ainR, kRecPlayOvr
 
 		kndx init 0
 		kndx 	= trigger(kRecPlayOvr,0.5,0) == 1 ? 0 : kndx
@@ -88,8 +88,6 @@
 			Srec sprintfk "Playing: %f", kStopStart
 				puts Srec, kStopStart+1
 
-			;aoutL, aoutR Play kSpeed, kRestart
-
 			; 1 over table length in seconds to get appropriate speed for phasor
 			kreadFreq divz kSpeed, (kLength/sr), 0.0000001
 
@@ -110,8 +108,6 @@
 			aoutR = 0
 		endif
 
-		;aoutL = ainL
-		;aoutR = ainR
 		if kThrough == 1 then
 			aoutL = aoutL + ainL
 			aoutR = aoutR + ainR
@@ -125,54 +121,3 @@
 
 
 
-
-;*********************************************************************
-; Record
-;*********************************************************************
-/*
-	opcode Record, 0, aak
-
-		ainL, ainR, kRecord xin
-
-		kndx init 0
-
-		kndx 	= trigger(kRecord,0.5,0) == 1 ? 0 : kndx
-
-		if kRecord == 1 then
-
-	        	tablew	ainL/0dbfs,a(kndx),giLiveSamplAudioTableL
-	        	tablew	ainR/0dbfs,a(kndx),giLiveSamplAudioTableR
-	        kndx	+=	ksmps
-
-		endif
-
-		gkLength	= kndx
-
-	endop
-*/
-;*********************************************************************
-; Play
-;*********************************************************************
-/*
-	opcode Play, aa, kk
-
-		kSpeed, kRestart xin
-
-		; 1 over table length in seconds to get appropriate speed for phasor
-		kreadFreq divz kSpeed, (gkLength/sr), 0.0000001
-
-		if kRestart == 1 then			; Restart loop playback from the beginning if play is retriggered
-			 reinit RESTART_PLAYBACK
-		endif
-	RESTART_PLAYBACK:
-	  	aPlayIdx    phasor  kreadFreq
-	  	aLoopLen	interp gkLength
-	  	aPlayIdx	= aPlayIdx*aLoopLen
-
-	  	aoutL tablei aPlayIdx, giLiveSamplAudioTableL
-	 	aoutR tablei aPlayIdx, giLiveSamplAudioTableR
-
-	 	xout aoutL, aoutR
-
- 	endop
-*/

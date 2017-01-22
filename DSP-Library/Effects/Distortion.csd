@@ -6,6 +6,12 @@
 
 	Arguments: Level, Drive, Tone (low pass filter)
     Defaults:  0.6, 0.3, 0.8
+
+	Level: 0 - 0.8
+	Drive: 0.01 - 0.4
+	Tone: 200Hz - 12000Hz
+
+    Description:
 	A distortion effect
 
 ********************************************************/

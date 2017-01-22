@@ -7,6 +7,10 @@
 	Arguments: Range, On/off
     Defaults:  0.8, 0
 
+	Range: 0.1s - 0.5s
+	On/off: 0 - 1 (on above 0.5, off below)
+
+	Description:
 	Repeater effect
 
 ********************************************************/
@@ -15,12 +19,15 @@ opcode Repeater, aa, aakk
 
 	ainL, ainR, kRange, kOnOff xin
 
+	kOnOff = kOnOff > 0.5 ? 1 : 0 
+	Sonoff sprintfk "Repeat on/off: %d", kOnOff
+		puts Sonoff, kOnOff + 1
+
 	kRange scale kRange, 0.5, 0.1
 	kRange = kRange >= 0.5 ? 0.5 : kRange		; Make sure range value doesnt exceed delayline length
 	Scut sprintfk "Repeat range: %f", kRange
 		puts Scut, kRange+1
 
-	;kRange portk kRange, 0.02
 	aRange interp kRange
 	aRange butlp aRange, 10
 
@@ -32,7 +39,6 @@ opcode Repeater, aa, aakk
 	if kOnOff < 1 then
 		kFeedback = 0
 		kInputVol = 0
-		;printk2 kFeedback
 	else
 		kInputVol = 1
 		kFeedback = 1

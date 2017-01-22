@@ -7,6 +7,10 @@
 	Arguments: Frequency, Dry/wet mix
     Defaults:  0.3, 0.5
 
+	Frequency: 0.5Hz - 45Hz
+	Dry/wet mix: 0% - 100%
+
+	Description:
 	A square wave amplitude modulator
 
 ********************************************************/

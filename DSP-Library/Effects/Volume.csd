@@ -7,7 +7,10 @@
 	Arguments: Level
     Defaults:  0.5
 
-	Master Volume Effect
+    Level: 0% - 100%
+
+	Description
+	Volume leveler 
 
 ********************************************************/
 

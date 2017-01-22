@@ -12,6 +12,7 @@
     Release: 0.01 - 10 seconds
     Gain: 0.1 - 10
 
+    Description:
     Audio analyzer with a quick, a slow and an adjustable
     envelope follower - available as control signals 
     through the chn channels "EnvelopeFollower", 
