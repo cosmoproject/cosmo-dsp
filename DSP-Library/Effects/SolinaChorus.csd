@@ -5,11 +5,17 @@
   Stereo version: Kevin Welsh (tgrey)
   COSMO UDO adaptation: Bernt Isak Wærstad
 
-  Arguments: LFO1 Frequency, LFO1 Amp, LFO2 Frequency, LFO2 Amp, Dry/wet mix, [, Stereo mode on/off]
-  Defaults:  0.2, 0.3, 0.4, 0.3, 0.5
+  Arguments: LFO1 Frequency, LFO1 Amp, LFO2 Frequency, LFO2 Amp, [, Stereo mode on/off], Dry/wet mix 
+  Defaults:  0.02, 0.6, 0.6, 0.2, 1, 0.5
 
-  Stereo mode is optional
+  LFO1 Frequency: 0.001Hz - 10Hz
+  LFO1 Amp: 0 - 1
+  LFO2 Frequency: 0.001Hz - 10Hz
+  LFO2 Amp: 0 - 1
+  Stereo mode on/off: 0 - 1 (on for 1, otherwise off - optional argument)
+  Dry/wet mix: 0% - 100%
 
+  Description:
   Solina Chorus, based on Solina String Ensemble Chorus Module
 
    based on:
@@ -25,8 +31,6 @@
 
 
 *********************************************************/
-
-
 
 gi_solina_parabola ftgen 0, 0, 65537, 19, 0.5, 1, 180, 1
 
@@ -52,6 +56,23 @@ endop
 opcode SolinaChorus, a, akkkkk
 
   aLeft, klfo_freq1, klfo_amp1, klfo_freq2, klfo_amp2, kdrywet xin
+
+  klfo_freq1 scale klfo_freq1, 10, 0.001
+  Slfo1 sprintfk "LFO1 Freq: %f", klfo_freq1
+    puts Slfo1, klfo_freq1 + 1  
+
+  klfo_freq2 scale klfo_freq2, 10, 0.001
+  Slfo2 sprintfk "LFO2 Freq: %f", klfo_freq2
+    puts Slfo2, klfo_freq2 + 1  
+
+  Samp1 sprintfk "LFO1 Amp: %f", klfo_amp1
+    puts Samp1, klfo_amp1 + 1
+
+  Samp2 sprintfk "LFO2 Amp: %f", klfo_amp2
+    puts Samp2, klfo_amp2 + 1
+
+  Smix sprintfk "SolinaChorus mix: %f", kdrywet
+    puts Smix, kdrywet + 1
 
   imax = 100
 
@@ -79,6 +100,26 @@ endop
 opcode SolinaChorus, aa, aakkkkPk
 
   aLeft, aRight, klfo_freq1, klfo_amp1, klfo_freq2, klfo_amp2, kstereo_mode, kdrywet  xin
+
+  klfo_freq1 scale klfo_freq1, 10, 0.001
+  Slfo1 sprintfk "LFO1 Freq: %f", klfo_freq1
+    puts Slfo1, klfo_freq1 + 1  
+
+  klfo_freq2 scale klfo_freq2, 10, 0.001
+  Slfo2 sprintfk "LFO2 Freq: %f", klfo_freq2
+    puts Slfo2, klfo_freq2 + 1  
+
+  Samp1 sprintfk "LFO1 Amp: %f", klfo_amp1
+    puts Samp1, klfo_amp1 + 1
+
+  Samp2 sprintfk "LFO2 Amp: %f", klfo_amp2
+    puts Samp2, klfo_amp2 + 1
+
+  Sstereo sprintfk "SolinaChorus stereo on/off: %d", kstereo_mode
+    puts Sstereo, kstereo_mode + 1
+
+  Smix sprintfk "SolinaChorus mix: %f", kdrywet
+    puts Smix, kdrywet + 1
 
   imax = 100
 
