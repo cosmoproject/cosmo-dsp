@@ -1,0 +1,13 @@
+{
+  "MIDI-Patch": {
+    "CC29_CH1": {
+      "PitchShifter": " Stereo mode"
+    }, 
+    "CC28_CH1": {
+      "PitchShifter": " Semitones (-/+ 1 octave)"
+    }, 
+    "CC30_CH1": {
+      "PitchShifter": " Dry/wet mix "
+    }
+  }
+}

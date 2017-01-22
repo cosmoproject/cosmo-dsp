@@ -4,7 +4,7 @@
       "SineDelay": " Feedback"
     }, 
     "CC28_CH1": {
-      "SineDelay": " Range(in seconds)"
+      "SineDelay": " Range"
     }, 
     "CC30_CH1": {
       "SineDelay": " Dry/wet mix"

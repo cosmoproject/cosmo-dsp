@@ -4,7 +4,7 @@
       "SolinaChorus": " LFO2 Amp"
     }, 
     "CC34_CH1": {
-      "SolinaChorus": " Stereo mode on/off]"
+      "SolinaChorus": " Dry/wet mix "
     }, 
     "CC29_CH1": {
       "SolinaChorus": " LFO1 Amp"
@@ -16,10 +16,10 @@
       "SolinaChorus": " LFO2 Frequency"
     }, 
     "CC32_CH1": {
-      "SolinaChorus": " Dry/wet mix"
+      "SolinaChorus": " ["
     }, 
     "CC33_CH1": {
-      "SolinaChorus": " ["
+      "SolinaChorus": " Stereo mode on/off]"
     }
   }
 }
