@@ -1,14 +1,32 @@
-; Based on code by Steven Yi
+/********************************************************
+
+	SineSynth.csd
+	Based on code by Steven Yi
+	Author: Bernt Isak Wærstad
+
+	Arguments: Attack, Release
+    Defaults: 0.1, 0.5
+
+    Attack: 0.1s - 3s
+    Release: 0.1s - 5s
+
+	Description:
+	A saw based string synth
+
+********************************************************/
 
 
-opcode StringSynth, aa, aaiii
-	aL, aR, iamp, icps, irel xin
 
-	Sprint sprintfk "Starting instrument 2: %f", icps
-		puts Sprint, k(icps)
+opcode StringSynth, aa, aaiikk
+	aL, aR, iamp, icps, katt, krel xin
 
+	katt scale katt, 3, 0.1
+	krel scale krel, 5, 0.1
 
-	kampenv = madsr:k(1, 0.1, 0.95, irel)
+	iatt = i(katt)
+	irel = i(krel)
+
+	kampenv = madsr:k(iatt, 0.1, 0.95, irel)
 	asig = vco2(0.5, icps)
 	asig = moogladder2(asig, 6000, 0.1)
 

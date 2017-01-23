@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
 ;-odac:hw:1,0 -d -+rtaudio=ALSA -b128 -B512 -+rtmidi=alsa -Ma -m0
--odac -iadc0 -Ma
+-odac -iadc0 -Ma -b128 -B256
 </CsOptions>
 <CsInstruments>
 sr      = 44100
@@ -16,17 +16,22 @@ nchnls 	= 2
 
 
 massign 1, 90
-massign 1, 91
 
-	#include "../DSP-Library/Instruments/SineSynths.csd"
+	#include "../DSP-Library/Instruments/SineSynth.csd"
 	#include "../DSP-Library/Instruments/StringSynth.csd"
 
+instr 1 
+
+	gkatt ctrl7 1, 28, 0, 1
+	gkrel ctrl7 1, 29, 0, 1
+
+endin
 
 instr 90
 
-	kmix ctrl7 7, 1, 0, 1
+	kmix ctrl7 1, 1, 0, 1
 
-	iamp ampmidi 0.3
+	iamp ampmidi 1
 	icps cpsmidi
 
 	aL = 0
@@ -34,21 +39,18 @@ instr 90
 	a2L = 0
 	a2R = 0
 
-	irel = 1.5
+	aL, aR StringSynth aL, aR, iamp, icps*1, gkatt, gkrel
+	aL, aR StringSynth aL, aR, iamp * 0.3, icps*2, gkatt, gkrel
+	aL, aR StringSynth aL, aR, iamp * 0.15, icps*3, gkatt, gkrel
 
-	aL, aR StringSynth aL, aR, iamp, icps*1, irel
-	aL, aR StringSynth aL, aR, iamp * 0.3, icps*2, irel
-	aL, aR StringSynth aL, aR, iamp * 0.15, icps*3, irel
-
-	xtratim irel 
+	xtratim i(gkrel) 
 
 	aL *= kmix
 	aR *= kmix
 
-
-	a2L, a2R SineSynth1 a2L, a2R, iamp, icps*1, irel
-	a2L, a2R SineSynth1 a2L, a2R, iamp, icps*2.1, irel
-	a2L, a2R SineSynth1 a2L, a2R, iamp, icps*3.3, irel
+	a2L, a2R SineSynth a2L, a2R, iamp, icps*1, gkatt, gkrel
+	a2L, a2R SineSynth a2L, a2R, iamp, icps*2.1, gkatt, gkrel
+	a2L, a2R SineSynth a2L, a2R, iamp, icps*3.3, gkatt, gkrel
 
 	a2L *= (1-kmix)
 	a2R *= (1-kmix)
@@ -58,26 +60,6 @@ instr 90
 
 endin
 
-instr 91
-
-	kmix ctrl7 7, 1, 0, 1
-
-	iamp ampmidi 0.3
-	icps cpsmidi
-
-	aL = 0
-	aR = 0
-
-	irel = 1.5
-
-
-
-	xtratim irel 
-
-	chnmix aL, "MasterL"
-	chnmix aR, "MasterR"
-
-endin
 instr 99
 	#include "../DSP-Library/Includes/adc_channels.inc"
 	#include "../DSP-Library/Includes/gpio_channels.inc"
@@ -97,15 +79,12 @@ instr 99
 	aR SolinaChorus aR, 0.18, 0.6, 0.3, 0.2, 0.5
 
 	; Reverb arguments: decay, cutoff, mix
-	arvbL, arvbR Reverb aL, aR, gkpot0, gkpot1, gkpot7
+	arvbL, arvbR Reverb aL, aR, gkpot0, gkpot1, 1
 	
-	aL ntrpol aL, arvbL, 0.8
-	aR ntrpol aR, arvbR, 0.8
-
 	; Lowpass_Stereo arguments: cutoff, resonance
 	;aL, aR Lowpass_Stereo aL, aR, gkpot2, gkpot3
 
-	outs aL, aR
+	outs aL + arvbL, aR + arvbR
 
 endin
 
@@ -126,6 +105,7 @@ endin
 
 </CsInstruments>
 <CsScore>
+i1 0 86400
 i999 0 2
 i99 0 86400
 </CsScore>
