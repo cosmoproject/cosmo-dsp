@@ -34,6 +34,9 @@ opcode Wobble, aa, aakk
 	aFilteredL moogvcf ainL, 2300 + aMod, 0.7
 	aFilteredR moogvcf ainR, 2300 + aMod, 0.7
 
+	aFilteredL *= 2.5
+	aFilteredR *= 2.5
+
 	aOutL ntrpol ainL, aFilteredL, kDryWet
 	aOutR ntrpol ainR, aFilteredR, kDryWet
 

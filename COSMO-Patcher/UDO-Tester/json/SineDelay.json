@@ -1,12 +1,15 @@
 {
   "MIDI-Patch": {
-    "CC29_CH1": {
+    "CC30_CH1": {
       "SineDelay": " Feedback"
+    }, 
+    "CC29_CH1": {
+      "SineDelay": " Frequency"
     }, 
     "CC28_CH1": {
       "SineDelay": " Range"
     }, 
-    "CC30_CH1": {
+    "CC31_CH1": {
       "SineDelay": " Dry/wet mix"
     }
   }

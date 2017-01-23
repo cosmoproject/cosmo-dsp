@@ -1,8 +1,14 @@
 {
   "MIDI-Patch": {
-    "CC29_CH1": {
+    "CC31_CH1": {
       "Blur": " Dry/wet mix"
     }, 
+    "CC30_CH1": {
+      "Blur": " StereoMode"
+    },
+    "CC29_CH1": {
+      "Blur": " Gain"
+    },       
     "CC28_CH1": {
       "Blur": " Blur time"
     }

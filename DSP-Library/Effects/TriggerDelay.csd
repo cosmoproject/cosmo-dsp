@@ -6,7 +6,7 @@
 	Arguments: 	Threshold, DelayTime Min, DelayTime Max, Feedback Min, Feedback Max, Width, Level, Portamento time, Cutoff frequency, Bandwidth, Dry/wet mix
     Defaults:	0.1, 0.1, 0.2, 0.5, 0.9, 1, 1, 0.1, 0.5, 0.1, 0.5
 
-	Treshold: 0 - 1
+	Treshold: 0.0001 - 1
 	DelayTime Min: 0.0001s - 2s
 	DelayTime Max: 0.0001s - 2s
 	Feedback Min: 0% - 120%
@@ -46,7 +46,7 @@ opcode TriggerDelay, aa, aakkkkkkkkkkk
 	ainL, ainR, kthreshold, kdly1, kdly2, kfback1, kfback2, kwidth, klevel, kporttime, kcf, kbw, kmix xin
 
 	kthreshold expcurve kthreshold, 10
-	kthreshold scale kthreshold, 1, 0
+	kthreshold scale kthreshold, 1, 0.0001
 	kthreshold init 0.1
 	Scut sprintfk "Threshold: %f", kthreshold
 		puts Scut, kthreshold
@@ -95,6 +95,7 @@ opcode TriggerDelay, aa, aakkkkkkkkkkk
 	Slpf sprintfk "Dly Feed LPF Cutoff: %d", kcf
 		puts Slpf, kcf
 
+	kbw expcurve kbw, 30
 	kbw scale kbw, 22050, 600
 	kbw init 4000
 	Slpf sprintfk "Bandwidth: %d", kbw
@@ -105,11 +106,12 @@ opcode TriggerDelay, aa, aakkkkkkkkkkk
 	Smix sprintfk "Delay Mix: %f", kmix
 		puts Smix, kmix+1
 
-;	klevel = 0.1
-
-	krms	rms	(ainL+ainR)*0.5
+	krms	rms	(ainL+ainR)
 
 	ktrig	trigger	krms, kthreshold, 0
+
+	Strig 	sprintfk "%d new delay triggered!", ktrig 
+		puts Strig, (krms * ktrig)
 
 	kdly	trandom	ktrig, 0, 1
 	kdly	expcurve	kdly,8
@@ -148,8 +150,8 @@ opcode TriggerDelay, aa, aakkkkkkkkkkk
 		delayw	ainR+(atapR*kfback)
 
 	 ;create width control. note that if width is zero the result is the same as 'simple' mode
-	 atapL	=	afirst+atapL+(atapR*(1-kwidth))
-	 atapR	=	atapR+(atapL*(1-kwidth))
+	 atapL	=	afirst+atapL+(atapR*(1-kwidth)) * klevel
+	 atapR	=	atapR+(atapL*(1-kwidth)) * klevel
 
 	;amixL		ntrpol		ainL, atapL, kmix	;CREATE A DRY/WET MIX BETWEEN THE DRY AND THE EFFECT SIGNAL
 	;amixR		ntrpol		ainR, atapR, kmix	;CREATE A DRY/WET MIX BETWEEN THE DRY AND THE EFFECT SIGNAL
@@ -157,5 +159,5 @@ opcode TriggerDelay, aa, aakkkkkkkkkkk
 	amixL = (ainL * (1-kmix)) + (atapL * kmix)
 	amixR = (ainR * (1-kmix)) + (atapR * kmix)
 
-			xout		amixL * klevel, amixR * klevel
+			xout		amixL, amixR
 endop

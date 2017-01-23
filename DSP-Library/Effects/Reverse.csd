@@ -27,6 +27,7 @@ opcode	Reverse, a, aK				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A USEF
 	Scut sprintfk "Reverse time: %dms", ktime
 		puts Scut, ktime
 
+	ktime init 0.1
 
 	ktrig	changed	ktime			;IF ktime CONTROL IS MOVED GENERATE A MOMENTARY '1' IMPULSE
 	if ktrig=1 then				;IF A TRIGGER HAS BEEN GENERATED IN THE LINE ABOVE...
@@ -46,7 +47,7 @@ opcode	Reverse, a, aK				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A USEF
 	xout	atap*aenv			;SEND AUDIO BACK TO CALLER INSTRUMENT. APPLY AMPLITUDE ENVELOPE TO PREVENT CLICKS.
 endop
 
-opcode Revers, a,a
+opcode Reverse, a,a
 	a1 xin
 	aout Reverse a1, 0.5
 	xout aout
@@ -63,6 +64,8 @@ opcode	Reverse, aa, aaKk				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A U
 	Scut sprintfk "Reverse time: %dms", ktime*1000
 		puts Scut, ktime
 
+	Smix sprintfk "Reverse dry/wet: %f", kdrywet
+		puts Smix, kdrywet + 1
 
 ;	if kdrywet == 1 then
 
@@ -91,8 +94,8 @@ opcode	Reverse, aa, aaKk				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A U
 		arevR = atapR*aenv
 
 ;	else
-		aoutL = ainL
-		aoutR = ainR
+;		aoutL = ainL
+;		aoutR = ainR
 ;	endif
 
 	aoutL, aoutR FadeSwitch ainL, ainR, arevL, arevR, 5, kdrywet

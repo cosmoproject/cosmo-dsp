@@ -1,8 +1,11 @@
 {
   "MIDI-Patch": {
-    "CC29_CH1": {
+    "CC30_CH1": {
       "Repeater": " On/off"
     }, 
+    "CC29_CH1": {
+      "Repeater": " Repeat time"
+    },
     "CC28_CH1": {
       "Repeater": " Range"
     }

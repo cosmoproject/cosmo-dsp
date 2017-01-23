@@ -24,6 +24,16 @@
 	; empty table, size 882000 equals 20 seconds at 44.1kHz sr
 	giLiveSamplTableLen 	init 882000;
 
+	opcode SimpleLooper, aa, aakkkkk
+
+	ainL, ainR, kRecPlayOvr, kStopStart, kSpeed, kReverse, kThrough xin
+
+	aoutL, aoutR, k1, k2 SimpleLooper ainL, ainR, kRecPlayOvr, kStopStart, kSpeed, kReverse, kThrough
+
+	xout	aoutL, aoutR
+
+	endop
+
 ;*********************************************************************
 ; SimpleLooper
 ;*********************************************************************
@@ -39,25 +49,33 @@
 	  	iLiveSamplAudioTableR ftgen 0, 0, giLiveSamplTableLen, 2, 0
 
 
-	  	kSpeed 		init 0.5
-	  	kReverse 	init 1 ; -1 or 1
+	  	kReverse 	init 0 
 
+	 	kThrough = kThrough > 0.5 ? 1 : 0
+	 	Sthru sprintfk "Looper Audio through: %d", kThrough
+	 		puts Sthru, kThrough+1 
 
-		kReverse scale kReverse, 1, -1
-	 	Srev sprintfk "Reverse on/off %d", kReverse
-	 		puts Srev, kReverse + 1 
-
-
-	 	kSpeed scale kSpeed, 2, 0
-	 	kSpeed = kSpeed * kReverse
-	 	Sspeed sprintfk "Loop speed %f", kSpeed
-	 		puts Sspeed, kSpeed + 1 
-	 	kSpeed port kSpeed, 0.05
-
-
+	 	kRecPlayOvr = kRecPlayOvr > 0.5 ? 1 : 0
 		Srec sprintfk "Recording: %f", kRecPlayOvr
 		   puts Srec, kRecPlayOvr+1
 
+
+		kStopStart = kStopStart > 0.5 ? 1 : 0
+		Sstop sprintfk "Stop/start loop: %d", kStopStart
+			puts Sstop, kStopStart + 1
+		
+
+	 	kReverse = kReverse > 0.5 ? 1 : 0
+	 	Srev sprintfk "Reverse on/off %d", kReverse
+	 		puts Srev, kReverse + 1 
+		kReverse = kReverse > 0.5 ? -1 : 1
+
+		kSpeed 	init 1
+	 	kSpeed scale kSpeed, 2, 0	 	
+	 	Sspeed sprintfk "Loop speed %f", kSpeed
+	 		puts Sspeed, kSpeed + 1 
+	 	kSpeed = kSpeed * kReverse
+	 	kSpeed port kSpeed, 0.05
 
 		kndx init 0
 		kndx 	= trigger(kRecPlayOvr,0.5,0) == 1 ? 0 : kndx
@@ -99,8 +117,8 @@
 		  	aLoopLen	interp kLength
 		  	aPlayIdx	= aPlayIdx*aLoopLen
 
-		  	aoutL tablei aPlayIdx, iLiveSamplAudioTableL
-		 	aoutR tablei aPlayIdx, iLiveSamplAudioTableR
+		  	aoutL tablei aPlayIdx, iLiveSamplAudioTableL,0,0,1
+		 	aoutR tablei aPlayIdx, iLiveSamplAudioTableR,0,0,1
 
 
 		else

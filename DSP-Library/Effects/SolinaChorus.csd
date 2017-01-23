@@ -5,7 +5,7 @@
   Stereo version: Kevin Welsh (tgrey)
   COSMO UDO adaptation: Bernt Isak Wærstad
 
-  Arguments: LFO1 Frequency, LFO1 Amp, LFO2 Frequency, LFO2 Amp, [, Stereo mode on/off], Dry/wet mix 
+  Arguments: LFO1 Frequency, LFO1 Amp, LFO2 Frequency, LFO2 Amp, Stereo mode on/off, Dry/wet mix 
   Defaults:  0.02, 0.6, 0.6, 0.2, 1, 0.5
 
   LFO1 Frequency: 0.001Hz - 10Hz
@@ -57,10 +57,12 @@ opcode SolinaChorus, a, akkkkk
 
   aLeft, klfo_freq1, klfo_amp1, klfo_freq2, klfo_amp2, kdrywet xin
 
+  klfo_freq1 expcurve klfo_freq1, 10
   klfo_freq1 scale klfo_freq1, 10, 0.001
   Slfo1 sprintfk "LFO1 Freq: %f", klfo_freq1
     puts Slfo1, klfo_freq1 + 1  
 
+  klfo_freq2 expcurve klfo_freq2, 10
   klfo_freq2 scale klfo_freq2, 10, 0.001
   Slfo2 sprintfk "LFO2 Freq: %f", klfo_freq2
     puts Slfo2, klfo_freq2 + 1  
@@ -101,10 +103,12 @@ opcode SolinaChorus, aa, aakkkkPk
 
   aLeft, aRight, klfo_freq1, klfo_amp1, klfo_freq2, klfo_amp2, kstereo_mode, kdrywet  xin
 
+  klfo_freq1 expcurve klfo_freq1, 10
   klfo_freq1 scale klfo_freq1, 10, 0.001
   Slfo1 sprintfk "LFO1 Freq: %f", klfo_freq1
     puts Slfo1, klfo_freq1 + 1  
 
+  klfo_freq2 expcurve klfo_freq2, 10
   klfo_freq2 scale klfo_freq2, 10, 0.001
   Slfo2 sprintfk "LFO2 Freq: %f", klfo_freq2
     puts Slfo2, klfo_freq2 + 1  

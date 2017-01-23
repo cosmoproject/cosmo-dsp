@@ -7,7 +7,10 @@
       "Distortion": " Level"
     }, 
     "CC30_CH1": {
-      "Distortion": " Tone (low pass filter)"
+      "Distortion": " Tone"
+    },
+    "CC31_CH1": {
+      "Distortion": " Dry/wet mix"
     }
   }
 }
