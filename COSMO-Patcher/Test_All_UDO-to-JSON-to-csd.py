@@ -7,6 +7,8 @@ from collections import OrderedDict
 import sys
 from CosmoGraph.CosmoPatcherGraph import CosmoPatcherGraph
 
+
+# Read all UDOS
 fileDir = os.path.dirname(__file__)
 mypath = os.path.join(fileDir, '../DSP-Library/Effects/')
 onlyfiles = sorted([f for f in listdir(mypath) if isfile(join(mypath, f))])
