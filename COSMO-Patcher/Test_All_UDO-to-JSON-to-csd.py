@@ -74,9 +74,9 @@ for file_name in onlyfiles:
     write_json(file_name, json.dumps(main_dict, indent=2))
 
 ## --- make csd's from JSON ----
-mypath = os.path.join(fileDir, '../TestAllUdos/')
-onlyfiles = sorted([f for f in listdir(mypath) if isfile(join(mypath, f))])
-for file_name in onlyfiles:
+mypathT = os.path.join(fileDir, '../TestAllUdos/')
+generated_json_f = sorted([f for f in listdir(mypathT) if isfile(join(mypathT, f))])
+for file_name in generated_json_f:
     C_set = CosmoPatcherGraph()
     fileDir = os.path.dirname(__file__)
     input_filename = os.path.join(fileDir, '../TestAllUdos/' + file_name)
@@ -92,6 +92,6 @@ for file_name in onlyfiles:
 
     print 'Generate Csound File'
     C_set.generate_csound_code_from_graph()
-    output_filename = os.path.join(fileDir, '../TestAllUdos/' + file_name + '.csd')
+    output_filename = mypathT + file_name + '.csd'
     print 'Write Csound file .. ' + output_filename
     C_set.write_csd(output_filename)
