@@ -1,0 +1,26 @@
+{"MIDI-Patch": {
+    "CC25_CH1":
+        {
+            "Volume": "Level"
+        },
+    "CC21_CH1":
+        {
+            "Repeater": "On/off",
+            "Hack": "Frequency"
+        },
+    "CC22_CH1":
+        {
+            "Repeater": "Repeat time",
+            "Hack": "Dry/wet mix"
+        },
+    "CC23_CH1":
+        {
+            "RandDelay": "Dry/wet mix",
+            "Reverb": "Decay time"
+        },
+    "CC24_CH1":
+        {
+            "Reverb": "Dry/wet mix"
+        }
+    }
+}
