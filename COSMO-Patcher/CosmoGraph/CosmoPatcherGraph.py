@@ -6,11 +6,10 @@ from collections import OrderedDict
 
 
 class CosmoPatcherGraph(nx.DiGraph):
-    # Topics will be stored as Nodes in a Graph
-    midi_ctrls = []
-    dsp_path = '../DSP-Library/'
+    # Ctls and UDOS will be stored as Nodes in a Graph
     def __init__(self):
         super(CosmoPatcherGraph, self).__init__()
+        self.dsp_path = '../DSP-Library/'
 
     def read_settings_json(self, path):
         with open(path) as data_file:
@@ -22,16 +21,10 @@ class CosmoPatcherGraph(nx.DiGraph):
         lastFX = 'In'
         self.add_node('In', type='UDO')
         for ctrl in controllers:
-            # controllers to nodes
+            # controllers to nodes, add gk for Csound code
 
-            # make Csound variables of ctrl args
-            midi_ctrl = ctrl.split("_")
-            cc = midi_ctrl[0]
-            chn = midi_ctrl[1]
-            ctrl_var = "gk%s_%s" % (cc,chn)
-            self.midi_ctrls.append(midi_ctrl)
-
-            self.add_node(ctrl, type='ctrl')
+            ctrl_var = "gk%s" % ctrl
+            self.add_node(ctrl_var, type='ctrl')
             for fx in self.jdata['MIDI-Patch'][ctrl]:
                 # print data['MIDI-Patch'][ctrl][fx]
                 # udos to nodes
@@ -45,7 +38,7 @@ class CosmoPatcherGraph(nx.DiGraph):
                     lastFX = fx
                 # connect UDOS and Controller Variables
                 self.add_edge(fx, ctrl_var, type='k', color='blue',
-                              input=self.jdata['MIDI-Patch'][ctrl][fx])
+                              input=self.jdata['MIDI-Patch'][ctrl][fx]) # Is this required or unused??
         self.add_node('Out', type='UDO')
         self.add_edge(lastFX, 'Out', type='a', color='red')
 
@@ -142,11 +135,12 @@ class CosmoPatcherGraph(nx.DiGraph):
                         for idx, item in enumerate(self.csnd_code_includes):
                             csd_file.write(self.csnd_code_includes[idx])
                         csd_file.write(instrDef.read())
-                        for idx in range(len(self.midi_ctrls)):
-                            midi_ctrl = self.midi_ctrls[idx]
-                            cc = midi_ctrl[0]
-                            chn = midi_ctrl[1]
-                            csd_file.write("\t\tgk%s_%s ctrl7 %s, %s, 0, 1\n" % (cc, chn, chn.strip("CHN"), cc.strip("CC")))
+                        for ctrl_names in self.nodes():
+                            if self.node[ctrl_names]['type'] == 'ctrl':
+                                midi_ctrl = ctrl_names.split("_")
+                                cc = midi_ctrl[0]
+                                chn = midi_ctrl[1]
+                                csd_file.write("\t\t%s_%s ctrl7 %s, %s, 0, 1\n" % (cc, chn, chn.strip("CHN"), cc.strip("gkCC")))
                         csd_file.write("\n")
                         for idx, item in enumerate(self.csnd_code_lines):
                             csd_file.write(self.csnd_code_lines[idx])
@@ -188,7 +182,7 @@ class CosmoPatcherGraph(nx.DiGraph):
 # C_set.cosmo_settings_to_graph()
 # C_set.print_fx_in_order()
 # C_set.generate_csound_code_from_graph()
-# # C_set.write_csd()
+# C_set.write_csd('test.csd')
 
 
 
