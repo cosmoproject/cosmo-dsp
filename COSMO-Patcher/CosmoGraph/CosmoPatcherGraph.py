@@ -147,6 +147,12 @@ class CosmoPatcherGraph(nx.DiGraph):
                         csd_file.write(outro.read())
                         csd_file.close
 
+    def print_udos(self):
+        udos = [u for u in self.nodes() if self.node[u]['type'] == 'UDO']
+        print self.nodes(data = True)
+        print udos
+        return
+
     # def plot(self):
     #     import matplotlib.pyplot as plt
     #     myPos = nx.shell_layout(self)
@@ -171,18 +177,19 @@ class CosmoPatcherGraph(nx.DiGraph):
 
 
 # -- debugging
-# C_set = CosmoPatcherGraph()
-# # C_set.open_COSMO_UDO_read_args('Lowpass')
-# print 'Load Json'
-# # json is read correctly, using 'OrderedDict'
-# C_set.read_settings_json('MIDI-Patch.json')
-#
-# print 'Json to Graph'
-# # graph connects FX modules in correct order (lastfx in correct if statement)
-# C_set.cosmo_settings_to_graph()
-# C_set.print_fx_in_order()
-# C_set.generate_csound_code_from_graph()
-# C_set.write_csd('test.csd')
+C_set = CosmoPatcherGraph()
+# C_set.open_COSMO_UDO_read_args('Lowpass')
+print 'Load Json'
+# json is read correctly, using 'OrderedDict'
+C_set.read_settings_json('MIDI-Patch.json')
+
+print 'Json to Graph'
+# graph connects FX modules in correct order (lastfx in correct if statement)
+C_set.cosmo_settings_to_graph()
+C_set.print_fx_in_order()
+C_set.generate_csound_code_from_graph()
+C_set.print_udos()
+C_set.write_csd('test.csd')
 
 
 
