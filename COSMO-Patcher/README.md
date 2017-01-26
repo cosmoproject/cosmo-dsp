@@ -18,7 +18,6 @@ From the CosmoSetting.json the controller mappings are used to generate a Csound
 
     nano MIDI-Patch.json
 
-
 ## Edit Csound Settings
 
     nano CosmoGraph/Intro.csd
@@ -39,5 +38,9 @@ From the CosmoSetting.json the controller mappings are used to generate a Csound
 
 ## Run with filenames
 
-        python CosmoGraph/CosmoToCsd.py MIDI-Patch.json workfile.csd
+        python JsonToCsd.py MIDI-Patch.json workfile.csd
         csound workfile.csd
+
+## Collect all and save to specified folder
+        python JsonToCsd.py export [input json file] [output csd file] [output directory]
+        e.g python JsonToCsd.py export MIDI-Patch.json MyCOSMO.csd ../../MyCOSMO/
