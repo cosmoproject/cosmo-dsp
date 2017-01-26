@@ -8,7 +8,7 @@
     Defaults:  0, 0.8, 0
 
 	Range: 0 - 1 (short or long repeat time)
-	Repeat time: 0.1s - 0.5s (short) or  
+	Repeat time: 0.1s - 0.5s (short) or 0.1s - 6s
 	On/off: 0 - 1 (on above 0.5, off below)
 
 	Description:
@@ -18,7 +18,7 @@
 
 opcode Repeater, aa, aakkk
 
-	ainL, ainR, kRepeatTime, kRange, kOnOff xin
+	ainL, ainR, kRange, kRepeatTime, kOnOff xin
 
 	kOnOff = kOnOff > 0.5 ? 1 : 0 
 	Sonoff sprintfk "Repeat on/off: %d", kOnOff
@@ -31,15 +31,13 @@ opcode Repeater, aa, aakkk
 	if kRange == 0 then 
 		kRepeatTime scale kRepeatTime, 0.5, 0.01
 		kRepeatTime limit kRepeatTime, 0.01, 0.5		; Make sure range value doesnt exceed delayline length
-		Scut sprintfk "Repeat time: %f", kRepeatTime
-			puts Scut, kRepeatTime+1
 	else
 		kRepeatTime scale kRepeatTime, 6, 0.1
 		kRepeatTime limit kRepeatTime, 0.1, 6		; Make sure range value doesnt exceed delayline length
-		Scut sprintfk "Repeat time: %f", kRepeatTime
-			puts Scut, kRepeatTime+1
 	endif
 
+	Scut sprintfk "Repeat time: %f", kRepeatTime
+		puts Scut, kRepeatTime+1
 
 	aRepeatTime interp kRepeatTime
 	aRepeatTime butlp aRepeatTime, 10
