@@ -107,6 +107,7 @@ class CosmoPatcherGraph(nx.DiGraph):
         return
 
     def _controller_ins(self):
+        # Generate Csound MIDI CC code using ctrl7 opcode or put chnget
         if self.controller_type == 'MIDI-Patch':
             ctrls = [c for c in self.nodes() if self.node[c]['type'] == 'ctrl']
             for ctrl in ctrls:
@@ -118,7 +119,15 @@ class CosmoPatcherGraph(nx.DiGraph):
             self.csnd_code_lines.append('\n')
                 #self.csnd_code_read_controller.append(ctrl7)
         elif self.controller_type == 'COSMO-Patch':
-                self.csnd_code_lines.append('I need some GPIO ins here!!' + '\n \n')
+                # self.csnd_code_lines.append('I need some GPIO ins here!!' + '\n \n')
+                fileDir = os.path.dirname(__file__)
+                filename = os.path.join(fileDir, '../' + self.import_dsp_path
+                                        + 'Includes/gpio_channels.inc')
+                with open(filename) as csd_gpio_channels:
+                    for line in csd_gpio_channels:
+                        print line
+                        line = '\t \t' + line
+                        self.csnd_code_lines.append(line)
 
     def generate_csound_code_from_graph(self):
         print '-- Graph to CSD --'
@@ -159,8 +168,6 @@ class CosmoPatcherGraph(nx.DiGraph):
     def write_csd(self, csd_file_name):
         fileDir = os.path.dirname(__file__)
         filename = os.path.join(fileDir, '../' + csd_file_name)
-        # Generate Csound MIDI CC code using ctrl7 opcode
-
         with open(filename, 'w+') as csd_file:
             with open(os.path.join(fileDir, 'Intro.csd')) as intro:
                 with open(os.path.join(fileDir,
@@ -171,8 +178,6 @@ class CosmoPatcherGraph(nx.DiGraph):
                         for idx, item in enumerate(self.csnd_code_includes):
                             csd_file.write(self.csnd_code_includes[idx])
                         csd_file.write(instrDef.read())
-                        # for ctrl7 in self.csound_ctrl7:
-                        #         csd_file.write("\t\t%s\n" % ctrl7)
                         csd_file.write("\n")
                         for idx, item in enumerate(self.csnd_code_lines):
                             csd_file.write(self.csnd_code_lines[idx])
@@ -248,20 +253,20 @@ class CosmoPatcherGraph(nx.DiGraph):
 
 # -- debugging
 
-C_set = CosmoPatcherGraph()
-C_set._open_COSMO_UDO_read_args('Lowpass')
-print 'Load Json'
-# json is read correctly, using 'OrderedDict'
-C_set.read_settings_json('MIDI-Patch.json')
+# C_set = CosmoPatcherGraph()
+# C_set._open_COSMO_UDO_read_args('Lowpass')
+# print 'Load Json'
+# # json is read correctly, using 'OrderedDict'
+# # C_set.read_settings_json('MIDI-Patch.json')
 # C_set.read_settings_json('COSMO-Patch.json')
-
-print 'Json to Graph'
-# graph connects FX modules in correct order (lastfx in correct if statement)
-C_set.cosmo_settings_to_graph()
-C_set.print_fx_in_order()
-C_set.generate_csound_code_from_graph()
-C_set.print_udos()
-C_set.write_csd('test.csd')
+#
+# print 'Json to Graph'
+# # graph connects FX modules in correct order (lastfx in correct if statement)
+# C_set.cosmo_settings_to_graph()
+# C_set.print_fx_in_order()
+# C_set.generate_csound_code_from_graph()
+# C_set.print_udos()
+# C_set.write_csd('test.csd')
 
 
 
