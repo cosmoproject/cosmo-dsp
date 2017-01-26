@@ -1,0 +1,12 @@
+{"COSMO-Patch": {
+    "pot0":
+        {
+            "Reverb": "Decay time",
+            "Lowpass": "Cutoff frequency"
+        }
+    },
+    "pot1":
+        {
+            "Reverse": "Dry/wet mix"
+        }
+}
