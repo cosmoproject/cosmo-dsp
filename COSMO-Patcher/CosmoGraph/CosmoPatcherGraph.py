@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 import networkx as nx
 import string
 from collections import OrderedDict
@@ -12,7 +13,9 @@ class CosmoPatcherGraph(nx.DiGraph):
         super(CosmoPatcherGraph, self).__init__()
         self.import_dsp_path = '../DSP-Library/'
         self.include_dsp_path = '../DSP-Library/'
-        self.csound_ctrl7 = []
+        self.csnd_code_read_controller = []
+        self.csnd_code_includes = []
+        self.csnd_code_lines = []
 
     def set_include_dsp_path(self, path):
         self.include_dsp_path = path
@@ -21,71 +24,53 @@ class CosmoPatcherGraph(nx.DiGraph):
         with open(path) as data_file:
             self.jdata = json.load(data_file, object_pairs_hook=OrderedDict)
             print json.dumps(self.jdata, indent=2)
+            # check if a COSMO or MIDI Patch is given
+            for keys in self.jdata.items():
+                if 'MIDI-Patch' in keys:
+                    print 'MIDI'
+                    self.controller_type = 'MIDI-Patch'
+                elif 'COSMO-Patch' in keys:
+                    print 'COSMO'
+                    self.controller_type = 'COSMO-Patch'
+                else:
+                    print 'invalid'
+                    sys.exit('Json input not valid. '
+                             'Neiter a MIDI nor a COSMO-Patch.')
 
     def cosmo_settings_to_graph(self):
-        controllers = [ctrl for ctrl in self.jdata['MIDI-Patch']]
-        lastFX = 'In'
-        self.add_node('In', type='UDO')
-        for ctrl in controllers:
-            # controllers to nodes, add gk for Csound code
-
-            ctrl_var = "gk%s" % ctrl
-            self.add_node(ctrl_var, type='ctrl')
-            for fx in self.jdata['MIDI-Patch'][ctrl]:
-                # print data['MIDI-Patch'][ctrl][fx]
-                # udos to nodes
-                print fx
-                if fx not in self.nodes():
-                    # print fx
-                    self.add_node(fx, type='UDO')
-                    if lastFX:
-                        self.add_edge(lastFX, fx, type='a', color='red')
-                        print 'combined ' + str(lastFX) + ' and ' + str(fx)
-                    lastFX = fx
-                # connect UDOS and Controller Variables
-                self.add_edge(fx, ctrl_var, type='k', color='blue',
-                              input=self.jdata['MIDI-Patch'][ctrl][fx]) # Is this required or unused??
-
-
-        self.add_node('Out', type='UDO')
-        self.add_edge(lastFX, 'Out', type='a', color='red')
-
-    def cosmo_settings_to_cosmo_graph(self):
-        controllers = [ctrl for ctrl in self.jdata['COSMO-Patch']]
-        lastFX = 'In'
-        self.add_node('In', type='UDO')
-
-        for ctrl in controllers:
-            # controllers to nodes, add gk for Csound code
-
-            ctrl_var = "gk%s" % ctrl
-            self.add_node(ctrl_var, type='ctrl')
-            for fx in self.jdata['COSMO-Patch'][ctrl]:
-                # print data['MIDI-Patch'][ctrl][fx]
-                # udos to nodes
-                print fx
-                if fx not in self.nodes():
-                    # print fx
-                    self.add_node(fx, type='UDO')
-                    if lastFX:
-                        self.add_edge(lastFX, fx, type='a', color='red')
-                        print 'combined ' + str(lastFX) + ' and ' + str(fx)
-                    lastFX = fx
-                # connect UDOS and Controller Variables
-                self.add_edge(fx, ctrl_var, type='k', color='blue',
-                              input=self.jdata['COSMO-Patch'][ctrl][fx]) # Is this required or unused??
-
-
-        self.add_node('Out', type='UDO')
-        self.add_edge(lastFX, 'Out', type='a', color='red')
+            controllers = [ctrl for ctrl in self.jdata[self.controller_type]]
+            lastFX = 'In'
+            self.add_node('In', type='UDO')
+            for ctrl in controllers:
+                # controllers to nodes, add 'gk' for Csound code
+                ctrl_var = "gk%s" % ctrl
+                self.add_node(ctrl_var, type='ctrl')
+                for fx in self.jdata[self.controller_type][ctrl]:
+                    # udos to nodes
+                    print fx
+                    # make sure udos are only once in the graph
+                    if fx not in self.nodes():
+                        # print fx
+                        self.add_node(fx, type='UDO')
+                        if lastFX:
+                            self.add_edge(lastFX, fx, type='a', color='red')
+                            print 'combined ' + str(lastFX) + ' and ' + str(fx)
+                        lastFX = fx
+                    # connect UDOS and Controller Variables
+                    self.add_edge(fx, ctrl_var, type='k', color='blue',
+                                  input=self.jdata[self.controller_type][ctrl][fx]) # Is this required or unused??
+            self.add_node('Out', type='UDO')
+            self.add_edge(lastFX, 'Out', type='a', color='red')
 
     def _open_COSMO_UDO_read_args(self, udoName):
         print '..reading csd ' + str(udoName)
         fileDir = os.path.dirname(__file__)
-        filename = os.path.join(fileDir, '../' + self.import_dsp_path + 'Effects/'
+        filename = os.path.join(fileDir, '../' + self.import_dsp_path
+                                + 'Effects/'
                                 + str(udoName)
                                 + '.csd')
         with open(filename) as UDO_file:
+            # search for Arguments and Defaults in UDO.csd header
             for line in UDO_file:
                 if 'Arguments' in line:
                     argTokens = line.split(',')
@@ -121,11 +106,23 @@ class CosmoPatcherGraph(nx.DiGraph):
         print nx.shortest_path(self, 'In', 'Out')
         return
 
+    def _controller_ins(self):
+        if self.controller_type == 'MIDI-Patch':
+            ctrls = [c for c in self.nodes() if self.node[c]['type'] == 'ctrl']
+            for ctrl in ctrls:
+                midi_data = ctrl.split("_")
+                cc = midi_data[0]
+                chn = midi_data[1]
+                ctrl7 = "\t \t %s_%s ctrl7 %s, %s, 0, 1" % (cc, chn, chn.strip("CHN"), cc.strip("gkCC"))
+                self.csnd_code_lines.append(ctrl7 + '\n')
+            self.csnd_code_lines.append('\n')
+                #self.csnd_code_read_controller.append(ctrl7)
+        elif self.controller_type == 'COSMO-Patch':
+                self.csnd_code_lines.append('I need some GPIO ins here!!' + '\n \n')
+
     def generate_csound_code_from_graph(self):
         print '-- Graph to CSD --'
-        self.csnd_code_includes = []
-        self.csnd_code_lines = []
-
+        self._controller_ins()
         if nx.has_path(self, 'In', 'Out'):
             fx_chain = nx.shortest_path(self, 'In', 'Out')
             fx_chain = fx_chain[1:-1]
@@ -163,7 +160,7 @@ class CosmoPatcherGraph(nx.DiGraph):
         fileDir = os.path.dirname(__file__)
         filename = os.path.join(fileDir, '../' + csd_file_name)
         # Generate Csound MIDI CC code using ctrl7 opcode
-        self.generate_ctrl7_statements()
+
         with open(filename, 'w+') as csd_file:
             with open(os.path.join(fileDir, 'Intro.csd')) as intro:
                 with open(os.path.join(fileDir,
@@ -174,27 +171,17 @@ class CosmoPatcherGraph(nx.DiGraph):
                         for idx, item in enumerate(self.csnd_code_includes):
                             csd_file.write(self.csnd_code_includes[idx])
                         csd_file.write(instrDef.read())
-                        for ctrl7 in self.csound_ctrl7:
-                                csd_file.write("\t\t%s\n" % ctrl7)
+                        # for ctrl7 in self.csound_ctrl7:
+                        #         csd_file.write("\t\t%s\n" % ctrl7)
                         csd_file.write("\n")
                         for idx, item in enumerate(self.csnd_code_lines):
                             csd_file.write(self.csnd_code_lines[idx])
                         csd_file.write(outro.read())
                         csd_file.close
 
-    def generate_ctrl7_statements(self):
-        ctrls = [c for c in self.nodes() if self.node[c]['type'] == 'ctrl']
-        for ctrl in ctrls:
-            midi_data = ctrl.split("_")
-            cc = midi_data[0]
-            chn = midi_data[1]
-            ctrl7 = "%s_%s ctrl7 %s, %s, 0, 1" % (cc, chn, chn.strip("CHN"), cc.strip("gkCC"))
-            self.csound_ctrl7.append(ctrl7)
-
-
     def print_udos(self):
         udos = [u for u in self.nodes() if self.node[u]['type'] == 'UDO']
-        print self.nodes(data = True)
+        print self.nodes(data=True)
         print udos
         return
 
@@ -261,19 +248,20 @@ class CosmoPatcherGraph(nx.DiGraph):
 
 # -- debugging
 
-#C_set = CosmoPatcherGraph()
-# C_set.open_COSMO_UDO_read_args('Lowpass')
-#print 'Load Json'
+C_set = CosmoPatcherGraph()
+C_set._open_COSMO_UDO_read_args('Lowpass')
+print 'Load Json'
 # json is read correctly, using 'OrderedDict'
-#C_set.read_settings_json('MIDI-Patch.json')
+C_set.read_settings_json('MIDI-Patch.json')
+# C_set.read_settings_json('COSMO-Patch.json')
 
-#print 'Json to Graph'
+print 'Json to Graph'
 # graph connects FX modules in correct order (lastfx in correct if statement)
-#C_set.cosmo_settings_to_graph()
-#C_set.print_fx_in_order()
-#C_set.generate_csound_code_from_graph()
-#C_set.print_udos()
-#C_set.write_csd('test.csd')
+C_set.cosmo_settings_to_graph()
+C_set.print_fx_in_order()
+C_set.generate_csound_code_from_graph()
+C_set.print_udos()
+C_set.write_csd('test.csd')
 
 
 
