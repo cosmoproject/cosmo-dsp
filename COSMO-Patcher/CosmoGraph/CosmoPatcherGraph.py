@@ -129,6 +129,14 @@ class CosmoPatcherGraph(nx.DiGraph):
                         line = '\t \t' + line
                         self.csnd_code_lines.append(line)
 
+                filename = os.path.join(fileDir, '../' + self.import_dsp_path
+                                        + 'Includes/adc_channels.inc')
+                with open(filename) as csd_gpio_channels:
+                    for line in csd_gpio_channels:
+                        print line
+                        line = '\t \t' + line
+                        self.csnd_code_lines.append(line)
+
     def generate_csound_code_from_graph(self):
         print '-- Graph to CSD --'
         self._controller_ins()
@@ -253,20 +261,20 @@ class CosmoPatcherGraph(nx.DiGraph):
 
 # -- debugging
 
-# C_set = CosmoPatcherGraph()
-# C_set._open_COSMO_UDO_read_args('Lowpass')
-# print 'Load Json'
-# # json is read correctly, using 'OrderedDict'
-# # C_set.read_settings_json('MIDI-Patch.json')
-# C_set.read_settings_json('COSMO-Patch.json')
-#
-# print 'Json to Graph'
-# # graph connects FX modules in correct order (lastfx in correct if statement)
-# C_set.cosmo_settings_to_graph()
-# C_set.print_fx_in_order()
-# C_set.generate_csound_code_from_graph()
-# C_set.print_udos()
-# C_set.write_csd('test.csd')
+C_set = CosmoPatcherGraph()
+C_set._open_COSMO_UDO_read_args('Lowpass')
+print 'Load Json'
+# json is read correctly, using 'OrderedDict'
+# C_set.read_settings_json('MIDI-Patch.json')
+C_set.read_settings_json('COSMO-Patch.json')
+
+print 'Json to Graph'
+# graph connects FX modules in correct order (lastfx in correct if statement)
+C_set.cosmo_settings_to_graph()
+C_set.print_fx_in_order()
+C_set.generate_csound_code_from_graph()
+C_set.print_udos()
+C_set.write_csd('test.csd')
 
 
 
