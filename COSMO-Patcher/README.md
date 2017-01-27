@@ -42,5 +42,5 @@ From the mappings in the .json files, Csound instruments (.csd) are generated, u
         csound workfile.csd
 
 ## Collect all files and save to a specified folder
-        python JsonToCsd.py export [input json file] [output csd file] [output directory]
-        e.g python JsonToCsd.py export MIDI-Patch.json MyCOSMO.csd ../../MyCOSMO/
+        python JsonToCsd.py [input json file] [output csd file] export [output directory]
+        e.g python JsonToCsd.py MIDI-Patch.json MyCOSMO.csd export ../../MyCOSMO/

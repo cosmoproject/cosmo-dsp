@@ -8,7 +8,13 @@ from subprocess import call
 
 
 class CosmoPatcherGraph(nx.DiGraph):
-    # Ctls and UDOS will be stored as Nodes in a Graph
+    """ Converter of JSON-based conroller mappings (.json) to Csound file (.csd)
+
+    Controller inputs and UDOs assigned in the .json will be stored as Nodes
+    in a graph. 
+
+
+    """
     def __init__(self):
         super(CosmoPatcherGraph, self).__init__()
         self.import_dsp_path = '../DSP-Library/'
