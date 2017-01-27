@@ -1,4 +1,4 @@
-| Opcode           | Arguments                                                                                                                                    |
+## List of supported effect UDOs:| UDO              | Arguments                                                                                                                                    |
 |:-----------------|:---------------------------------------------------------------------------------------------------------------------------------------------|
 | AnalogDelay.csd  | Delay time, Feedback, Dry/wet mix                                                                                                            |
 | Blur.csd         | Blur time, Gain, StereoMode, Dry/wet mix                                                                                                     |
@@ -9,7 +9,6 @@
 | Lowpass.csd      | Cutoff frequency, Resonance, Distortion                                                                                                      |
 | MultiDelay.csd   | Multi tap on/off, Delay time, Feedback, Cutoff, Dry/wet mix                                                                                  |
 | PitchShifter.csd | Semitones (-/+ 1 octave), Stereo mode, Dry/wet mix                                                                                           |
-| README.md        |                                                                                                                                              |
 | RandDelay.csd    | Range, Feedback, Dry/wet mix                                                                                                                 |
 | Repeater.csd     | Range, Repeat time, On/off                                                                                                                   |
 | Reverb.csd       | Decay time, Cutoff frequency, Dry/wet mix                                                                                                    |
