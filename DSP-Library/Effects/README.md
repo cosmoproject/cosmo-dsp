@@ -1,4 +1,5 @@
-## List of supported effect UDOs:| UDO              | Arguments                                                                                                                                    |
+## List of supported effect UDOs: 
+| UDO              | Arguments                                                                                                                                    |
 |:-----------------|:---------------------------------------------------------------------------------------------------------------------------------------------|
 | AnalogDelay.csd  | Delay time, Feedback, Dry/wet mix                                                                                                            |
 | Blur.csd         | Blur time, Gain, StereoMode, Dry/wet mix                                                                                                     |
