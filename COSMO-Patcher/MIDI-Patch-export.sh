@@ -1,2 +1,1 @@
-python JsonToCsd.py export MIDI-Patch.json MyCOSMO.csd "../../MyCOSMO/"
-
+python JsonToCsd.py MIDI-Patch.json MyCOSMO.csd export "../../MyCOSMO/"
