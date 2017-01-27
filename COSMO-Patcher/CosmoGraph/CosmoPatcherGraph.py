@@ -13,7 +13,6 @@ class CosmoPatcherGraph(nx.DiGraph):
         super(CosmoPatcherGraph, self).__init__()
         self.import_dsp_path = '../DSP-Library/'
         self.include_dsp_path = '../DSP-Library/'
-        self.csnd_code_read_controller = []
         self.csnd_code_includes = []
         self.csnd_code_lines = []
 
@@ -35,7 +34,7 @@ class CosmoPatcherGraph(nx.DiGraph):
                 else:
                     print 'invalid'
                     sys.exit('Json input not valid. '
-                             'Neiter a MIDI nor a COSMO-Patch.')
+                             'Neihter a MIDI nor a COSMO-Patch.')
 
     def cosmo_settings_to_graph(self):
             controllers = [ctrl for ctrl in self.jdata[self.controller_type]]
@@ -107,7 +106,7 @@ class CosmoPatcherGraph(nx.DiGraph):
         return
 
     def _controller_ins(self):
-        # Generate Csound MIDI CC code using ctrl7 opcode or put chnget
+        # Generate Csound MIDI CC code using 'ctrl7' opcode or 'chnget' opcode for GPIO
         if self.controller_type == 'MIDI-Patch':
             ctrls = [c for c in self.nodes() if self.node[c]['type'] == 'ctrl']
             for ctrl in ctrls:
@@ -117,9 +116,7 @@ class CosmoPatcherGraph(nx.DiGraph):
                 ctrl7 = "\t \t %s_%s ctrl7 %s, %s, 0, 1" % (cc, chn, chn.strip("CHN"), cc.strip("gkCC"))
                 self.csnd_code_lines.append(ctrl7 + '\n')
             self.csnd_code_lines.append('\n')
-                #self.csnd_code_read_controller.append(ctrl7)
         elif self.controller_type == 'COSMO-Patch':
-                # self.csnd_code_lines.append('I need some GPIO ins here!!' + '\n \n')
                 fileDir = os.path.dirname(__file__)
                 filename = os.path.join(fileDir, '../' + self.import_dsp_path
                                         + 'Includes/gpio_channels.inc')
@@ -162,7 +159,8 @@ class CosmoPatcherGraph(nx.DiGraph):
                 args = self._fill_none_with_defaults(udo_inputs, args)
                 argsSt = ', '.join(str(x) for x in args)
                 self.csnd_code_includes.append(
-                                    '\t#include "' + self.include_dsp_path + 'Effects/'
+                                    '\t#include "' + self.include_dsp_path
+                                    + 'Effects/'
                                     + udo
                                     + '.csd" \n'
                                     )
@@ -182,7 +180,8 @@ class CosmoPatcherGraph(nx.DiGraph):
                                        'InstrumentDefBegin.csd')) as instrDef:
                     with open(os.path.join(fileDir, 'Outro.csd')) as outro:
                         csd_file.write(intro.read())
-                        csd_file.write('\t#include "' + self.include_dsp_path + 'Includes/cosmo_utilities.inc"\n\n')
+                        csd_file.write('\t#include "' + self.include_dsp_path
+                                       + 'Includes/cosmo_utilities.inc"\n\n')
                         for idx, item in enumerate(self.csnd_code_includes):
                             csd_file.write(self.csnd_code_includes[idx])
                         csd_file.write(instrDef.read())
@@ -261,20 +260,20 @@ class CosmoPatcherGraph(nx.DiGraph):
 
 # -- debugging
 
-C_set = CosmoPatcherGraph()
-C_set._open_COSMO_UDO_read_args('Lowpass')
-print 'Load Json'
-# json is read correctly, using 'OrderedDict'
-# C_set.read_settings_json('MIDI-Patch.json')
-C_set.read_settings_json('COSMO-Patch.json')
-
-print 'Json to Graph'
-# graph connects FX modules in correct order (lastfx in correct if statement)
-C_set.cosmo_settings_to_graph()
-C_set.print_fx_in_order()
-C_set.generate_csound_code_from_graph()
-C_set.print_udos()
-C_set.write_csd('test.csd')
+# C_set = CosmoPatcherGraph()
+# C_set._open_COSMO_UDO_read_args('Lowpass')
+# print 'Load Json'
+# # json is read correctly, using 'OrderedDict'
+# # C_set.read_settings_json('MIDI-Patch.json')
+# C_set.read_settings_json('COSMO-Patch.json')
+#
+# print 'Json to Graph'
+# # graph connects FX modules in correct order (lastfx in correct if statement)
+# C_set.cosmo_settings_to_graph()
+# C_set.print_fx_in_order()
+# C_set.generate_csound_code_from_graph()
+# C_set.print_udos()
+# C_set.write_csd('test.csd')
 
 
 
