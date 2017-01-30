@@ -4,7 +4,7 @@
 	Author: Alex Hofmann
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
-	Arguments: Semitones (-/+ 1 octave), Stereo mode, Dry/wet mix 
+	Arguments: Semitones, Stereo mode, Dry/wet mix 
     Defaults:  1, 0.5, 0
 
 	Semitones (-/+ 1 octaves): -12 - +12 semitones

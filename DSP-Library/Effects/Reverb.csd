@@ -6,7 +6,7 @@
 	Arguments: Decay time, Cutoff frequency, Dry/wet mix
     Defaults:  0.85, 0.5, 0.5
 
-	Decay time: 0 - 1
+	Decay time: 0.1 - 1
 	Cutoff frequency: 200Hz - 12000Hz
 	Dry/wet mix: 0% - 100%
 
@@ -25,7 +25,7 @@
 opcode Reverb, aa, aakkk
 	ainL, ainR, kRev_Decay, kRev_Cutoff, kRev_Mix xin
 
-	kRev_Decay scale kRev_Decay, 1, 0
+	kRev_Decay scale kRev_Decay, 1, 0.1
 	Srev sprintfk "Reverb Decay: %f", kRev_Decay
 		puts Srev, kRev_Decay+1
 	kRev_Decay port kRev_Decay, 0.1

@@ -11,13 +11,13 @@ from CosmoGraph.CosmoPatcherGraph import CosmoPatcherGraph
 input_filename = sys.argv[1]
 output_filename = sys.argv[2]
 mode = sys.argv[3]
-output_path = sys.argv[4]
 
 C_set = CosmoPatcherGraph()
 
 
 if (mode == 'export'):
-    C_set.export_patch(input_filename, output_filename, output_path)
+	output_path = sys.argv[4]
+	C_set.export_patch(input_filename, output_filename, output_path)
 else:
     print 'Load Json file ' + input_filename
     C_set.read_settings_json(input_filename)

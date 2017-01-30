@@ -1,0 +1,18 @@
+{"MIDI-Patch": {
+    "CC21_CH1":
+        {
+            "Hack": "Dry/wet mix",            
+            "AnalogDelay": "Delay time"
+        },
+    "CC22_CH1":
+        {
+            "Reverse": "Dry/wet mix",
+            "AnalogDelay": "Feedback"
+        },
+    "CC23_CH1":
+        {
+            "AnalogDelay": "Dry/wet mix",
+            "Hack": "Frequency"
+        }
+    }
+}
