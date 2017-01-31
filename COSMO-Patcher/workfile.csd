@@ -18,6 +18,7 @@
 	#include "../DSP-Library/Effects/Hack.csd" 
 	#include "../DSP-Library/Effects/AnalogDelay.csd" 
 	#include "../DSP-Library/Effects/Reverse.csd" 
+	#include "../DSP-Library/Effects/Reverb.csd" 
 
 	instr 1
 
@@ -34,6 +35,7 @@
 		aL, aR Hack aL, aR, gkCC23_CH1, gkCC21_CH1
 		aL, aR AnalogDelay aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1
 		aL, aR Reverse aL, aR, 0.5, gkCC22_CH1
+		aL, aR Reverb aL, aR, 0.9, 0.5, 0.5
 
 		aOutL = (aL + adlyL)
 		aOutR = (aR + adlyR)

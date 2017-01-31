@@ -48,7 +48,10 @@ class CosmoPatcherGraph(nx.DiGraph):
             self.add_node('In', type='UDO')
             for ctrl in controllers:
                 # controllers to nodes, add 'gk' for Csound code
-                ctrl_var = "gk%s" % ctrl
+                if 'CC' in ctrl:
+                    ctrl_var = "gk%s" % ctrl
+                else:
+                    ctrl_var = ctrl
                 self.add_node(ctrl_var, type='ctrl')
                 for fx in self.jdata[self.controller_type][ctrl]:
                     # udos to nodes
@@ -116,11 +119,12 @@ class CosmoPatcherGraph(nx.DiGraph):
         if self.controller_type == 'MIDI-Patch':
             ctrls = [c for c in self.nodes() if self.node[c]['type'] == 'ctrl']
             for ctrl in ctrls:
-                midi_data = ctrl.split("_")
-                cc = midi_data[0]
-                chn = midi_data[1]
-                ctrl7 = "\t \t %s_%s ctrl7 %s, %s, 0, 1" % (cc, chn, chn.strip("CHN"), cc.strip("gkCC"))
-                self.csnd_code_lines.append(ctrl7 + '\n')
+                if 'CC' in ctrl:
+                    midi_data = ctrl.split("_")
+                    cc = midi_data[0]
+                    chn = midi_data[1]
+                    ctrl7 = "\t \t %s_%s ctrl7 %s, %s, 0, 1" % (cc, chn, chn.strip("CHN"), cc.strip("gkCC"))
+                    self.csnd_code_lines.append(ctrl7 + '\n')
             self.csnd_code_lines.append('\n')
         elif self.controller_type == 'COSMO-Patch':
                 fileDir = os.path.dirname(__file__)

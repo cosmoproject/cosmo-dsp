@@ -13,6 +13,10 @@
         {
             "AnalogDelay": "Dry/wet mix",
             "Hack": "Frequency"
+        },
+    "0.9":
+        {
+            "Reverb": "Decay time"
         }
     }
 }
