@@ -11,7 +11,7 @@ class CosmoPatcherGraph(nx.DiGraph):
     """ Converter of JSON-based conroller mappings (.json) to Csound file (.csd)
 
     Controller inputs and UDOs assigned in the .json will be stored as Nodes
-    in a graph. 
+    in a graph.
 
 
     """
@@ -243,58 +243,3 @@ class CosmoPatcherGraph(nx.DiGraph):
         for x in udos:
             udo_file = '%sEffects/%s.csd' % (self.import_dsp_path, x)
             call(["cp", udo_file, export_path+"Effects/"])
-
-
-
-    # def plot(self):
-    #     import matplotlib.pyplot as plt
-    #     myPos = nx.shell_layout(self)
-    #     # nx.draw_networkx(self, pos=myPos)
-    #     udos = [u for u in self.nodes() if self.node[u]['type'] == 'UDO']
-    #     nx.draw_networkx_nodes(self, myPos,
-    #                            nodelist=udos,
-    #                            node_color='r',
-    #                            node_size=500,
-    #                            alpha=0.8)
-    #     nx.draw_networkx_labels(self, myPos)
-    #     ctrls = [c for c in self.nodes() if self.node[c]['type'] == 'ctrl']
-    #     # nx.draw_networkx_nodes(self, myPos,
-    #     #                nodelist=ctrls,
-    #     #                node_color='g',
-    #     #                node_size=500,
-    #     #                alpha=0.8)
-    #     # nx.draw_networkx_edge_labels(self, pos=myPos)
-    #     plt.show()
-    #     return
-
-
-# -- debugging
-
-# C_set = CosmoPatcherGraph()
-# C_set._open_COSMO_UDO_read_args('Lowpass')
-# print 'Load Json'
-# # json is read correctly, using 'OrderedDict'
-# # C_set.read_settings_json('MIDI-Patch.json')
-# C_set.read_settings_json('COSMO-Patch.json')
-#
-# print 'Json to Graph'
-# # graph connects FX modules in correct order (lastfx in correct if statement)
-# C_set.cosmo_settings_to_graph()
-# C_set.print_fx_in_order()
-# C_set.generate_csound_code_from_graph()
-# C_set.print_udos()
-# C_set.write_csd('test.csd')
-
-
-
-# ---- test
-# C_set.plot()
-# print C_set.successors('Wobble')
-# print C_set.out_edges()
-#
-# print 'All nodes and edges'
-# print C_set.nodes()
-# print C_set.edges(data = True)
-#
-# C_set.generate_csound_code_from_graph()
-# C_set.write_csd()
