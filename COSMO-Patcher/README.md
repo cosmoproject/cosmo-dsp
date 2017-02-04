@@ -6,7 +6,7 @@ From the mappings in the .json files, Csound instruments (.csd) are generated, u
 
 ## Install
 
-    pip install -r CosmoGraph/requirements.txt
+    sudo pip install -r CosmoGraph/requirements.txt
 
     ('pip' - is the package manager for python, you can install it via apt-get or homebrew )
 
