@@ -48,7 +48,7 @@ class CosmoPatcherGraph(nx.DiGraph):
             self.add_node('In', type='UDO')
             for ctrl in controllers:
                 # controllers to nodes, add 'gk' for Csound code
-                if 'CC' in ctrl:
+                if 'CC' or 'pot' or 'switch' or 'toggle' in ctrl:
                     ctrl_var = "gk%s" % ctrl
                 else:
                     ctrl_var = ctrl
