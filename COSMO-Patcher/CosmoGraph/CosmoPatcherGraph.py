@@ -6,6 +6,13 @@ import string
 from collections import OrderedDict
 from subprocess import call
 
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
 
 class CosmoPatcherGraph(nx.DiGraph):
     """ Converter of JSON-based conroller mappings (.json) to Csound file (.csd)
@@ -48,10 +55,10 @@ class CosmoPatcherGraph(nx.DiGraph):
             self.add_node('In', type='UDO')
             for ctrl in controllers:
                 # controllers to nodes, add 'gk' for Csound code
-                if 'CC' or 'pot' or 'switch' or 'toggle' in ctrl:
-                    ctrl_var = "gk%s" % ctrl
-                else:
+                if is_number(ctrl):
                     ctrl_var = ctrl
+                else:
+                    ctrl_var = "gk%s" % ctrl
                 self.add_node(ctrl_var, type='ctrl')
                 for fx in self.jdata[self.controller_type][ctrl]:
                     # udos to nodes
