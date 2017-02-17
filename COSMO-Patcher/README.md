@@ -1,6 +1,6 @@
 ## Description
 
-This configuration script allows to map Controllers (Knobs/Pots) directly to effect parameters, without manually editing a Csound file (.csd).
+This configuration script allows to map controllers (knobs/pots) directly to effect parameters, without manually editing a Csound file (.csd).
 
 From the mappings in the .json files, Csound instruments (.csd) are generated, using the UDOs in this (DSP-Library/Effects) repository.
 
@@ -22,7 +22,7 @@ From the mappings in the .json files, Csound instruments (.csd) are generated, u
 
     nano CosmoGraph/Intro.csd
 
-## Run with a Cosmo-Box
+## Run with a COSMO-Box
 
         ./COSMO-Patch-run.sh
 
