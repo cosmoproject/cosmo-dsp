@@ -1,0 +1,25 @@
+/*
+ *rsr.js
+ */
+
+var app = angular.module('raagamApp', []);
+
+app.controller('raagamCtrl', function($scope,  $http) {
+    $http.get('webapp/scripts/carnaticdb.json').then(function(data) {
+	$scope.compositions = angular.fromJson(data.data);//Object.values(data.data); // data.data;
+    });
+    $scope.sortReverse  = false;  // set the default sort order
+    $scope.orderProp = 'raagam';
+    $scope.showAll = false;
+    /*
+      using angular's filter instead
+      $scope.search = function(){
+      console.debug($scope.query);
+      //$scope.searchResults = $scope.compositions;
+      //console.log($scope.searchResults);
+      };
+    */
+});
+
+
+

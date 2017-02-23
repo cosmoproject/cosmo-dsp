@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cosmo Patcher</title>
+    <meta name="description" content="Cosmo Interface Configuration" />
+    <meta name="author" content="Gytha Ogg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="webapp/stylesheets/base.css" type="text/css" />
+    
+    <script src="webapp/scripts/angular.min.js"></script>
+    <script src="webapp/scripts/cosmo.js"></script>
+  </head>
+  <body>
+    <div ng-app="cosmoApp" ng-controller="cosmoCtrl">
+      <header>
+	<h1>cosmo-patcher <!--span class = "flright" >{{numControls}}/{{maxControls}}</span--></h1>
+      </header>
+      <div class = "container">
+	
+	<!--<input ng-model="maxControls" type="number" min="0" max="10" step="1" maxwidth="20px" ng-change="validateMaxControls()">-->
+	<div class = "warehouse" ondrop="trash(event)" ondragover="allowDrop(event)">
+	  <ul>
+  	    <li ng:repeat="cosmoCtrl in cosmoCtrls | orderBy:orderProp">
+	      <img id="{{cosmoCtrl.ctrlId}}" ng-src="{{cosmoCtrl.ctrlImgPath}}" draggable="true" ondragstart="drag(event)"/>
+	    </li>
+	  </ul>
+	</div>
+	<div class="playground"  ondrop="drop(event)" ondragover="allowDrop(event)">
+	</div>
+      </div>
+    </div>
+  </body>
+</html>
