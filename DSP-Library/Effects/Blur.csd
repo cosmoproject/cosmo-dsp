@@ -4,7 +4,7 @@
 	Author: Bernt Isak Wærstad
 
 	Arguments: Blur time, Gain, StereoMode, Dry/wet mix
-    Defaults:  0.2, 0,  0.8
+    Defaults:  0.2, 0, 1, 0.8
 
 	Blur time: 0.1s - 3s
 	Gain: 1 - 5
