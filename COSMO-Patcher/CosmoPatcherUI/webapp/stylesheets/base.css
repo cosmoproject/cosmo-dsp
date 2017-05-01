@@ -308,6 +308,7 @@ a {
     align: center;
 }
 
+
 .container .playground .placeholder{
     margin: 10px;
     width: 95px;
@@ -343,12 +344,14 @@ a {
     float: right;
 }
 
-.effects li{
+.effects li,
+.selected-effects li{
     border-radius: 5px;
     background: #27292a;
     color: #b5e853;
     margin: 10px;
     cursor: move;
+    line-height: 2;
 }
 
 .effects li.selected{
