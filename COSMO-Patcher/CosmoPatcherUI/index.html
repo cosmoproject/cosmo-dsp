@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="webapp/stylesheets/base.css" type="text/css" />
     
     <script src="webapp/scripts/angular.min.js"></script>
+    <script src="webapp/scripts/Sortable.min.js"></script>
     <script src="webapp/scripts/cosmo.js"></script>
   </head>
   <body>
@@ -41,7 +42,7 @@
 	    <img id="{{cosmoCtrl.ctrlId}}" ng-src="{{cosmoCtrl.ctrlImgPath}}" draggable="true" ondragstart="drag(event)"/>
 	  </div>
 	  <div id="trash"ondrop="trash(event)" ondragover="allowDrop(event)" draggable="false">
-	  <img draggable="false" src="webapp/images/trash.png">
+	    <img draggable="false" src="webapp/images/trash.png">
 	  </div>
 	</div>
 
@@ -53,8 +54,28 @@
 	    </a>
 	  </div>
 	  <div class="info">
-	    Effects: {{selection}}
-	   </div>
+	    <span ng-if="selection == -1">
+	      Drag and drop controllers and map the controllers to audio effects.
+	    </span>
+	    <div ng-if="selection != -1">
+	      Effects: {{selection}}
+	    </div>
+	  </div>
+	</div>
+
+	<div class = "effects" ng-if="selection != -1">
+	  <ul ng-sortable="{group: 'udos', animation: 150 }" class="udos">
+	    <li ng-repeat="(effect, args) in cosmoEffects"
+		ng-click="select_effect(effect, args)" ng-class="{selected: selected_effect == effect}">
+	      {{effect}}
+	    </li>
+	  </ul>	
+	  <ul ng-if="selected_effect != ''" ng-sortable="{group: 'arguments', animation: 150 }"
+	      class="arguments">
+	    <li ng-repeat="arg in arguments">
+	      {{arg}}
+	    </li>
+	  </ul>
 	</div>
       </div>
     </div>

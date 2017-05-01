@@ -4,7 +4,7 @@
 
 var app = angular.module('cosmoApp', []);
 var prefix= 'pot'
-app.controller('cosmoCtrl', function($scope, $http) {
+app.controller('cosmoCtrl', function($scope, $http, $timeout) {
     $http.get('webapp/scripts/cosmo-controls.json').then(function(data) {
 	$scope.cosmoCtrls = angular.fromJson(data.data);
     });
@@ -16,24 +16,27 @@ app.controller('cosmoCtrl', function($scope, $http) {
     $scope.placeholders = [0, 1, 2, 3, 4, 5, 6, 7]
     $scope.out_json = {};
     $scope.selection = -1;
+    $scope.selected_effect = -1;
     $scope.select_controller = function(element_id){
 	console.log("selecting "+ element_id);
 	$scope.selection = element_id;
-	$scope.$apply();
+	$timeout(); //.$scope.$apply();
     }
+    $scope.select_effect = function(effect, args){
+	$scope.selected_effect = effect;
+	$scope.arguments = args;
+	$timeout(); //.$scope.$apply();
+    }
+
 });
 
 function allowDrop(ev) {
     ev.dataTransfer.dropEffect = 'move';
     ev.preventDefault();
-    scope = getControllerScope();
-    scope.select_controller(ev.target.id);
 }
 
 function drag(ev) {
     ev.dataTransfer.setData("draggedId", ev.target.id);
-    scope = getControllerScope();
-    scope.select_controller(ev.target.id);
 }
 
 function drop(ev) {
@@ -68,6 +71,8 @@ function trash(ev) {
 	var dataNode = document.getElementById(data);
 	scope = getControllerScope();
 	dataNode.parentNode.removeChild(dataNode);
+	scope = getControllerScope();
+	scope.select_controller(-1);
     }else{
 	console.log('not removing, control object');
     }

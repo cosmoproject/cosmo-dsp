@@ -30,6 +30,11 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0 0 20px;
 }
 
+ul{
+    padding: 0;
+    list-style-type: none;
+}
+
 li {
     line-height: 1.4 ;
 }
@@ -292,7 +297,8 @@ a {
     cursor: grab;
 }
 
-.container .playground{
+.container .playground,
+.container .effects{
     display: inline-block;
     margin: auto;
     width: 100%;
@@ -315,9 +321,62 @@ a {
 }
 
 .playground .info{
+    display: table;
     float: right;
     margin: 5px;
     width: 28%;
+    height: 100%;
+    text-align: center;
+}
+
+.udos{
+    width: 70%;
+    display: inline-block;
+    float: left;
+    border: 1px #b5e853;
+    border-style: none dashed none none;
+}
+
+.arguments{
+    width: 29%;
+    display: inline-block;
+    float: right;
+}
+
+.effects li{
+    border-radius: 5px;
+    background: #27292a;
+    color: #b5e853;
+    margin: 10px;
+    cursor: move;
+}
+
+.effects li.selected{
+    background: #b5e853;
+    color: black;
+}
+
+.arguments li{
+    display: block;
+    width: 92%;
+    text-align: center;
+    margin: 10px 5px;
+}
+
+.udos li{
+    width: 27%;
+    display: inline-block;
+	       
+}
+
+.playground .info span{
+    display: table-cell;
+    vertical-align: middle;
+    font-size: large;
+    text-align: left;
+    font-size: x-large;
+    color: lightgrey;
+    font-family: monospace;
 }
 
 .playground .layout{
