@@ -12,7 +12,7 @@ body {
 
 .container{
     width: 90%;
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     text-align: center;
 }
@@ -63,6 +63,9 @@ header h1 {
     -webkit-font-smoothing: antialiased;
 }
 
+header h1 label{
+    font-size: 20px;
+}
 header h1:before {
     content: "./ ";
     font-size: 24px;
@@ -262,29 +265,75 @@ a {
 .flright{
     float:right;
 }
-.warehouse{
-    display: block;
- }
-.warehouse ul li{
-    display: inline;
-    margin: 0 10px;
+
+.container{
+    min-height: 250px;
+    /*display: table-cell;*/
 }
-.warehouse ul li img{
+
+.container .warehouse{
+    display: grid;
+    justify-content: center;
+    float: left;
+    border: #b5e853 dotted;
+    width: 12%;
+    height: 100%;
+    min-height: 250px;
+    margin: auto 10px;
+}
+
+.container .warehouse div{
+    align-self: center;
+    display: block;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.container .warehouse div img{
     max-width:50px;
     max-height:50px;
+    cursor: grab;
 }
-.playground{
-    display:block;
-    margin: 10px;
-    width: 100%;
-    border: #b5e853 dotted;
+
+.container .playground{
+    display: inline-block;
+    margin: auto;
+    width: 70%;
     min-height: 250px;
+    border: #b5e853 dotted;
+    height: 100%;
+    align: center;
 }
 
-.playground img{
-    max-width: 75px;
-    max-height: 75px;
-    margin: 20px;
-    
+.container .playground .placeholder{
+    margin: 10px;
+    width: 95px;
+    height: 95px;
+    display: inline-block;
+    float: none;
+    border: #b5e853 double;
+    border-radius: 50px;
+    vertical-align: middle;
+    overflow: none;
 }
 
+.container .playground .placeholder:hover{
+    border: #b5e853 dashed;
+}
+.container .playground .placeholder img{
+    max-width: 75%;
+    max-height: 75%;
+    padding: 9px 0;
+    cursor: pointer;
+}
+
+.container #trash{
+    display: block;
+    float: right;
+    height: 100%;
+    min-height: 250px;
+    line-height: 100%;
+    width: 12%;
+    background: url('../images/trash.png') no-repeat left center;
+    background-size:contain;
+}

@@ -15,20 +15,42 @@
   <body>
     <div ng-app="cosmoApp" ng-controller="cosmoCtrl">
       <header>
-	<h1>cosmo-patcher <!--span class = "flright" >{{numControls}}/{{maxControls}}</span--></h1>
+	<h1>cosmo-patcher
+	  <span class = "flright">
+	    <label>
+	      <input type="radio"
+		     ng-model="patch.type"
+		     value="MIDI">
+	      MIDI
+	    </label>
+	    <label>
+	      <input type="radio"
+		     ng-model="patch.type"
+		     value="Cosmo"
+		     ng-checked="true">
+	      cosmo
+	    </label>
+	  </span>
+	</h1>
       </header>
       <div class = "container">
-	
 	<!--<input ng-model="maxControls" type="number" min="0" max="10" step="1" maxwidth="20px" ng-change="validateMaxControls()">-->
-	<div class = "warehouse" ondrop="trash(event)" ondragover="allowDrop(event)">
-	  <ul>
-  	    <li ng:repeat="cosmoCtrl in cosmoCtrls | orderBy:orderProp">
-	      <img id="{{cosmoCtrl.ctrlId}}" ng-src="{{cosmoCtrl.ctrlImgPath}}" draggable="true" ondragstart="drag(event)"/>
-	    </li>
-	  </ul>
+
+	<div class = "warehouse">
+  	  <div ng:repeat="cosmoCtrl in cosmoCtrls | orderBy:orderProp">
+	    <img id="{{cosmoCtrl.ctrlId}}" ng-src="{{cosmoCtrl.ctrlImgPath}}" draggable="true" ondragstart="drag(event)"/>
+	  </div>
 	</div>
-	<div class="playground"  ondrop="drop(event)" ondragover="allowDrop(event)">
+
+	<div id="myCanvas" class="playground">
+	  <div ng:repeat="i in placeholders" ondrop="drop(event)" ondragover="allowDrop(event)"
+	       class = "placeholder" id="{{i}}">
+	  </div>
 	</div>
+
+	<div id="trash" ondrop="trash(event)" ondragover="allowDrop(event)">
+	</div>
+
       </div>
     </div>
   </body>
