@@ -40,17 +40,22 @@
   	  <div ng:repeat="cosmoCtrl in cosmoCtrls | orderBy:orderProp">
 	    <img id="{{cosmoCtrl.ctrlId}}" ng-src="{{cosmoCtrl.ctrlImgPath}}" draggable="true" ondragstart="drag(event)"/>
 	  </div>
-	</div>
-
-	<div id="myCanvas" class="playground">
-	  <div ng:repeat="i in placeholders" ondrop="drop(event)" ondragover="allowDrop(event)"
-	       class = "placeholder" id="{{i}}">
+	  <div id="trash"ondrop="trash(event)" ondragover="allowDrop(event)" draggable="false">
+	  <img draggable="false" src="webapp/images/trash.png">
 	  </div>
 	</div>
 
-	<div id="trash" ondrop="trash(event)" ondragover="allowDrop(event)">
+	<div class="playground">
+	  <div class="layout" multiple>
+	    <a ng:repeat="i in placeholders" ondrop="drop(event)" ondragover="allowDrop(event)"
+	       id="{{i}}" class = "placeholder"
+	       ng-click="select_controller(i)" ng-class="{selected: selection == i}">
+	    </a>
+	  </div>
+	  <div class="info">
+	    Effects: {{selection}}
+	   </div>
 	</div>
-
       </div>
     </div>
   </body>

@@ -6,24 +6,34 @@ var app = angular.module('cosmoApp', []);
 var prefix= 'pot'
 app.controller('cosmoCtrl', function($scope, $http) {
     $http.get('webapp/scripts/cosmo-controls.json').then(function(data) {
-	$scope.cosmoCtrls = angular.fromJson(data.data);//Object.values(data.data); // data.data;
+	$scope.cosmoCtrls = angular.fromJson(data.data);
+    });
+    $http.get('webapp/scripts/effects.json').then(function(data) {
+	$scope.cosmoEffects = angular.fromJson(data.data);
+	console.log($scope.cosmoEffects)
     });
     $scope.orderProp = 'ctrlId';
     $scope.placeholders = [0, 1, 2, 3, 4, 5, 6, 7]
-    $scope.updateControls = function(){
-	console.log('Loaded: ');
-	return true;
-    }
     $scope.out_json = {};
+    $scope.selection = -1;
+    $scope.select_controller = function(element_id){
+	console.log("selecting "+ element_id);
+	$scope.selection = element_id;
+	$scope.$apply();
+    }
 });
 
 function allowDrop(ev) {
     ev.dataTransfer.dropEffect = 'move';
     ev.preventDefault();
+    scope = getControllerScope();
+    scope.select_controller(ev.target.id);
 }
 
 function drag(ev) {
     ev.dataTransfer.setData("draggedId", ev.target.id);
+    scope = getControllerScope();
+    scope.select_controller(ev.target.id);
 }
 
 function drop(ev) {
@@ -33,12 +43,10 @@ function drop(ev) {
 	return;
     var data = ev.dataTransfer.getData("draggedId");
     var nodeCopy = document.getElementById(data).cloneNode(true);
-    console.log(ev.target.id)
     nodeCopy.id = prefix+ev.target.id;
+    ev.target.append(nodeCopy);
     scope = getControllerScope();
-    if (scope.updateControls()){
-	ev.target.append(nodeCopy);
-    }
+    scope.select_controller(ev.target.id);
     if (!is_warehouse_element(data)){
 	var dataNode = document.getElementById(data);
 	dataNode.parentNode.removeChild(dataNode);

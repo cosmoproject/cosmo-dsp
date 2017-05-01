@@ -272,33 +272,30 @@ a {
 }
 
 .container .warehouse{
-    display: grid;
+    display: inline-block;
     justify-content: center;
-    float: left;
     border: #b5e853 dotted;
-    width: 12%;
-    height: 100%;
-    min-height: 250px;
-    margin: auto 10px;
+    width: 100%;
+    margin-bottom: 10px; 
 }
 
 .container .warehouse div{
+    display: inline-block;
     align-self: center;
-    display: block;
-    margin: 0 10px;
+    margin: 10px;
     cursor: pointer;
 }
 
 .container .warehouse div img{
-    max-width:50px;
-    max-height:50px;
+    max-width:75px;
+    max-height:75px;
     cursor: grab;
 }
 
 .container .playground{
     display: inline-block;
     margin: auto;
-    width: 70%;
+    width: 100%;
     min-height: 250px;
     border: #b5e853 dotted;
     height: 100%;
@@ -317,9 +314,21 @@ a {
     overflow: none;
 }
 
-.container .playground .placeholder:hover{
+.playground .info{
+    float: right;
+    margin: 5px;
+    width: 28%;
+}
+
+.playground .layout{
+    float: left;
+    width: 70%;
+}
+
+.playground .layout a.selected{
     border: #b5e853 dashed;
 }
+
 .container .playground .placeholder img{
     max-width: 75%;
     max-height: 75%;
@@ -328,12 +337,5 @@ a {
 }
 
 .container #trash{
-    display: block;
-    float: right;
-    height: 100%;
-    min-height: 250px;
-    line-height: 100%;
-    width: 12%;
-    background: url('../images/trash.png') no-repeat left center;
-    background-size:contain;
+    min-height: 75px;
 }
