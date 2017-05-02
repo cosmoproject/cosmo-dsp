@@ -26,6 +26,9 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
     $http.get('webapp/scripts/COSMO-Patch-example.json').then(function(data) {
 	$scope.json_object = angular.fromJson(data.data);
 	$scope.json_export = JSON.stringify($scope.json_object, null, 2);
+	//$scope.json_default = $scope.json_object ["COSMO-Patch"];
+	$scope.json_default = JSON.parse(
+	    JSON.stringify($scope.json_object ["COSMO-Patch"]));
 	console.log($scope.json_export)
     });
     $scope.prefix = 'pot';
@@ -89,7 +92,13 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
 	delete $scope.json_object["COSMO-Patch"][element_id];
 	scope.reset();
 	scope.save();
-}
+    }
+    $scope.default_load = function (i){
+	console.log($scope.json_default);
+	if ($scope.prefix+i in $scope.json_default)
+	    return true;
+	return false;
+    }
     
 });
 
@@ -112,6 +121,10 @@ function drop(ev) {
     var nodeCopy = document.getElementById(data).cloneNode(true);
     nodeCopy.id = scope.prefix+ev.target.id;
     console.log(scope.json_object["COSMO-Patch"][data]);
+    ev.target.append(nodeCopy);
+    console.log("appended");
+    console.log(scope.default_json)
+
     if (scope.json_object["COSMO-Patch"][data]){
 	if (!scope.json_object["COSMO-Patch"][nodeCopy.id]){
 	    scope.json_object["COSMO-Patch"][nodeCopy.id] = {};
@@ -120,7 +133,6 @@ function drop(ev) {
 	    scope.json_object["COSMO-Patch"][data];
 	scope.selected_effects = scope.json_object["COSMO-Patch"][nodeCopy.id];
     }
-    ev.target.append(nodeCopy);
     if (!is_warehouse_element(data)){
 	//var dataNode = document.getElementById(data);
 	//dataNode.parentNode.removeChild(dataNode);

@@ -54,7 +54,8 @@
 	    <a ng:repeat="i in placeholders" ondrop="drop(event)" ondragover="allowDrop(event)"
 	       id="{{i}}" class = "placeholder"
 	       ng-click="select_controller(i)" ng-class="{selected: selection == i}">
-	      <img id = "{{prefix+i}}" src = "webapp/images/controls/knob.png" ng-if="prefix+i == 'pot0'"
+	      <img id = "{{prefix+i}}" src = "webapp/images/controls/knob.png"
+		   ng-if="default_load(i)"
 		   draggable="true" ondragstart="drag(event)" />
 	    </a>
 	  </div>
