@@ -31,6 +31,7 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
 	    JSON.stringify($scope.json_object ["COSMO-Patch"]));
 	console.log($scope.json_export)
     });
+    $timeout();
     $scope.prefix = 'pot';
     $scope.orderProp = 'ctrlId';
     $scope.placeholders = [0, 1, 2, 3, 4, 5, 6, 7]
