@@ -29,19 +29,16 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
     $scope.out_json = {};
     $scope.json_export = "What's up?"
     $scope.selection = -1;
-    $scope.selected_effect = -1;
+    $scope.selected_udo = -1;
+    $scope.selected_effects = {}
     $scope.arguments = [];    
     $scope.select_controller = function(element_id){
 	console.log("selecting "+ element_id);
-	if (element_id == -1){
-	    $scope.arguments = [];
-	    $scope.selected_effect = -1;
-	}
 	$scope.selection = element_id;
 	$timeout(); //.$scope.$apply();
     }
-    $scope.select_effect = function(effect, args){
-	$scope.selected_effect = effect;
+    $scope.select_udo = function(udo, args){
+	$scope.selected_udo = udo;
 	$scope.arguments = args;
 	$timeout(); //.$scope.$apply();
     }
@@ -57,7 +54,16 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
 	$scope.savelink = window.URL.createObjectURL(textFileAsBlob);
     }
     $scope.save();
-
+    $scope.add_effect = function(arg){
+	console.log($scope.selected_udo + '-' + arg);
+	$scope.selected_effects[$scope.selected_udo] = arg;
+    }
+    $scope.reset = function(){
+	scope.select_controller(-1);
+	$scope.selected_udo = -1;
+	$scope.selected_effects = {}
+	$scope.arguments = [];    
+    }
 });
 
 function allowDrop(ev) {
@@ -102,7 +108,7 @@ function trash(ev) {
 	scope = getControllerScope();
 	dataNode.parentNode.removeChild(dataNode);
 	scope = getControllerScope();
-	scope.select_controller(-1);
+	scope.reset();
     }else{
 	console.log('not removing, control object');
     }

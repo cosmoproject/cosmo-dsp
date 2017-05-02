@@ -64,6 +64,9 @@
 	    </ol>
 	    <div class = "selected-effects" ng-if="selection != -1">
 	      <ul ng-sortable="{animation: 0}" id="selected-effects-list">
+		<li ng-repeat="(udo, arg) in selected_effects" draggable="true">
+		  {{udo}}: {{arg}}
+		</li>
 	      </ul>
 	    </div>
 	  </div>
@@ -71,15 +74,16 @@
 
 	<div class = "effects" ng-if="selection != -1">
 	  <ul class="udos">
-	    <li ng-repeat="(effect, args) in cosmoEffects" draggable="false" 
-		ng-click="select_effect(effect, args)"
-		ng-class="{selected: selected_effect == effect}">
-	      {{effect}}
+	    <li ng-repeat="(udo, args) in cosmoEffects" draggable="false" 
+		ng-click="select_udo(udo, args)"
+		ng-class="{selected: selected_udo == udo}">
+	      {{udo}}
 	    </li>
 	  </ul>	
-	  <ul ng-if="selected_effect != ''" 
+	  <ul ng-if="selected_udo != ''" 
 	      class="arguments">
-	    <li ng-repeat="arg in arguments" draggable="true">
+	    <li ng-repeat="arg in arguments" draggable="false"
+		ng-dblclick="add_effect(arg)">
 	      {{arg}}
 	    </li>
 	  </ul>

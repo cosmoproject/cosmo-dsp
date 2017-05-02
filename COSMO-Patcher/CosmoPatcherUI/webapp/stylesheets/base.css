@@ -348,6 +348,7 @@ a {
 
 .selected-effects ul{
     min-height: 250px;
+    font-size: smaller;
 }
 
 .effects li,
