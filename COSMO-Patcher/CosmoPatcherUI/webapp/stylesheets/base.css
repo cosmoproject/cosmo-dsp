@@ -417,6 +417,7 @@ a {
 }
 
 a.greenBtn{
+    text-decoration:none;
     border : solid 1px #638a00;
     border-radius : 3px;
     moz-border-radius : 3px;
@@ -444,5 +445,5 @@ a.greenBtn:hover{
 
 textarea{
     width: 100%;
-    min-height: 100px;
+    min-height: 200px;
 }
