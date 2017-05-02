@@ -7,6 +7,13 @@ app.constant('ngSortableConfig',
 	     {onEnd: function() {
 		 console.log('default onEnd()');
 	     }})
+app.config( [
+    '$compileProvider',
+    function( $compileProvider )
+    {   
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|file|blob):/);
+    }
+]);
 //    .constant('ngSortableConfig'
 var prefix= 'pot'
 app.controller('cosmoCtrl', function($scope, $http, $timeout) {
@@ -20,6 +27,7 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
     $scope.orderProp = 'ctrlId';
     $scope.placeholders = [0, 1, 2, 3, 4, 5, 6, 7]
     $scope.out_json = {};
+    $scope.json_export = "What's up?"
     $scope.selection = -1;
     $scope.selected_effect = -1;
     $scope.arguments = [];    
@@ -37,6 +45,18 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
 	$scope.arguments = args;
 	$timeout(); //.$scope.$apply();
     }
+    $scope.save = function()
+    {
+	var textToWrite = $scope.json_export;
+	var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+	var fileNameToSaveAs = 'COSMO_patch.json'
+	//var save_link = document.getElementById('save');
+	/*if (window.webkitURL != null)
+	    $scope.savelink  = window.webkitURL.createObjectURL(textFileAsBlob);
+	else*/
+	$scope.savelink = window.URL.createObjectURL(textFileAsBlob);
+    }
+    $scope.save();
 
 });
 
@@ -94,6 +114,7 @@ function getControllerScope() {
     var controllerScope = appScope.$$childHead;
     return appScope;
 }
+
 
 /* 
 angular.module('todoApp', ['ng-sortable'])

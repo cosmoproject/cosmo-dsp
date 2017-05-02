@@ -57,13 +57,13 @@
 	    </a>
 	  </div>
 	  <div class="info">
-	    <span ng-if="selection == -1">
-	      Drag and drop controllers and map the controllers to audio effects.
-	    </span>
+	    <ol ng-if="selection == -1">
+	      <li>Drag and drop controllers.</li>
+	      <li>Select an UDO and double click on an argument to map effects.</li>
+	      <li>Order effects chain.</li>
+	    </ol>
 	    <div class = "selected-effects" ng-if="selection != -1">
-	      <ul ng-sortable="{animation: 0}">
-		<li draggable="true" >Effects: {{selection}}</li>
-		<li draggable="true" >Effects: {{selection+1}}</li>
+	      <ul ng-sortable="{animation: 0}" id="selected-effects-list">
 	      </ul>
 	    </div>
 	  </div>
@@ -72,7 +72,8 @@
 	<div class = "effects" ng-if="selection != -1">
 	  <ul class="udos">
 	    <li ng-repeat="(effect, args) in cosmoEffects" draggable="false" 
-		ng-click="select_effect(effect, args)" ng-class="{selected: selected_effect == effect}">
+		ng-click="select_effect(effect, args)"
+		ng-class="{selected: selected_effect == effect}">
 	      {{effect}}
 	    </li>
 	  </ul>	
@@ -83,7 +84,15 @@
 	    </li>
 	  </ul>
 	</div>
+
+      <div class="json_export">
+	<textarea ng-model="json_export" >{{json_export}}</textarea>
+	<a id = "save" download = "COSMO-patch.json"
+	   class = "greenBtn" ng-href="{{savelink}}" ng-click="save()"> Save </a>
       </div>
+
+      </div>
+
     </div>
   </body>
 </html>
