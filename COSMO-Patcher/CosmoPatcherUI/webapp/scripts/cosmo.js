@@ -29,7 +29,6 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
 	//$scope.json_default = $scope.json_object ["COSMO-Patch"];
 	$scope.json_default = JSON.parse(
 	    JSON.stringify($scope.json_object ["COSMO-Patch"]));
-	console.log($scope.json_export)
     });
     $timeout();
     $scope.prefix = 'pot';
@@ -41,11 +40,9 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
     $scope.selected_effects = {}
     $scope.arguments = [];    
     $scope.select_controller = function(element_id){
-	console.log("selecting "+ element_id);
 	$scope.selection = element_id;
 	if (element_id != -1){
 	    channel = $scope.prefix + element_id;
-	    console.log($scope.json_object["COSMO-Patch"])
 	    if (!$scope.json_object["COSMO-Patch"][channel]){
 		$scope.json_object["COSMO-Patch"][channel] = {};
 	    }
@@ -88,16 +85,16 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
     $scope.delete_controller = function (element_id){
 	console.log('Deleting' +element_id);
     	var dataNode = document.getElementById(element_id);
-	console.log(dataNode)
 	dataNode.parentNode.removeChild(dataNode);
 	delete $scope.json_object["COSMO-Patch"][element_id];
 	scope.reset();
 	scope.save();
     }
     $scope.default_load = function (i){
-	console.log($scope.json_default);
-	if ($scope.prefix+i in $scope.json_default)
-	    return true;
+	if ($scope.json_default){
+	    if ($scope.prefix+i in $scope.json_default)
+		return true;
+	}
 	return false;
     }
     
@@ -123,8 +120,6 @@ function drop(ev) {
     nodeCopy.id = scope.prefix+ev.target.id;
     console.log(scope.json_object["COSMO-Patch"][data]);
     ev.target.append(nodeCopy);
-    console.log("appended");
-    console.log(scope.default_json)
 
     if (scope.json_object["COSMO-Patch"][data]){
 	if (!scope.json_object["COSMO-Patch"][nodeCopy.id]){
