@@ -6,7 +6,7 @@ var app = angular.module('cosmoApp',  ['ng-sortable']);
 app.constant('ngSortableConfig',
 	     {onEnd: function() {
 		 console.log('default onEnd()');
-	     }})
+	     }});
 app.config( [
     '$compileProvider',
     function( $compileProvider )
@@ -64,6 +64,7 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
 	$scope.selected_effects = {}
 	$scope.arguments = [];    
     }
+    
 });
 
 function allowDrop(ev) {

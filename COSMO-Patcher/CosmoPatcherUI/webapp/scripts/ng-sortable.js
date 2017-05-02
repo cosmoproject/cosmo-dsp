@@ -120,7 +120,7 @@
 							evt.from.insertBefore(evt.item, nextSibling); // revert element
 						}
 						else {
-							items.splice(newIndex, 0, items.splice(oldIndex, 1)[0]);
+							//items.splice(newIndex, 0, items.splice(oldIndex, 1)[0]);
 						}
 
 						scope.$apply();

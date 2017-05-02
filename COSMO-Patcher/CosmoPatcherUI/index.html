@@ -63,8 +63,8 @@
 	      <li>Order effects chain.</li>
 	    </ol>
 	    <div class = "selected-effects" ng-if="selection != -1">
-	      <ul ng-sortable="{animation: 0}" id="selected-effects-list">
-		<li ng-repeat="(udo, arg) in selected_effects" draggable="true">
+	      <ul ng-sortable="{animation: 150}" id="selected-effects-list">
+		<li ng-repeat="(udo, arg) in selected_effects">
 		  {{udo}}: {{arg}}
 		</li>
 	      </ul>
