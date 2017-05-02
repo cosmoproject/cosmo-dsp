@@ -10,6 +10,11 @@ import json
 
 
 def main():
+    '''
+    main method
+    MUST parameterise paths and log level
+    and use these as default values
+    '''
     effects_path = '../../DSP-Library/Effects'
     out_path = 'webapp/scripts/'
     out_file = 'effects.json'
@@ -28,6 +33,8 @@ def main():
                     effects_json[splitext(effect)[0]] = args
                     logging.debug('Arguments: %s', args)
     with open(join(out_path, out_file), 'w+') as out_effects:
+        # could we take a backup in case of exceptions
+        # so that the GUI doesn't fail?
         out_effects.write(json.dumps(effects_json))
         logging.info('%s written to %s successfully.', out_file, out_path)
     return
