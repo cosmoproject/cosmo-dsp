@@ -274,29 +274,31 @@ a {
 }
 
 .container{
-    min-height: 250px;
+    min-height: 200px;
     /*display: table-cell;*/
 }
 
 .container .warehouse{
     display: inline-block;
     justify-content: center;
-    /*border: #b5e853 dotted;*/
     width: 5%;
-    /*margin-bottom: 10px;*/
     float: left;
+    border: 1px #b5e853;
+    padding: 0 5px 0 0;
+    border-style: none dashed none none;
 }
 
 .container .warehouse div{
     align-self: center;
     margin: 10px;
-    cursor: pointer;
 }
 
-.container .warehouse div img{
-    max-width:50px;
-    max-height:50px;
+.control{
+    max-width:75%;
+    max-height:75%;
     cursor: grab;
+    display: block;
+    border: white !important;
 }
 
 .container .playground,
@@ -332,7 +334,7 @@ a {
 
 .playground .info{
     display: table;
-    float: right;
+    float: left;
     margin: 5px;
     width: 28%;
     height: 100%;
@@ -398,7 +400,7 @@ a {
 
 .playground .layout{
     float: left;
-    width: 70%;
+    width: 50%;
 }
 
 .playground .layout a.selected{
@@ -411,20 +413,21 @@ a {
 }
 
 .playground .layout .caption{
+    position: absolute;
     visibility: hidden;
-    width: 50%;
     background-color: white;
     color: black;
     text-align: center;
     border-radius: 6px;
-    padding: 5px 0;
     position: absolute;
     z-index: 1;
     /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
     opacity: 0;
     transition: opacity 1s;
-    left: 12px;
+    font-size: smaller;
+    left: -5px;
     top: -15px;
+    width: 60px;
 }
 
 .playground a:hover .caption {
@@ -441,6 +444,13 @@ a {
 
 .container #trash{
     min-height: 75px;
+    width: 20%;
+    float: right;
+}
+
+.container #trash img{
+    max-width: 75%;
+    max-height: 75%;    
 }
 
 .greenBtn{
@@ -480,4 +490,11 @@ a.greenBtn:hover{
 textarea{
     width: 100%;
     min-height: 200px;
+}
+
+.disable-select {
+  -webkit-user-select: none;  
+  -moz-user-select: none;    
+  -ms-user-select: none;      
+  user-select: none;
 }

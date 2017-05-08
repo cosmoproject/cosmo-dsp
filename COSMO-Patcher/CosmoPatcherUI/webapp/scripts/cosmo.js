@@ -31,26 +31,27 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
 	    JSON.stringify($scope.json_object ["COSMO-Patch"]));
     });
     $timeout();
-    $scope.prefix = 'pot';
     $scope.orderProp = 'ctrlId';
-    $scope.analog_placeholders = range(8);
-    $scope.digital_placeholders = range(8);
+    $scope.analog_placeholders = range(8, 'pot');
+    $scope.digital_placeholders = range(8,'switch');
     $scope.out_json = {};
     $scope.selection = -1;
     $scope.selected_udo = -1;
     $scope.selected_effects = {}
     $scope.arguments = [];    
     $scope.select_controller = function(element_id){
-	$scope.selection = element_id;
-	if (element_id != -1){
-	    channel = $scope.prefix + element_id;
-	    if (!$scope.json_object["COSMO-Patch"][channel]){
-		$scope.json_object["COSMO-Patch"][channel] = {};
+	if (!is_warehouse_element(element_id)){
+	    $scope.selection = element_id;
+	    if (element_id != -1){
+		channel =  element_id;
+		if (!$scope.json_object["COSMO-Patch"][channel]){
+		    $scope.json_object["COSMO-Patch"][channel] = {};
+		}
+		$scope.selected_effects = $scope.json_object["COSMO-Patch"][channel];
+    		console.log($scope.json_object["COSMO-Patch"][channel]);
 	    }
-	    $scope.selected_effects = $scope.json_object["COSMO-Patch"][channel];
-    	    console.log($scope.json_object["COSMO-Patch"][channel]);
+	    $timeout();
 	}
-	$timeout(); //.$scope.$apply();
     }
     $scope.select_udo = function(udo, args){
 	$scope.selected_udo = udo;
@@ -73,7 +74,7 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
     $scope.add_effect = function(arg){
 	console.log($scope.selected_udo + '-' + arg);
 	$scope.selected_effects[$scope.selected_udo] = arg;
-	channel = $scope.prefix + $scope.selection;
+	channel = $scope.selection;
 	$scope.json_object["COSMO-Patch"][channel] = $scope.selected_effects;
 	$scope.save();
     }
@@ -93,12 +94,20 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
     }
     $scope.default_load = function (i){
 	if ($scope.json_default){
-	    if ($scope.prefix+i in $scope.json_default)
+	    if (i in $scope.json_default)
 		return true;
 	}
 	return false;
     }
-    
+    $scope.is_control = function(i){
+	return is_warehouse_element(i);
+    }
+    $scope.control_class = function(i){
+	if (is_warehouse_element(i))
+	    return 'control';
+	return '';
+    }
+	
 });
 
 function allowDrop(ev) {
@@ -118,7 +127,7 @@ function drop(ev) {
 	return;
     var data = ev.dataTransfer.getData("draggedId");
     var nodeCopy = document.getElementById(data).cloneNode(true);
-    nodeCopy.id = scope.prefix+ev.target.id;
+    nodeCopy.id = ev.target.id.slice(1); /* remove the a prefix for the image*/
     console.log(scope.json_object["COSMO-Patch"][data]);
     ev.target.append(nodeCopy);
 
@@ -135,12 +144,13 @@ function drop(ev) {
 	//dataNode.parentNode.removeChild(dataNode);
 	scope.delete_controller(data);
     }
-    scope.select_controller(ev.target.id);
+    scope.select_controller(nodeCopy.id);
 
 }
 
 
 function is_warehouse_element(id) {
+    id = id+'';
     if (id.substring(0,4) != 'ctrl')
 	return false;
     else
@@ -170,11 +180,11 @@ function sortObject(o) {
     return Object.keys(o).sort().reduce((r, k) => (r[k] = o[k], r), {});
 }
 
-function range(n) {
+function range(n, prefix='') {
     if (n<= 0) return null;
-    var arr = [];
+    var arr = ['ctrl_'+prefix];
     for (i = 0; i < n; i++) {
-	arr.push(i);
+	arr.push(prefix+i);
     }
     return arr;
 }

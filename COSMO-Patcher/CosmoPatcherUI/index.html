@@ -8,7 +8,7 @@
     <meta charset="utf-8">
 
     <link rel="stylesheet" href="webapp/stylesheets/base.css" type="text/css" />
-    
+    <script src="webapp/scripts/jquery-3.2.1.min.js"></script>
     <script src="webapp/scripts/angular.min.js"></script>
     <script src="webapp/scripts/Sortable.js"></script>
     <script src="webapp/scripts/ng-sortable.js"></script>
@@ -29,27 +29,27 @@
       <div class = "container">
 	<!--<input ng-model="maxControls" type="number" min="0" max="10" step="1" maxwidth="20px" ng-change="validateMaxControls()">-->
 	<div class="playground">
-	    <!--div id="trash"ondrop="trash(event)" ondragover="allowDrop(event)" draggable="false">
-	      <img draggable="false" src="webapp/images/trash.png">
-	    </div-->
-	  <div class="layout">
-	    <a ng:repeat="i in analog_placeholders" ondrop="drop(event)"
+	<div class="layout">
+	    <a ng-repeat="i in analog_placeholders" ondrop="drop(event)"
 	       ondragover="allowDrop(event)"
-	       id="A{{i}}" class = "placeholder analog"
-	       ng-click="select_controller('A'+i)" ng-class="{selected: selection == 'A'+i}">
-	      <span class="caption">A{{i}} </span>	      
-	      <img id = "{{prefix+i}}" src = "webapp/images/controls/knob.png"
-		   ng-if="default_load(i)"
-		   alt="A_{{i}}"
+	       id="{{'a'+i}}" class = "placeholder analog"
+	       ng-click="select_controller(i)" 
+	        ng-class="{selected: selection == i, 'control': control_class(i)}">
+	      <img id = "{{i}}" src = "webapp/images/controls/knob.png"
+		   ng-if="default_load(i) || is_control(i)"
+		   alt="{{i}}"
 		   draggable="true" ondragstart="drag(event)" />
+	      <span class="caption disable-select" ng-if="is_control(i) == false">{{i}} </span>	      
 	    </a>
-	    <a ng:repeat="i in digital_placeholders" ondrop="drop(event)"
+	    <br/>
+	    <a ng-repeat="i in digital_placeholders" ondrop="drop(event)"
 	       ondragover="allowDrop(event)"
-	       id="D{{i}}" class = "placeholder digital"
-	       ng-click="select_controller('D'+i)" ng-class="{selected: selection == 'D'+i}">
-	      <span class="caption">D{{i}} </span>
-	      <img id = "{{prefix+i}}" src = "webapp/images/controls/knob.png"
-		   ng-if="default_load(i)"
+	       id="{{'a'+i}}" class = "placeholder digital"
+	       ng-click="select_controller(i)"
+	       ng-class="{selected: selection == i, 'control': control_class(i)}">
+	      <span ng-if="is_control(i) == false" class="caption disable-select">{{i}} </span>
+	      <img id = "{{i}}" src = "webapp/images/controls/switch.png"
+		   ng-if="default_load(i) || is_control(i)"
 		   draggable="true" ondragstart="drag(event)" />
 	    </a>	    
 	  </div>
@@ -60,17 +60,23 @@
 	      <li>Order effects chain.</li>
 	    </ol>
 	    <div class = "selected-effects" ng-if="selection != -1">
+	      {{selection}}
 	      <ul ng-sortable="{animation: 150}" id="selected-effects-list">
-		<li ng-repeat="(udo, arg) in selected_effects">
+		<li id = "{{udo}}_{{arg}}"
+		    ng-repeat="(udo, arg) in selected_effects"  draggable="true"
+		    ondragstart="drag(event)">
 		  {{udo}}: {{arg}}
 		</li>
 	      </ul>
 	    </div>
 	  </div>
+	  <div id="trash"ondrop="trash(event)" ondragover="allowDrop(event)" draggable="false">
+	      <img draggable="false" src="webapp/images/trash.png">
+	    </div>
 	</div>
 
 	<div class = "effects" ng-if="selection != -1">
-	  <ul class="udos">
+	  <ul class="udos disable-select">
 	    <li ng-repeat="(udo, args) in cosmoEffects" draggable="false" 
 		ng-click="select_udo(udo, args)"
 		ng-class="{selected: selected_udo == udo}">
@@ -78,7 +84,7 @@
 	    </li>
 	  </ul>	
 	  <ul ng-if="selected_udo != ''" 
-	      class="arguments">
+	      class="arguments disable-select">
 	    <li ng-repeat="arg in arguments" draggable="false"
 		ng-dblclick="add_effect(arg)">
 	      {{arg}}
@@ -87,7 +93,7 @@
 	</div>
 
       <div class="json_export">
-	<textarea ng-model="json_export" >{{json_export}}</textarea>
+	<textarea ng-model="json_export" readonly >{{json_export}}</textarea>
 	<a id = "save" download = "COSMO-patch.json"
 	   class = "greenBtn" ng-href="{{savelink}}" ng-click="save()"> Download </a>
       </div>
