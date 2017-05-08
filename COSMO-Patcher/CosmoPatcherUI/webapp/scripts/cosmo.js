@@ -33,7 +33,8 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
     $timeout();
     $scope.prefix = 'pot';
     $scope.orderProp = 'ctrlId';
-    $scope.placeholders = [0, 1, 2, 3, 4, 5, 6, 7]
+    $scope.analog_placeholders = range(8);
+    $scope.digital_placeholders = range(8);
     $scope.out_json = {};
     $scope.selection = -1;
     $scope.selected_udo = -1;
@@ -167,4 +168,13 @@ function getControllerScope() {
 
 function sortObject(o) {
     return Object.keys(o).sort().reduce((r, k) => (r[k] = o[k], r), {});
+}
+
+function range(n) {
+    if (n<= 0) return null;
+    var arr = [];
+    for (i = 0; i < n; i++) {
+	arr.push(i);
+    }
+    return arr;
 }

@@ -281,21 +281,21 @@ a {
 .container .warehouse{
     display: inline-block;
     justify-content: center;
-    border: #b5e853 dotted;
-    width: 100%;
-    margin-bottom: 10px; 
+    /*border: #b5e853 dotted;*/
+    width: 5%;
+    /*margin-bottom: 10px;*/
+    float: left;
 }
 
 .container .warehouse div{
-    display: inline-block;
     align-self: center;
     margin: 10px;
     cursor: pointer;
 }
 
 .container .warehouse div img{
-    max-width:75px;
-    max-height:75px;
+    max-width:50px;
+    max-height:50px;
     cursor: grab;
 }
 
@@ -313,14 +313,21 @@ a {
 
 .container .playground .placeholder{
     margin: 10px;
-    width: 95px;
-    height: 95px;
+    width: 50px;
+    height: 50px;
     display: inline-block;
     float: none;
-    border: #b5e853 double;
-    border-radius: 50px;
+    border: #b5e853 solid;
     vertical-align: middle;
     overflow: none;
+}
+
+.playground .analog{
+        border-radius: 50px;
+}
+
+.playground .digital{
+        border-radius: 0px;
 }
 
 .playground .info{
@@ -396,6 +403,33 @@ a {
 
 .playground .layout a.selected{
     border: #b5e853 dashed;
+}
+
+.playground .layout a{
+    position: relative;
+    display: inline-block;
+}
+
+.playground .layout .caption{
+    visibility: hidden;
+    width: 50%;
+    background-color: white;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+    opacity: 0;
+    transition: opacity 1s;
+    left: 12px;
+    top: -15px;
+}
+
+.playground a:hover .caption {
+    visibility: visible;
+    opacity: 1;
 }
 
 .container .playground .placeholder img{

@@ -18,46 +18,40 @@
     <div ng-app="cosmoApp" ng-controller="cosmoCtrl">
       <header>
 	<h1>cosmo-patcher
-	  <!--
-	  <span class = "flright">
+	  <!--<span class = "flright">
+	    <label><input type="radio" ng-model="patch.type" value="MIDI">MIDI</label>
 	    <label>
-	      <input type="radio"
-		     ng-model="patch.type"
-		     value="MIDI">
-	      MIDI
+	      <input type="radio" ng-model="patch.type" value="Cosmo" ng-checked="true">cosmo
 	    </label>
-	    <label>
-	      <input type="radio"
-		     ng-model="patch.type"
-		     value="Cosmo"
-		     ng-checked="true">
-	      cosmo
-	    </label>
-	  </span>
--->
+	  </span>-->
 	</h1>
       </header>
       <div class = "container">
 	<!--<input ng-model="maxControls" type="number" min="0" max="10" step="1" maxwidth="20px" ng-change="validateMaxControls()">-->
-
-	<div class = "warehouse">
-  	  <div ng:repeat="cosmoCtrl in cosmoCtrls | orderBy:orderProp">
-	    <img id="{{cosmoCtrl.ctrlId}}" ng-src="{{cosmoCtrl.ctrlImgPath}}" draggable="true" ondragstart="drag(event)"/>
-	  </div>
-	  <div id="trash"ondrop="trash(event)" ondragover="allowDrop(event)" draggable="false">
-	    <img draggable="false" src="webapp/images/trash.png">
-	  </div>
-	</div>
-
 	<div class="playground">
+	    <!--div id="trash"ondrop="trash(event)" ondragover="allowDrop(event)" draggable="false">
+	      <img draggable="false" src="webapp/images/trash.png">
+	    </div-->
 	  <div class="layout">
-	    <a ng:repeat="i in placeholders" ondrop="drop(event)" ondragover="allowDrop(event)"
-	       id="{{i}}" class = "placeholder"
-	       ng-click="select_controller(i)" ng-class="{selected: selection == i}">
+	    <a ng:repeat="i in analog_placeholders" ondrop="drop(event)"
+	       ondragover="allowDrop(event)"
+	       id="A{{i}}" class = "placeholder analog"
+	       ng-click="select_controller('A'+i)" ng-class="{selected: selection == 'A'+i}">
+	      <span class="caption">A{{i}} </span>	      
+	      <img id = "{{prefix+i}}" src = "webapp/images/controls/knob.png"
+		   ng-if="default_load(i)"
+		   alt="A_{{i}}"
+		   draggable="true" ondragstart="drag(event)" />
+	    </a>
+	    <a ng:repeat="i in digital_placeholders" ondrop="drop(event)"
+	       ondragover="allowDrop(event)"
+	       id="D{{i}}" class = "placeholder digital"
+	       ng-click="select_controller('D'+i)" ng-class="{selected: selection == 'D'+i}">
+	      <span class="caption">D{{i}} </span>
 	      <img id = "{{prefix+i}}" src = "webapp/images/controls/knob.png"
 		   ng-if="default_load(i)"
 		   draggable="true" ondragstart="drag(event)" />
-	    </a>
+	    </a>	    
 	  </div>
 	  <div class="info">
 	    <ol ng-if="selection == -1">
