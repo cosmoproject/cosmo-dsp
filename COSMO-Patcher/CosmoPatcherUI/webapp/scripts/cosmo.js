@@ -44,9 +44,6 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
 	    $scope.selection = element_id;
 	    if (element_id != -1){
 		channel =  element_id;
-		if (!$scope.json_object["COSMO-Patch"][channel]){
-		    $scope.json_object["COSMO-Patch"][channel] = {};
-		}
 		$scope.selected_effects = $scope.json_object["COSMO-Patch"][channel];
     		console.log($scope.json_object["COSMO-Patch"][channel]);
 	    }
@@ -72,9 +69,12 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
     }
     $scope.save();
     $scope.add_effect = function(arg){
-	console.log($scope.selected_udo + '-' + arg);
+	if (!$scope.selected_effects) $scope.selected_effects = {};
 	$scope.selected_effects[$scope.selected_udo] = arg;
 	channel = $scope.selection;
+	if (!$scope.json_object["COSMO-Patch"][channel]){
+	    $scope.json_object["COSMO-Patch"][channel] = {};
+	}
 	$scope.json_object["COSMO-Patch"][channel] = $scope.selected_effects;
 	$scope.save();
     }
