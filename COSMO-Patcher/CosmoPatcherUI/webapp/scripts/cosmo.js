@@ -108,9 +108,9 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
     $scope.delete_controller = function (element_id){
 	console.log('Deleting: ' +element_id);
     	var dataNode = document.getElementById(element_id);
-	console.log(dataNode);
-	console.log(dataNode.parentNode);	
-	dataNode.parentNode.removeChild(dataNode);
+	console.log(element_id);
+	delete $scope.json_default[element_id];
+	//console.log($scope.json_default[$scope.selection]);
 	delete $scope.json_object[$scope.patchname][element_id];
 	$scope.reset();
 	$scope.save();
@@ -152,8 +152,6 @@ function drop(ev) {
     var nodeCopy = document.getElementById(data).cloneNode(true);
     nodeCopy.id = ev.target.id.slice(1); /* remove the a prefix for the image*/
     console.log(scope.json_object[scope.patchname][data]);
-    ev.target.append(nodeCopy);
-
     if (scope.json_object[scope.patchname][data]){
 	if (!scope.json_object[scope.patchname][nodeCopy.id]){
 	    scope.json_object[scope.patchname][nodeCopy.id] = {};
@@ -161,13 +159,11 @@ function drop(ev) {
 	scope.json_object[scope.patchname][nodeCopy.id] =
 	    scope.json_object[scope.patchname][data];
 	scope.selected_effects = scope.json_object[scope.patchname][nodeCopy.id];
+	scope.json_default[nodeCopy.id] = '';
     }
     scope.json_object[scope.patchname] =
 	sortObject(scope.json_object[scope.patchname]);
-    //$scope.save();
     if (!is_warehouse_element(data)){
-	//var dataNode = document.getElementById(data);
-	//dataNode.parentNode.removeChild(dataNode);
 	scope.delete_controller(data);
     }
     
@@ -190,8 +186,8 @@ function trash(ev) {
     var data = ev.dataTransfer.getData("draggedId");
     scope = getControllerScope();
     if (!is_warehouse_element(data)){
-	if (scope.analog_placeholders.slice(1).includes(data) ||
-	    scope.digital_placeholders.slice(1).includes(data)){
+	if (scope.analog_placeholders.includes(data) ||
+	    scope.digital_placeholders.includes(data)){
 	    //removing selected controller
 	    scope.delete_controller(data);
 	}else{
@@ -217,7 +213,7 @@ function sortObject(o) {
 
 function range(n, prefix='') {
     if (n<= 0) return null;
-    var arr = ['ctrl_'+prefix];
+    var arr = [];//['ctrl_'+prefix];
     for (i = 0; i < n; i++) {
 	arr.push(prefix+i);
     }
