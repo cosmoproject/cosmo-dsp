@@ -26,12 +26,12 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
     $http.get('webapp/scripts/COSMO-Patch-example.json').then(function(data) {
 	$scope.json_object = angular.fromJson(data.data);
 	$scope.json_export = JSON.stringify($scope.json_object, null, 2);
-	//$scope.json_default = $scope.json_object ["COSMO-Patch"];
 	$scope.json_default = JSON.parse(
-	    JSON.stringify($scope.json_object ["COSMO-Patch"]));
+	    JSON.stringify($scope.json_object [$scope.patchname]));
     });
     $timeout();
     $scope.orderProp = 'ctrlId';
+    $scope.patchname = "COSMO-Patch";
     $scope.analog_placeholders = range(8, 'pot');
     $scope.digital_placeholders = range(8,'switch');
     $scope.out_json = {};
@@ -44,8 +44,8 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
 	    $scope.selection = element_id;
 	    if (element_id != -1){
 		channel =  element_id;
-		$scope.selected_effects = $scope.json_object["COSMO-Patch"][channel];
-    		console.log($scope.json_object["COSMO-Patch"][channel]);
+		$scope.selected_effects = $scope.json_object[$scope.patchname][channel];
+    		console.log($scope.json_object[$scope.patchname][channel]);
 	    }
 	    $timeout();
 	}
@@ -72,10 +72,11 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
 	if (!$scope.selected_effects) $scope.selected_effects = {};
 	$scope.selected_effects[$scope.selected_udo] = arg;
 	channel = $scope.selection;
-	if (!$scope.json_object["COSMO-Patch"][channel]){
-	    $scope.json_object["COSMO-Patch"][channel] = {};
+	if (!$scope.json_object[$scope.patchname][channel]){
+	    $scope.json_object[$scope.patchname][channel] = {};
 	}
-	$scope.json_object["COSMO-Patch"][channel] = $scope.selected_effects;
+	$scope.json_object[$scope.patchname][channel] = $scope.selected_effects;
+	$scope.json_object[$scope.patchname] = sortObject($scope.json_object[$scope.patchname]);
 	$scope.save();
     }
     $scope.reset = function(){
@@ -88,7 +89,7 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
 	console.log('Deleting' +element_id);
     	var dataNode = document.getElementById(element_id);
 	dataNode.parentNode.removeChild(dataNode);
-	delete $scope.json_object["COSMO-Patch"][element_id];
+	delete $scope.json_object[$scope.patchname][element_id];
 	scope.reset();
 	scope.save();
     }
@@ -128,22 +129,26 @@ function drop(ev) {
     var data = ev.dataTransfer.getData("draggedId");
     var nodeCopy = document.getElementById(data).cloneNode(true);
     nodeCopy.id = ev.target.id.slice(1); /* remove the a prefix for the image*/
-    console.log(scope.json_object["COSMO-Patch"][data]);
+    console.log(scope.json_object[scope.patchname][data]);
     ev.target.append(nodeCopy);
 
-    if (scope.json_object["COSMO-Patch"][data]){
-	if (!scope.json_object["COSMO-Patch"][nodeCopy.id]){
-	    scope.json_object["COSMO-Patch"][nodeCopy.id] = {};
+    if (scope.json_object[scope.patchname][data]){
+	if (!scope.json_object[scope.patchname][nodeCopy.id]){
+	    scope.json_object[scope.patchname][nodeCopy.id] = {};
 	}
-	scope.json_object["COSMO-Patch"][nodeCopy.id] =
-	    scope.json_object["COSMO-Patch"][data];
-	scope.selected_effects = scope.json_object["COSMO-Patch"][nodeCopy.id];
+	scope.json_object[scope.patchname][nodeCopy.id] =
+	    scope.json_object[scope.patchname][data];
+	scope.selected_effects = scope.json_object[scope.patchname][nodeCopy.id];
     }
+    scope.json_object[scope.patchname] =
+	sortObject(scope.json_object[scope.patchname]);
+    //$scope.save();
     if (!is_warehouse_element(data)){
 	//var dataNode = document.getElementById(data);
 	//dataNode.parentNode.removeChild(dataNode);
 	scope.delete_controller(data);
     }
+    
     scope.select_controller(nodeCopy.id);
 
 }
