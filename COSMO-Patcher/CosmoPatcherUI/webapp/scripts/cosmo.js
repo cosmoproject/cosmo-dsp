@@ -15,9 +15,6 @@ app.config( [
     }
 ]);
 app.controller('cosmoCtrl', function($scope, $http, $timeout) {
-    $http.get('webapp/scripts/cosmo-controls.json').then(function(data) {
-	$scope.cosmoCtrls = angular.fromJson(data.data);
-    });
     $http.get('webapp/scripts/effects.json').then(function(data) {
 	$scope.cosmoEffects = angular.fromJson(data.data);
 	console.log(data)
