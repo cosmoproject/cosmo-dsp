@@ -38,7 +38,7 @@
 		   draggable="true" ondragstart="drag(event)" />
 	      <span class="caption disable-select" ng-if="is_control(i) == false">{{i}} </span>	      
 	    </a>
-	    <br/>
+	    <br/><!--
 	    <a ng-repeat="i in digital_placeholders" ondrop="drop(event)"
 	       ondragover="allowDrop(event)"
 	       id="{{'a'+i}}" class = "placeholder digital"
@@ -48,11 +48,11 @@
 	      <img id = "{{i}}" src = "webapp/images/controls/switch.png"
 		   ng-if="default_load(i) || is_control(i)"
 		   draggable="true" ondragstart="drag(event)" />
-	    </a>	    
+	    </a>-->	    
 	  </div>
 	  <div class="info">
 	    <ol ng-if="selection == -1">
-	      <li>Click on an analog (circle) or a digital (square) input channel.</li>
+	      <li>Click on an input channel.</li>
 	      <li>Click on an effect to select and <em>double click on an argument</em> to map the effect to the input channel.</li>
 	      <li>Drag and drop controllers between the channels to reassign the effects to a different input channel.</li>
 	      <li>Drag and drop into the bin to delete a controller or a mapped effect. </li>
