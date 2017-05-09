@@ -6,10 +6,10 @@ echo "effects collected, updated"
 #python -m SimpleHTTPServer 8888 &
 # CGI webserver if we also want to run python functions
 # from the site
-python -m CGIHTTPServer 8888
+python -m CGIHTTPServer 8888 &
 echo "web server started as a background process"
 # save the webserver pid
 SIMPLE_SERVER_PID=$!
 echo "web server process id: "$SIMPLE_SERVER_PID
 # open the design page
-xdg-open http://localhost:8888
+echo "Go to http://cosmo1.local:8888/ or find the correct IP address of the pi and replace."
