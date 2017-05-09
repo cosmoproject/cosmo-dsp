@@ -1,9 +1,0 @@
-[{
-	"ctrlId": "ctrl1",
-	"ctrlName": "knob",
-	"ctrlImgPath": "webapp/images/controls/knob.png"
-},{
-	"ctrlId": "ctrl2",
-	"ctrlName": "slider",
-	"ctrlImgPath": "webapp/images/controls/slider.png"
-}]

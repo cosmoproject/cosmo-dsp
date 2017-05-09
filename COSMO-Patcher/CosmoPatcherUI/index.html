@@ -8,33 +8,30 @@
     <meta charset="utf-8">
 
     <link rel="stylesheet" href="webapp/stylesheets/base.css" type="text/css" />
-    <script src="webapp/scripts/jquery-3.2.1.min.js"></script>
     <script src="webapp/scripts/angular.min.js"></script>
-    <script src="webapp/scripts/Sortable.js"></script>
-    <script src="webapp/scripts/ng-sortable.js"></script>
     <script src="webapp/scripts/cosmo.js"></script>
   </head>
   <body>
     <div ng-app="cosmoApp" ng-controller="cosmoCtrl">
       <header>
 	<h1>cosmo-patcher
-	  <!--<span class = "flright">
-	    <label><input type="radio" ng-model="patch.type" value="MIDI">MIDI</label>
-	    <label>
-	      <input type="radio" ng-model="patch.type" value="Cosmo" ng-checked="true">cosmo
-	    </label>
-	  </span>-->
+	  <span class = "flright">
+	    <!--<label><input type="radio" ng-model="patch.type" value="MIDI">MIDI</label>
+		<label>
+		  <input type="radio" ng-model="patch.type" value="Cosmo" ng-checked="true">cosmo
+		</label>-->
+	    <a href="#" ng-click="select_controller(-1)" >?</a>
+	  </span>
 	</h1>
       </header>
-      <div class = "container">
-	<!--<input ng-model="maxControls" type="number" min="0" max="10" step="1" maxwidth="20px" ng-change="validateMaxControls()">-->
+      <div class = "container disable-select">
 	<div class="playground">
-	<div class="layout">
+	  <div class="layout">
 	    <a ng-repeat="i in analog_placeholders" ondrop="drop(event)"
 	       ondragover="allowDrop(event)"
 	       id="{{'a'+i}}" class = "placeholder analog"
 	       ng-click="select_controller(i)" 
-	        ng-class="{selected: selection == i, 'control': control_class(i)}">
+	       ng-class="{selected: selection == i, 'control': control_class(i)}">
 	      <img id = "{{i}}" src = "webapp/images/controls/knob.png"
 		   ng-if="default_load(i) || is_control(i)"
 		   alt="{{i}}"
@@ -55,13 +52,15 @@
 	  </div>
 	  <div class="info">
 	    <ol ng-if="selection == -1">
-	      <li>Drag and drop controllers.</li>
-	      <li>Select an UDO and double click on an argument to map effects.</li>
-	      <li>Order effects chain.</li>
+	      <li>Click on an analog (circle) or a digital (square) input channel.</li>
+	      <li>Click on an effect to select and <em>double click on an argument</em> to map the effect to the input channel.</li>
+	      <li>Drag and drop controllers between the channels to reassign the effects to a different input channel.</li>
+	      <li>Drag and drop into the bin to delete a controller or a mapped effect. </li>
+	      <li>Download the JSON mapping file. </li>
 	    </ol>
-	    <div class = "selected-effects" ng-show="selection != -1">
+	    <div class = "selected-effects" ng-if="selection != -1">
 	      {{selection}}
-	      <ul ng-sortable="{animation: 150}" id="{{selection}}_effects-list">
+	      <ul id="{{selection}}_effects-list">
 		<li id = "{{selection}}_{{udo}}_{{arg}}"
 		    ng-repeat="(udo, arg) in selected_effects"  draggable="true"
 		    ondragstart="drag(event)">
@@ -71,8 +70,8 @@
 	    </div>
 	  </div>
 	  <div id="trash"ondrop="trash(event)" ondragover="allowDrop(event)" draggable="false">
-	      <img draggable="false" src="webapp/images/trash.png">
-	    </div>
+	    <img draggable="false" src="webapp/images/trash.png" alt="trash" />
+	  </div>
 	</div>
 
 	<div class = "effects" ng-if="selection != -1">
@@ -92,11 +91,11 @@
 	  </ul>
 	</div>
 
-      <div class="json_export">
-	<textarea ng-model="json_export" readonly >{{json_export}}</textarea>
-	<a id = "save" download = "COSMO-patch.json"
-	   class = "greenBtn" ng-href="{{savelink}}" ng-click="save()"> Download </a>
-      </div>
+	<div class="json_export">
+	  <textarea ng-model="json_export" readonly >{{json_export}}</textarea>
+	  <a id = "save" download = "COSMO-patch.json"
+	     class = "greenBtn" ng-href="{{savelink}}" ng-click="save()"> Download </a>
+	</div>
 
       </div>
 

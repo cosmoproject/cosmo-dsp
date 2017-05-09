@@ -2,11 +2,11 @@
  *cosmo.js
  */
 
-var app = angular.module('cosmoApp',  ['ng-sortable']);
-app.constant('ngSortableConfig',
+var app = angular.module('cosmoApp',  [/*'ng-sortable'*/]);
+/*app.constant('ngSortableConfig',
 	     {onEnd: function() {
 		 console.log('default onEnd()');
-	     }});
+	     }});*/
 app.config( [
     '$compileProvider',
     function( $compileProvider )
@@ -14,7 +14,6 @@ app.config( [
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|file|blob):/);
     }
 ]);
-//    .constant('ngSortableConfig'
 app.controller('cosmoCtrl', function($scope, $http, $timeout) {
     $http.get('webapp/scripts/cosmo-controls.json').then(function(data) {
 	$scope.cosmoCtrls = angular.fromJson(data.data);

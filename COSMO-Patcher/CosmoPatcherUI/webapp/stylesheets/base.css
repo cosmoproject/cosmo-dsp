@@ -40,6 +40,7 @@ li {
 }
 .info ol li{
     text-align: left;
+    font-size: smaller;
 }
 /* Header, <header>
    header   - container
@@ -82,6 +83,18 @@ header h2 {
     font-size: 18px;
     font-weight: 300;
     color: #666;
+}
+
+header h1 a{
+    text-decoration: none;
+    /*border: 3px #638a00;*/
+    border-radius: 50px;
+    height: 40px;
+    width: 40px;
+    display: inline-block;
+    text-align: center;
+    background: #27292a;
+    color: #b5e853;
 }
 
 #downloads .btn {
@@ -303,8 +316,8 @@ a {
 
 .container .playground,
 .container .effects{
-    display: inline-block;
-    margin: auto;
+    display: flex;
+    margin: auto auto 10px auto;
     width: 100%;
     min-height: 250px;
     border: #b5e853 dotted;
@@ -333,12 +346,14 @@ a {
 }
 
 .playground .info{
-    display: table;
-    float: left;
+    display: flex;
+    align-self: center;
+    align-contents: center;
     margin: 5px;
     width: 28%;
     height: 100%;
     text-align: center;
+    flex-direction: column;
 }
 
 .udos{
@@ -388,7 +403,7 @@ a {
 	       
 }
 
-.playground .info span{
+/*.playground .info ul li{
     display: table-cell;
     vertical-align: middle;
     font-size: large;
@@ -396,10 +411,9 @@ a {
     font-size: x-large;
     color: lightgrey;
     font-family: monospace;
-}
+}*/
 
 .playground .layout{
-    float: left;
     width: 50%;
 }
 
@@ -443,14 +457,17 @@ a {
 }
 
 .container #trash{
-    min-height: 75px;
     width: 20%;
-    float: right;
+    display: flex;
+    height: 100%;
+    align-self: flex-end;
+    flex-direction: column;
 }
 
 .container #trash img{
-    max-width: 75%;
-    max-height: 75%;    
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 .greenBtn{
