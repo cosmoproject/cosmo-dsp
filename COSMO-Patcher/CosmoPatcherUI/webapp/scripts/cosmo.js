@@ -66,12 +66,14 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
 	    $scope.savelink  = window.webkitURL.createObjectURL(textFileAsBlob);
 	else*/
 	$scope.savelink = window.URL.createObjectURL(textFileAsBlob);
+	$timeout();
     }
     $scope.save();
     $scope.add_effect = function(arg){
 	if (!$scope.selected_effects) $scope.selected_effects = {};
 	$scope.selected_effects[$scope.selected_udo] = arg;
-	channel = $scope.selection;
+	channel = $scope.selection;	//add image
+	$scope.json_default[channel] = '';
 	if (!$scope.json_object[$scope.patchname][channel]){
 	    $scope.json_object[$scope.patchname][channel] = {};
 	}
@@ -79,6 +81,24 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
 	$scope.json_object[$scope.patchname] = sortObject($scope.json_object[$scope.patchname]);
 	$scope.save();
     }
+    $scope.delete_effect = function(element_id){
+	console.log('Deleting effect: ' +element_id);
+	channel = $scope.selection;
+	//the list element is named like channel_effect_arg
+	effect_key = element_id.split("_")[1];
+	delete $scope.selected_effects[effect_key];
+	console.log($scope.selected_effects);
+	delete $scope.json_object[$scope.patchname][channel][effect_key];
+	$scope.save();
+	if ( !Object.keys($scope.selected_effects).length > 0) {
+	    //if the controller has no keys, also delete the controller
+	    console.log('Number of children: '+ $scope.selected_effects.length);
+	    console.log('Deleting controller: '+channel);
+	    $scope.delete_controller(channel);
+	}
+	$timeout();
+    }
+
     $scope.reset = function(){
 	scope.select_controller(-1);
 	$scope.selected_udo = -1;
@@ -86,12 +106,14 @@ app.controller('cosmoCtrl', function($scope, $http, $timeout) {
 	$scope.arguments = [];    
     }
     $scope.delete_controller = function (element_id){
-	console.log('Deleting' +element_id);
+	console.log('Deleting: ' +element_id);
     	var dataNode = document.getElementById(element_id);
+	console.log(dataNode);
+	console.log(dataNode.parentNode);	
 	dataNode.parentNode.removeChild(dataNode);
 	delete $scope.json_object[$scope.patchname][element_id];
-	scope.reset();
-	scope.save();
+	$scope.reset();
+	$scope.save();
     }
     $scope.default_load = function (i){
 	if ($scope.json_default){
@@ -164,12 +186,20 @@ function is_warehouse_element(id) {
 
 function trash(ev) {
     ev.preventDefault();
+    ev.stopPropagation();
     var data = ev.dataTransfer.getData("draggedId");
+    scope = getControllerScope();
     if (!is_warehouse_element(data)){
-	scope = getControllerScope();
-	scope.delete_controller(data);
+	if (scope.analog_placeholders.slice(1).includes(data) ||
+	    scope.digital_placeholders.slice(1).includes(data)){
+	    //removing selected controller
+	    scope.delete_controller(data);
+	}else{
+	    //removing selected effects
+	    scope.delete_effect(data);
+	}
     }else{
-	console.log('not removing, control object');
+	    console.log('not removing, control object');
     }
 }
 

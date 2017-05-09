@@ -59,10 +59,10 @@
 	      <li>Select an UDO and double click on an argument to map effects.</li>
 	      <li>Order effects chain.</li>
 	    </ol>
-	    <div class = "selected-effects" ng-if="selection != -1">
+	    <div class = "selected-effects" ng-show="selection != -1">
 	      {{selection}}
-	      <ul ng-sortable="{animation: 150}" id="selected-effects-list">
-		<li id = "{{udo}}_{{arg}}"
+	      <ul ng-sortable="{animation: 150}" id="{{selection}}_effects-list">
+		<li id = "{{selection}}_{{udo}}_{{arg}}"
 		    ng-repeat="(udo, arg) in selected_effects"  draggable="true"
 		    ondragstart="drag(event)">
 		  {{udo}}: {{arg}}
