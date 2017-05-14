@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cosmo Patcher</title>
+    <meta name="description" content="Cosmo Interface Configuration" />
+    <meta name="author" content="Gytha Ogg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="webapp/stylesheets/base.css" type="text/css" />
+    <script src="webapp/scripts/angular.min.js"></script>
+    <script src="webapp/scripts/cosmo.js"></script>
+  </head>
+  <body>
+    <div ng-app="cosmoApp" ng-controller="cosmoCtrl">
+      <header>
+	<h1>cosmo-patcher
+	  <span class = "flright">
+	    <!--<label><input type="radio" ng-model="patch.type" value="MIDI">MIDI</label>
+		<label>
+		  <input type="radio" ng-model="patch.type" value="Cosmo" ng-checked="true">cosmo
+		</label>-->
+	    <a href="#" ng-click="select_controller(-1)" >?</a>
+	  </span>
+	</h1>
+      </header>
+      <div class = "container disable-select">
+	<div class="playground">
+	  <div class="layout">
+	    <a ng-repeat="i in analog_placeholders" ondrop="drop(event)"
+	       ondragover="allowDrop(event)"
+	       id="{{'a'+i}}" class = "placeholder analog"
+	       ng-click="select_controller(i)" 
+	       ng-class="{selected: selection == i, 'control': control_class(i)}">
+	      <img id = "{{i}}" src = "webapp/images/controls/knob.png"
+		   ng-if="default_load(i) || is_control(i)"
+		   alt="{{i}}"
+		   draggable="true" ondragstart="drag(event)" />
+	      <span class="caption disable-select" ng-if="is_control(i) == false">{{i}} </span>	      
+	    </a>
+	    <br/><!--
+	    <a ng-repeat="i in digital_placeholders" ondrop="drop(event)"
+	       ondragover="allowDrop(event)"
+	       id="{{'a'+i}}" class = "placeholder digital"
+	       ng-click="select_controller(i)"
+	       ng-class="{selected: selection == i, 'control': control_class(i)}">
+	      <span ng-if="is_control(i) == false" class="caption disable-select">{{i}} </span>
+	      <img id = "{{i}}" src = "webapp/images/controls/switch.png"
+		   ng-if="default_load(i) || is_control(i)"
+		   draggable="true" ondragstart="drag(event)" />
+	    </a>-->	    
+	  </div>
+	  <div class="info">
+	    <ol ng-if="selection == -1">
+	      <li>Click on an input channel.</li>
+	      <li>Click on an effect to select and <em>double click on an argument</em> to map the effect to the input channel.</li>
+	      <li>Drag and drop controllers between the channels to reassign the effects to a different input channel.</li>
+	      <li>Drag and drop into the bin to delete a controller or a mapped effect. </li>
+	      <li>Download the JSON mapping file. </li>
+	    </ol>
+	    <div class = "selected-effects" ng-if="selection != -1">
+	      {{selection}}
+	      <ul id="{{selection}}_effects-list">
+		<li id = "{{selection}}_{{udo}}_{{arg}}"
+		    ng-repeat="(udo, arg) in selected_effects"  draggable="true"
+		    ondragstart="drag(event)">
+		  {{udo}}: {{arg}}
+		</li>
+	      </ul>
+	    </div>
+	  </div>
+	  <div id="trash"ondrop="trash(event)" ondragover="allowDrop(event)" draggable="false">
+	    <img draggable="false" src="webapp/images/trash.png" alt="trash" />
+	  </div>
+	</div>
+
+	<div class = "effects" ng-if="selection != -1">
+	  <ul class="udos disable-select">
+	    <li ng-repeat="(udo, args) in cosmoEffects" draggable="false" 
+		ng-click="select_udo(udo, args)"
+		ng-class="{selected: selected_udo == udo}">
+	      {{udo}}
+	    </li>
+	  </ul>	
+	  <ul ng-if="selected_udo != ''" 
+	      class="arguments disable-select">
+	    <li ng-repeat="arg in arguments" draggable="false"
+		ng-dblclick="add_effect(arg)">
+	      {{arg}}
+	    </li>
+	  </ul>
+	</div>
+
+	<div class="json_export">
+	  <textarea ng-model="json_export" readonly >{{json_export}}</textarea>
+	  <a id = "save" download = "COSMO-patch.json"
+	     class = "greenBtn" ng-href="{{savelink}}" ng-click="save()"> Download </a>
+	</div>
+
+      </div>
+
+    </div>
+  </body>
+</html>

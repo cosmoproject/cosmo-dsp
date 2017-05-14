@@ -14,6 +14,22 @@ def is_number(s):
         return False
 
 
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        pass
+
+    try:
+        import unicodedata
+        unicodedata.numeric(s)
+        return True
+    except (TypeError, ValueError):
+        pass
+    return False
+
+
 class CosmoPatcherGraph(nx.DiGraph):
     """ Converter of JSON-based conroller mappings (.json) to Csound file (.csd)
 
@@ -54,11 +70,11 @@ class CosmoPatcherGraph(nx.DiGraph):
             lastFX = 'In'
             self.add_node('In', type='UDO')
             for ctrl in controllers:
-                # controllers to nodes, add 'gk' for Csound code
-                if is_number(ctrl):
-                    ctrl_var = ctrl
-                else:
+                # controllers to nodes, add 'gk' non numbers
+                if not is_number(ctrl):
                     ctrl_var = "gk%s" % ctrl
+                else:
+                    ctrl_var = str(ctrl)
                 self.add_node(ctrl_var, type='ctrl')
                 for fx in self.jdata[self.controller_type][ctrl]:
                     # udos to nodes
@@ -213,6 +229,7 @@ class CosmoPatcherGraph(nx.DiGraph):
         print self.nodes(data=True)
         print udos
         return
+
 
     def export_patch(self, json_file, csd_file_name, export_path):
         print 'Load Json file ' + json_file

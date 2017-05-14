@@ -1,6 +1,6 @@
 /********************************************************
 
-	Wobble.csd
+	Volume.csd
 	Author: Alex Hofmann
 	COSMO UDO adaptation: Bernt Isak Wærstad
 

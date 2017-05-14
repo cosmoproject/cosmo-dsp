@@ -37,7 +37,7 @@ markupTable = tabulate(udos, headers = head, tablefmt = 'pipe')
 print markupTable
 
 # export Markup table into README.me file
-filename = os.path.join(fileDir, '../Effects/README.md')
+filename = os.path.join(fileDir, '../../DSP-Library/README.md')
 with open(filename, 'w+') as readme_file:
     readme_file.write('## List of supported effect UDOs: \n')
     readme_file.write(markupTable)
