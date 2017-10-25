@@ -1,7 +1,7 @@
 /********************************************************
 
 	Reverse.csd
-	Author: Alex Hofmann
+	Author: unknown (Iain?)
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
 	Arguments: Reverse time, Dry/wet mix
@@ -9,7 +9,7 @@
 
 	Reverse time: 0.1s - 3s
 	Dry/wet mix: 0% - 100%
-	
+
 	Description:
 	A reverse effect
 

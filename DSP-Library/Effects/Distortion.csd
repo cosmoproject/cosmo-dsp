@@ -1,7 +1,7 @@
 /********************************************************
 
 	Distortion.csd
-	Author: Alex Hofmann
+	Author: Unknown (Iain?)
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
 	Arguments: Level, Drive, Tone, Dry/wet mix
@@ -57,7 +57,7 @@ opcode	Distortion, a, akkkk
 
 	aOut ntrpol ain, (aDist*klevel*kGainComp1), kmix  ;RESCALE WITH USER LEVEL CONTROL AND GAIN COMPENSATION
 
-	xout aOut				
+	xout aOut
 endop
 
 opcode	Distortion, a, akk
@@ -133,7 +133,7 @@ opcode	Distortion, aa, aakkkk
 	aOutL ntrpol ainL, (aDistL*klevel*kGainComp1), kmix  ;RESCALE WITH USER LEVEL CONTROL AND GAIN COMPENSATION
 	aOutR ntrpol ainR, (aDistR*klevel*kGainComp1), kmix  ;RESCALE WITH USER LEVEL CONTROL AND GAIN COMPENSATION
 
-	xout aOutL, aOutR				
+	xout aOutL, aOutR
 endop
 
 opcode	Distortion, aa, aakk
@@ -149,7 +149,7 @@ opcode	Distortion, aa, aak
 
 	ainL,ainR,klevel	xin
 
-	aOutL,aOutR Distortion ainL,ainR, klevel, 0.5, 0.6, 1 
+	aOutL,aOutR Distortion ainL,ainR, klevel, 0.5, 0.6, 1
 
 	xout	aOutL,aOutR
 endop
