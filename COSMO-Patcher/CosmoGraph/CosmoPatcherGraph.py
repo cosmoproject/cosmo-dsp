@@ -53,6 +53,10 @@ class CosmoPatcherGraph(nx.DiGraph):
                 elif 'COSMO-Patch' in keys:
                     print 'COSMO'
                     self.controller_type = 'COSMO-Patch'
+                elif 'CsOptions' in keys:
+                    print 'found CsOptions'
+                    self.Csoptions = keys
+                    print self.Csoptions
                 else:
                     print 'invalid'
                     sys.exit('Json input not valid. '
@@ -197,15 +201,37 @@ class CosmoPatcherGraph(nx.DiGraph):
                                     + argsSt + '\n'
                                     )
 
+
+    def generate_CsOptions(self):
+
+        from sys import platform
+        if platform == "linux" or platform == "linux2":
+            print 'linux'
+            csOptions = self.Csoptions[1]['Linux']
+        elif platform == "darwin":
+            print 'OS X'
+            csOptions = self.Csoptions[1]['Mac']
+        elif platform == "win32":
+             print 'Windows...'
+             csOptions = self.Csoptions[1]['Win']
+
+        beginCsoundFile ="<CsoundSynthesizer> \n <CsOptions> \n"
+        closeOptionsCsoundFile = "\n</CsOptions>\n"
+        beginInstrDef = "<CsInstruments>\n \n sr = 44100 \n ksmps = 64 \n 0dbfs	= 1 \n nchnls = 2 \n"
+        CsFileIntro = str(beginCsoundFile + csOptions + closeOptionsCsoundFile + beginInstrDef)
+        print CsFileIntro
+        return CsFileIntro
+
     def write_csd(self, csd_file_name):
         fileDir = os.path.dirname(__file__)
         filename = os.path.join(fileDir, '../' + csd_file_name)
         with open(filename, 'w+') as csd_file:
-            with open(os.path.join(fileDir, 'Intro.csd')) as intro:
+            #with open(os.path.join(fileDir, 'Intro.csd')) as intro:
                 with open(os.path.join(fileDir,
                                        'InstrumentDefBegin.csd')) as instrDef:
                     with open(os.path.join(fileDir, 'Outro.csd')) as outro:
-                        csd_file.write(intro.read())
+            #            csd_file.write(intro.read())
+                        csd_file.write(self.generate_CsOptions())
                         csd_file.write('\t#include "' + self.include_dsp_path
                                        + 'Includes/cosmo_utilities.inc"\n\n')
                         for idx, item in enumerate(self.csnd_code_includes):

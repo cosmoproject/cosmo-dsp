@@ -1,0 +1,27 @@
+{"CsOptions" : {
+    "Linux" : "-odac -iadc -Ma -m0d ",
+    "Mac" : "-odac -iadc -Ma -coremidi ",
+    "Win" : "-odac -iadc -Ma"
+    },
+
+  "MIDI-Patch": {
+    "CC21_CH1":
+        {
+            "Wobble": "Frequency",
+            "RandDelay": "Feedback"
+        },
+    "CC22_CH1":
+        {
+            "Chorus": "Dry/wet mix"
+        },
+    "CC23_CH1":
+        {
+            "Reverb": "Dry/wet mix",
+            "RandDelay": "Range"
+        },
+    "CC24_CH1":
+        {
+            "Volume": "Level"
+        }
+    }
+}
