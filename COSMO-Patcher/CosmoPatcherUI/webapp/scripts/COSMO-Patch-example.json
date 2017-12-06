@@ -1,0 +1,17 @@
+{"COSMO-Patch": {
+	"pot0":
+		{
+			"Lowpass": "Cutoff",
+			"RandDelay": "Feedback"
+		},
+	"pot1":
+		{
+			"RandDelay": "Dry/wet mix"
+		},	
+	"pot2":
+		{
+			"Reverb": "Dry/wet mix",
+			"RandDelay": "Range"
+		}
+	}
+}

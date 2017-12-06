@@ -1,2 +1,2 @@
-python JsonToCsd.py COSMO-Patch.json workfile.csd
-csound workfile.csd
+python JsonToCsd.py COSMO-Patch.json COSMO-Patch.csd
+csound COSMO-Patch.csd
