@@ -5,6 +5,7 @@ import networkx as nx
 import string
 from collections import OrderedDict
 from subprocess import call
+from sys import platform
 
 def is_number(s):
     try:
@@ -210,11 +211,18 @@ class CosmoPatcherGraph(nx.DiGraph):
 
 
     def generate_CsOptions(self):
-
-        from sys import platform
+        userDeviceName = 'cosmo1' # TODO read out from MIDI Patcher..
         if platform == "linux" or platform == "linux2":
             print 'linux'
-            csOptions = self.Csoptions[1]['Linux']
+
+            system_details = os.uname()
+            if system_details[4] == 'x86_64':
+                print 'x86_64'
+                csOptions = self.Csoptions[1]['Linux']
+            elif system_details[4] == 'armv7l' & system_details[1] == userDeviceName:
+                print system_details[1]
+                csOptions = self.Csoptions[1][system_details[1]]
+
         elif platform == "darwin":
             print 'OS X'
             csOptions = self.Csoptions[1]['Mac']
