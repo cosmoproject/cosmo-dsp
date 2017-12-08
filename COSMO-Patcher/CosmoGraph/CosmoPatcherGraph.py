@@ -240,10 +240,8 @@ class CosmoPatcherGraph(nx.DiGraph):
             CsFileIntro = str(beginCsoundFile + csOptions + closeOptionsCsoundFile + beginInstrDef)
             print CsFileIntro
             return CsFileIntro
-        else
-            print("Warning: no CsOptions given by user,
-                    using Csound default options, which might generate
-                    a 'test.wav' file.")
+        else:
+            print("Warning: no CsOptions given by user, using Csound default options, which might generate a 'test.wav' file.")
             return
 
     def write_csd(self, csd_file_name):
