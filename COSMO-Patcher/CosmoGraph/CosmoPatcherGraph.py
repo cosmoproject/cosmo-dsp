@@ -211,12 +211,16 @@ class CosmoPatcherGraph(nx.DiGraph):
 
 
     def generate_CsOptions(self):
-        userDeviceName = 'cosmo1' # TODO read out from MIDI Patcher..
+
+        #print self.Csoptions[1]
+        userDeviceNamesGiven = [] # TODO read out from MIDI Patcher..
+        [userDeviceNamesGiven.append(uDN) for uDN in self.Csoptions[1]]
+        print userDeviceNamesGiven
 
         system_details = os.uname()
         deviceName = system_details[1]
 
-        if deviceName == userDeviceName:
+        if deviceName in userDeviceNamesGiven:
             print system_details[1]
             csOptions = self.Csoptions[1][system_details[1]]
         else:
