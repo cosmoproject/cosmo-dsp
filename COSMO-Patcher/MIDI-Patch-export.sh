@@ -1,1 +1,1 @@
-python JsonToCsd.py MIDI-Patch.json MyCOSMO.csd -e "../../MyCOSMO/"
+python JsonToCsd.py MIDI-Patch_CsoundOptions.json MyCOSMO.csd -e "../../MyCOSMO/"

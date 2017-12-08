@@ -1,0 +1,24 @@
+{"CsOptions" : {
+    "Linux" : "-odac -iadc -Ma -m0d ",
+    "Mac" : "-odac -iadc -Ma -+rtmidi=coremidi",
+    "Win" : "-odac -iadc -Ma",
+    "cosmo1" :  "-odac -iadc -Ma --realtime"
+    },
+
+	"COSMO-Patch": {
+	"pot0":
+		{
+			"Lowpass": "Cutoff",
+			"RandDelay": "Feedback"
+		},
+	"pot1":
+		{
+			"RandDelay": "Dry/wet mix"
+		},
+	"pot2":
+		{
+			"Reverb": "Dry/wet mix",
+			"RandDelay": "Range"
+		}
+	}
+}

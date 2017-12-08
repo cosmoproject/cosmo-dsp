@@ -1,2 +1,2 @@
-python JsonToCsd.py MIDI-Patch.json workfile.csd
+python JsonToCsd.py MIDI-Patch_CsoundOptions.json workfile.csd
 csound workfile.csd

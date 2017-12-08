@@ -211,7 +211,7 @@ class CosmoPatcherGraph(nx.DiGraph):
 
 
     def generate_CsOptions(self):
-        if self.Csoptions:
+        if hasattr(self, 'Csoptions'):
             #print self.Csoptions[1]
             userDeviceNamesGiven = [] # TODO read out from MIDI Patcher..
             [userDeviceNamesGiven.append(uDN) for uDN in self.Csoptions[1]]
@@ -233,16 +233,16 @@ class CosmoPatcherGraph(nx.DiGraph):
                 elif platform == "win32":
                     print 'Windows...'
                     csOptions = self.Csoptions[1]['Win']
-
-            beginCsoundFile ="<CsoundSynthesizer> \n <CsOptions> \n"
-            closeOptionsCsoundFile = "\n</CsOptions>\n"
-            beginInstrDef = "<CsInstruments>\n \n sr = 44100 \n ksmps = 64 \n 0dbfs	= 1 \n nchnls = 2 \n"
-            CsFileIntro = str(beginCsoundFile + csOptions + closeOptionsCsoundFile + beginInstrDef)
-            print CsFileIntro
-            return CsFileIntro
         else:
             print("Warning: no CsOptions given by user, using Csound default options, which might generate a 'test.wav' file.")
-            return
+            csOptions = "\n"
+
+        beginCsoundFile ="<CsoundSynthesizer> \n <CsOptions> \n"
+        closeOptionsCsoundFile = "\n</CsOptions>\n"
+        beginInstrDef = "<CsInstruments>\n \n sr = 44100 \n ksmps = 64 \n 0dbfs	= 1 \n nchnls = 2 \n"
+        CsFileIntro = str(beginCsoundFile + csOptions + closeOptionsCsoundFile + beginInstrDef)
+        print CsFileIntro
+        return CsFileIntro
 
     def write_csd(self, csd_file_name):
         fileDir = os.path.dirname(__file__)
