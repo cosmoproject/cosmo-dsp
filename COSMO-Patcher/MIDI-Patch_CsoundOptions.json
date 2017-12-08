@@ -1,7 +1,9 @@
 {"CsOptions" : {
     "Linux" : "-odac -iadc -Ma -m0d ",
-    "Mac" : "-odac -iadc -Ma -coremidi ",
-    "Win" : "-odac -iadc -Ma"
+    "Mac" : "-odac -iadc -Ma -+rtmidi=coremidi",
+    "Win" : "-odac -iadc -Ma",
+    "cosmo1" :  "-odac -iadc -Ma --realtime"
+
     },
 
   "MIDI-Patch": {
