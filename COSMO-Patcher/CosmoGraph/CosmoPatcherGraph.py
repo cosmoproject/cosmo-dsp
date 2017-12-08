@@ -219,7 +219,7 @@ class CosmoPatcherGraph(nx.DiGraph):
             if system_details[4] == 'x86_64':
                 print 'x86_64'
                 csOptions = self.Csoptions[1]['Linux']
-            elif system_details[4] == 'armv7l' & system_details[1] == userDeviceName:
+            elif system_details[4] == 'armv7l' and system_details[1] == userDeviceName:
                 print system_details[1]
                 csOptions = self.Csoptions[1][system_details[1]]
 
