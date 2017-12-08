@@ -211,35 +211,40 @@ class CosmoPatcherGraph(nx.DiGraph):
 
 
     def generate_CsOptions(self):
+        if self.Csoptions:
+            #print self.Csoptions[1]
+            userDeviceNamesGiven = [] # TODO read out from MIDI Patcher..
+            [userDeviceNamesGiven.append(uDN) for uDN in self.Csoptions[1]]
+            print userDeviceNamesGiven
 
-        #print self.Csoptions[1]
-        userDeviceNamesGiven = [] # TODO read out from MIDI Patcher..
-        [userDeviceNamesGiven.append(uDN) for uDN in self.Csoptions[1]]
-        print userDeviceNamesGiven
+            system_details = os.uname()
+            deviceName = system_details[1]
 
-        system_details = os.uname()
-        deviceName = system_details[1]
+            if deviceName in userDeviceNamesGiven:
+                print system_details[1]
+                csOptions = self.Csoptions[1][system_details[1]]
+            else:
+                if platform == "linux" or platform == "linux2":
+                    print 'linux'
+                    csOptions = self.Csoptions[1]['Linux']
+                elif platform == "darwin":
+                    print 'OS X'
+                    csOptions = self.Csoptions[1]['Mac']
+                elif platform == "win32":
+                    print 'Windows...'
+                    csOptions = self.Csoptions[1]['Win']
 
-        if deviceName in userDeviceNamesGiven:
-            print system_details[1]
-            csOptions = self.Csoptions[1][system_details[1]]
-        else:
-            if platform == "linux" or platform == "linux2":
-                print 'linux'
-                csOptions = self.Csoptions[1]['Linux']
-            elif platform == "darwin":
-                print 'OS X'
-                csOptions = self.Csoptions[1]['Mac']
-            elif platform == "win32":
-                print 'Windows...'
-                csOptions = self.Csoptions[1]['Win']
-
-        beginCsoundFile ="<CsoundSynthesizer> \n <CsOptions> \n"
-        closeOptionsCsoundFile = "\n</CsOptions>\n"
-        beginInstrDef = "<CsInstruments>\n \n sr = 44100 \n ksmps = 64 \n 0dbfs	= 1 \n nchnls = 2 \n"
-        CsFileIntro = str(beginCsoundFile + csOptions + closeOptionsCsoundFile + beginInstrDef)
-        print CsFileIntro
-        return CsFileIntro
+            beginCsoundFile ="<CsoundSynthesizer> \n <CsOptions> \n"
+            closeOptionsCsoundFile = "\n</CsOptions>\n"
+            beginInstrDef = "<CsInstruments>\n \n sr = 44100 \n ksmps = 64 \n 0dbfs	= 1 \n nchnls = 2 \n"
+            CsFileIntro = str(beginCsoundFile + csOptions + closeOptionsCsoundFile + beginInstrDef)
+            print CsFileIntro
+            return CsFileIntro
+        else
+            print("Warning: no CsOptions given by user,
+                    using Csound default options, which might generate
+                    a 'test.wav' file.")
+            return
 
     def write_csd(self, csd_file_name):
         fileDir = os.path.dirname(__file__)
