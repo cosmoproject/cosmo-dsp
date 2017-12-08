@@ -212,23 +212,23 @@ class CosmoPatcherGraph(nx.DiGraph):
 
     def generate_CsOptions(self):
         userDeviceName = 'cosmo1' # TODO read out from MIDI Patcher..
-        if platform == "linux" or platform == "linux2":
-            print 'linux'
 
-            system_details = os.uname()
-            if system_details[4] == 'x86_64':
-                print 'x86_64'
+        system_details = os.uname()
+        deviceName = system_details[1]
+
+        if deviceName == userDeviceName:
+            print system_details[1]
+            csOptions = self.Csoptions[1][system_details[1]]
+        else:
+            if platform == "linux" or platform == "linux2":
+                print 'linux'
                 csOptions = self.Csoptions[1]['Linux']
-            elif system_details[4] == 'armv7l' and system_details[1] == userDeviceName:
-                print system_details[1]
-                csOptions = self.Csoptions[1][system_details[1]]
-
-        elif platform == "darwin":
-            print 'OS X'
-            csOptions = self.Csoptions[1]['Mac']
-        elif platform == "win32":
-             print 'Windows...'
-             csOptions = self.Csoptions[1]['Win']
+            elif platform == "darwin":
+                print 'OS X'
+                csOptions = self.Csoptions[1]['Mac']
+            elif platform == "win32":
+                print 'Windows...'
+                csOptions = self.Csoptions[1]['Win']
 
         beginCsoundFile ="<CsoundSynthesizer> \n <CsOptions> \n"
         closeOptionsCsoundFile = "\n</CsOptions>\n"
