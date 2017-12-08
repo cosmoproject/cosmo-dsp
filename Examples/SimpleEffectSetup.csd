@@ -11,8 +11,8 @@ nchnls 	= 2
 
 #include "../DSP-Library/Includes/cosmo_utilities.inc"
 
-#include "../DSP-Library/Effects/Reverb.csd"
-#include "../DSP-Library/Effects/Lowpass.csd"
+#include "../DSP-Library/Effects/Reverb.udo"
+#include "../DSP-Library/Effects/Lowpass.udo"
 
 instr 1 
 	#include "../DSP-Library/Includes/adc_channels.inc"

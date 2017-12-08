@@ -11,14 +11,14 @@ nchnls 	= 2
 
 	#include "../DSP-Library/Includes/cosmo_utilities.inc"	
 
-	#include "../DSP-Library/Effects/Reverb.csd"
-	#include "../DSP-Library/Effects/SolinaChorus.csd"
+	#include "../DSP-Library/Effects/Reverb.udo"
+	#include "../DSP-Library/Effects/SolinaChorus.udo"
 
 
 massign 1, 90
 
-	#include "../DSP-Library/Instruments/SineSynth.csd"
-	#include "../DSP-Library/Instruments/StringSynth.csd"
+	#include "../DSP-Library/Instruments/SineSynth.udo"
+	#include "../DSP-Library/Instruments/StringSynth.udo"
 
 instr 1 
 

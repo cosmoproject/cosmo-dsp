@@ -104,7 +104,7 @@ class CosmoPatcherGraph(nx.DiGraph):
         filename = os.path.join(fileDir, '../' + self.import_dsp_path
                                 + 'Effects/'
                                 + str(udoName)
-                                + '.csd')
+                                + '.udo')
         with open(filename) as UDO_file:
             # search for Arguments and Defaults in UDO.csd header
             for line in UDO_file:
@@ -200,7 +200,7 @@ class CosmoPatcherGraph(nx.DiGraph):
                                     '\t#include "' + self.include_dsp_path
                                     + 'Effects/'
                                     + udo
-                                    + '.csd" \n'
+                                    + '.udo" \n'
                                     )
                 self.csnd_code_lines.append(
                                     '\t\taL, aR '
@@ -306,5 +306,5 @@ class CosmoPatcherGraph(nx.DiGraph):
         udos = [u for u in self.nodes() if self.node[u]['type'] == 'UDO']
         print udos
         for x in udos:
-            udo_file = '%sEffects/%s.csd' % (self.import_dsp_path, x)
+            udo_file = '%sEffects/%s.udo' % (self.import_dsp_path, x)
             call(["cp", udo_file, export_path+"Effects/"])

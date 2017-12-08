@@ -20,10 +20,14 @@
 
 ********************************************************/
 
+; -----------------------
+; Default argument values
+; -----------------------
 #define DECAY #0.85#
 #define CUTOFF #0.5#
 #define MIX #0.5#
 #define MODE #0#
+; -----------------------
 
 opcode Reverb, aa, aakkkk
 	ainL, ainR, kRev_Decay, kRev_Cutoff, kRev_Mix, kMode xin
@@ -73,7 +77,7 @@ opcode Reverb, aa, aakkkk
 		elseif kMode == 1 then
 			
 			/********************************************************
-			Reverbsc
+			Freeverb
 
 			freeverb is a stereo reverb unit based on Jezar's public 
 			domain C++ sources, composed of eight parallel comb 
