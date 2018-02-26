@@ -3,11 +3,11 @@
 	Reverb.csd
 	Author: Bernt Isak Wærstad
 
-	Arguments: Decay time, Cutoff frequency, Dry/wet mix, Mode
+	Arguments: DecayTime, HighFreq_Cutoff, DryWet_Mix, Mode
     Defaults:  0.85, 0.5, 0.5, 0
 
-	Decay time: 0.1 - 1
-	Cutoff frequency: 200Hz - 12000Hz
+	Decay Time: 0.1 - 1
+	Dampening/cutoff freq: 200Hz - 12000Hz
 	Dry/wet mix: 0% - 100%
 	Mode: 
 
@@ -23,26 +23,28 @@
 ; -----------------------
 ; Default argument values
 ; -----------------------
-#define DECAY #0.85#
-#define CUTOFF #0.5#
-#define MIX #0.5#
-#define MODE #0#
+#define DecayTime #0.85#
+#define HighFreq_Cutoff #0.5#
+#define DryWet_Mix #0.5#
+#define Mode #0#
 ; -----------------------
 
-opcode Reverb, aa, aakkkk
+opcode Reverb, aa, aaPVVO
 	ainL, ainR, kRev_Decay, kRev_Cutoff, kRev_Mix, kMode xin
 
-	kRev_Decay init $DECAY
-	kRev_Cutoff init $CUTOFF
+	kRev_Decay init $DecayTime
+	kRev_Cutoff init $HighFreq_Cutoff
+	kRev_Mix init $DryWet_Mix
+	kMode init $Mode	
 
-	kRev_Mix scale kRev_Mix, 1, 0
+	kRev_Mix limit kRev_Mix, 0, 1
 	Srev sprintfk "Reverb Mix: %f", kRev_Mix
-		puts Srev, kRev_Mix+1
-
+		puts Srev, kRev_Mix
 	kRev_Mix port kRev_Mix, 0.05
-	kRev_Mix init $MIX
 
-	if (kRev_Mix > 0.1) then
+	; Skip Reverb processing when mix is close to 0
+	 
+	if (kRev_Mix > 0.01) then
 
 		if kMode == 0 then
 
@@ -59,7 +61,7 @@ opcode Reverb, aa, aakkkk
 
 			kRev_Decay scale kRev_Decay, 1, 0.1
 			Srev sprintfk "Reverb Decay [reverbsc]: %f", kRev_Decay
-				puts Srev, kRev_Decay+1
+				puts Srev, kRev_Decay
 			kRev_Decay port kRev_Decay, 0.1
 
 			kRev_Cutoff scale kRev_Cutoff, 12000, 200
@@ -118,46 +120,28 @@ opcode Reverb, aa, aakkkk
 	xout aoutL, aoutR
 endop
 
-/********************************************************
-	With default value for Mode 
-********************************************************/
-opcode Reverb, aa, aakkk
-	ainL, ainR, kRev_Decay, kRev_Cutoff, kMix xin
+; Mono -> Stereo Reverb
 
-	aoutL, aoutR Reverb ainL, ainR, kRev_Decay, kRev_Cutoff, kMix, $MODE
+opcode Reverb, aa, aPVVO
+	ainMono, kRev_Decay, kRev_Cutoff, kRev_Mix, kMode xin
 
-	xout aoutL, aoutR
+	aL, aR Reverb ainMono, ainMono, kRev_Decay, kRev_Cutoff, kRev_Mix, kMode
+
+	xout aL, aR
 endop
 
-/********************************************************
-	With default value for Dry/wet mix and Mode
-********************************************************/
-opcode Reverb, aa, aakk
-	ainL, ainR, kRev_Decay, kRev_Cutoff xin
+; Mono -> Mono Reverb
 
-	aoutL, aoutR Reverb ainL, ainR, kRev_Decay, kRev_Cutoff, $MIX, $MODE
+opcode Reverb, a, aPVVO
 
-	xout aoutL, aoutR
+	ainMono, kRev_Decay, kRev_Cutoff, kRev_Mix, kMode xin
+
+	aL, aR Reverb ainMono, ainMono, kRev_Decay, kRev_Cutoff, kRev_Mix, kMode
+
+	xout aL
 endop
 
-/********************************************************
-	With default value for Cutoff, Dry/wet mix and Mode 
-********************************************************/
-opcode Reverb, aa, aak
-	ainL, ainR, kRev_Decay xin
 
-	aoutL, aoutR Reverb ainL, ainR, kRev_Decay, $CUTOFF, $MIX, $MODE
 
-	xout aoutL, aoutR
-endop
 
-/********************************************************
-	With default value for Decay, Cutoff Dry/wet mix and Mode
-********************************************************/
-opcode Reverb, aa, aa
-	ainL, ainR xin
 
-	aoutL, aoutR Reverb ainL, ainR, $DECAY, $CUTOFF, $MIX, $MODE
-
-	xout aoutL, aoutR
-endop
