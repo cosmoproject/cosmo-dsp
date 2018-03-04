@@ -5,6 +5,7 @@
 	Author: Bernt Isak Wærstad
 
 	Arguments: Cutoff_frequency, Resonance, Distortion
+    Defaults:  0.8, 0.3, 0
 
 	Cutoff frequency: 30Hz - 12000Hz
 	Resonance: 0 - 0.9
@@ -16,7 +17,7 @@
 		3: zdf
 
 	Description:
-	Resonant highpass filters with distortion
+	Resonant highpass filters (some with distortion)
 
 ********************************************************/
 
@@ -27,7 +28,7 @@
 	#define Distortion #0#
 
 ;*********************************************************************
-; Highpass - Mono in, mono out
+; Highpass - 1 in / 1 out
 ;*********************************************************************
 
 opcode Highpass, a, akkkk 
@@ -35,6 +36,8 @@ opcode Highpass, a, akkkk
 	ain, kfco, kres, kdist, kmode xin
 
 	#include "Lowpass.udo"
+
+	; TODO: Scale and print frequency correctly for highpass 
 
 	alowpass Lowpass ain, kfco, kres, kdist, kmode
 
@@ -46,7 +49,22 @@ opcode Highpass, a, akkkk
 endop
 
 ;*********************************************************************
-; Highpass - Stereo in, stereo out
+; Highpass - '' in / 2 out
+;*********************************************************************
+
+opcode Highpass, a, aakkk
+
+	ain, kfco, kres, kdist, kmode xin
+
+	aOutL Highpass ain, kfco, kres, kdist, kmode
+	aOutR Highpass ain, kfco, kres, kdist, kmode
+
+	xout aOutL, aOutR
+
+endop
+
+;*********************************************************************
+; Highpass - 2 in / 2 out
 ;*********************************************************************
 
 opcode Highpass, aa, aakkk

@@ -17,7 +17,7 @@
 		3: zdf
 
 	Description:
-	A resonant lowpass filter with distortion
+	A resonant lowpass filter (some with distortion)
 
 ********************************************************/
 
@@ -27,12 +27,26 @@
 	#define Resonance #0.3#
 	#define Distortion #0#
 
+	; Toggle printing on/off
+	#define PRINT #0#
+
+	#define MAX_FREQ #20000#
+	#define MIN_FREQ #30#	
+	#define MAX_RESO #1.25#
+	#define MAX_DIST #1#
+
+
 ;*********************************************************************
-; Lowpass - Mono
+; Lowpass - 1 in / 1 out
 ;*********************************************************************
 
 opcode Lowpass, a, akkkk
 	ain, kfco, kres, kdist, kmode xin
+
+
+	; ******************************
+	; LPF18
+	; ******************************
 
 	if kmode == 0 then 
 	  	; ******************************
@@ -40,27 +54,33 @@ opcode Lowpass, a, akkkk
 	  	; ******************************
 
 		kfco expcurve kfco, 30
-		kfco scale kfco, 20000, 30
-		Srev sprintfk "LPF Cutoff: %f", kfco
-			puts Srev, kfco
+		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Cutoff: %f", kfco
+				puts Srev, kfco
+		endif
 		kfco port kfco, 0.1
 
-		kres scale kres, 0.9, 0
-		Srev sprintfk "LPF Reso: %f", kres
-			puts Srev, kres
+		kres scale kres, $MAX_RESO, 0
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Reso: %f", kres
+				puts Srev, kres
+		endif
 		kres port kres, 0.01
 
-		kdist scale kdist, 0.9, 0
-		Srev sprintfk "LPF Dist: %f", kdist
-			puts Srev, kdist
+		kdist scale kdist, $MAX_DIST, 0
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Dist: %f", kdist
+				puts Srev, kdist
+		endif
 		kdist port kdist, 0.01
-
-		; ******************************
-		; LPF18
-		; ******************************
 
 		aout lpf18 ain, kfco, kres, kdist
 	
+	; ******************************
+	; Moogladder
+	; ******************************
+
 	elseif kmode == 1 then
 
 		; ******************************
@@ -68,57 +88,74 @@ opcode Lowpass, a, akkkk
 	  	; ******************************
 
 		kfco expcurve kfco, 30
-		kfco scale kfco, 20000, 30
-		Srev sprintfk "LPF Cutoff: %f", kfco
-			puts Srev, kfco
+		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Cutoff: %f", kfco
+				puts Srev, kfco
+		endif
 		kfco port kfco, 0.1
 
-		kres scale kres, 0.9, 0
-		Srev sprintfk "LPF Reso: %f", kres
-			puts Srev, kres
+		kres scale kres, $MAX_RESO, 0
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Reso: %f", kres
+				puts Srev, kres
+		endif
 		kres port kres, 0.01
 
-/*
-		kdist scale kdist, 0.9, 0
-		Srev sprintfk "LPF Dist: %f", kdist
-			puts Srev, kdist
+		kdist scale kdist, $MAX_DIST, 0
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Dist: %f", kdist
+				puts Srev, kdist
+		endif
 		kdist port kdist, 0.01
-*/
-		; ******************************
-		; Moogladder
-		; ******************************
 
 		aout moogladder ain, kfco, kres
 		; Add some distortion ??
 
+	; ******************************
+	; k35
+	; ******************************
+
 	elseif kmode == 2 then
-/*
+
 		; ******************************
 	  	; Controller value scalings
 	  	; ******************************
 
+
 		kfco expcurve kfco, 30
-		kfco scale kfco, 20000, 30
-		Srev sprintfk "LPF Cutoff: %f", kfco
-			puts Srev, kfco
+		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Cutoff: %f", kfco
+				puts Srev, kfco
+		endif
 		kfco port kfco, 0.1
 
-		kres scale kres, 0.9, 0
-		Srev sprintfk "LPF Reso: %f", kres
-			puts Srev, kres
+		kres scale kres, $MAX_RESO, 0
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Reso: %f", kres
+				puts Srev, kres
+		endif
 		kres port kres, 0.01
-
-		kdist scale kdist, 0.9, 0
-		Srev sprintfk "LPF Dist: %f", kdist
-			puts Srev, kdist
+/*
+		kdist scale kdist, $MAX_DIST, 0
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Dist: %f", kdist
+				puts Srev, kdist
+		endif
 		kdist port kdist, 0.01
+*/
 
-		; ******************************
-		; k35
-		; ******************************
+		; k35 apparently not in Csound yet - using tone instead for now 
 
-		aout k35 ain, kfco, kres
+		aout tone ain, kfco
+		;aout k35 ain, kfco, kres
 		; Add some distortion ??
+
+
+	; ******************************
+	; ZDF
+	; ******************************
 
 	elseif kmode == 3 then
 
@@ -127,64 +164,53 @@ opcode Lowpass, a, akkkk
 	  	; ******************************
 
 		kfco expcurve kfco, 30
-		kfco scale kfco, 20000, 30
-		Srev sprintfk "LPF Cutoff: %f", kfco
-			puts Srev, kfco
+		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Cutoff: %f", kfco
+				puts Srev, kfco
+		endif
 		kfco port kfco, 0.1
 
-		kres scale kres, 0.9, 0
-		Srev sprintfk "LPF Reso: %f", kres
-			puts Srev, kres
+		kres scale kres, $MAX_RESO, 0
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Reso: %f", kres
+				puts Srev, kres
+		endif
 		kres port kres, 0.01
-
-		kdist scale kdist, 0.9, 0
-		Srev sprintfk "LPF Dist: %f", kdist
-			puts Srev, kdist
+/*
+		kdist scale kdist, $MAX_DIST, 0
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Dist: %f", kdist
+				puts Srev, kdist
+		endif
 		kdist port kdist, 0.01
-
-		; ******************************
-		; ZDF
-		; ******************************
-
-		aout zdf ain, kfco, kres
-		; Add some distortion ??
 */
+
+		aout zdf_2pole ain, kfco, kres
+		; Add some distortion ??
+
 	endif
 
 	xout aout
 endop
 
 
+;*********************************************************************
+; Lowpass - 1 in / 2 out
+;*********************************************************************
 
-/*
-opcode Lowpass, a, akk
-	ain, kfco, kres xin
+opcode Lowpass, aa, akkkk
+	ain, kfco, kres, kdist, kmode xin
 
-	aout Lowpass ain, kfco, kres, 0
+	aoutL Lowpass ain, kfco, kres, kdist, kmode
+	aoutR Lowpass ain, kfco, kres, kdist, kmode
 
-	xout aout
+	xout aoutL, aoutR
 endop
 
-opcode Lowpass, a, ak
-	ain, kfco  xin
-
-	aout Lowpass ain, kfco, 0.3, 0
-
-	xout aout
-endop
-
-opcode Lowpass, a, a
-	ain xin
-
-	aout Lowpass ain, 0.8 , 0.3, 0
-
-	xout aout
-endop
-
-*/ 
 
 ;*********************************************************************
-; Lowpass - Stereo
+; Lowpass - 2 in / 2 out
 ;*********************************************************************
 
 opcode Lowpass, aa, aakkkk

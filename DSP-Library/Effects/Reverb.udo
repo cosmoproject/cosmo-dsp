@@ -20,14 +20,22 @@
 
 ********************************************************/
 
-; -----------------------
-; Default argument values
-; -----------------------
-#define DecayTime #0.85#
-#define HighFreq_Cutoff #0.5#
-#define DryWet_Mix #0.5#
-#define Mode #0#
-; -----------------------
+	; Default argument values
+
+	#define DecayTime #0.85#
+	#define HighFreq_Cutoff #0.5#
+	#define DryWet_Mix #0.5#
+	#define Mode #0#
+
+	; Toggle printing on/off
+	#define PRINT #0#
+
+	#define MAX_FREQ #12000#
+	#define MIN_FREQ #200#	
+
+;*********************************************************************
+; Reverb - 2 in / 2 out
+;*********************************************************************
 
 opcode Reverb, aa, aaPVVO
 	ainL, ainR, kRev_Decay, kRev_Cutoff, kRev_Mix, kMode xin
@@ -60,13 +68,17 @@ opcode Reverb, aa, aaPVVO
 			********************************************************/
 
 			kRev_Decay scale kRev_Decay, 1, 0.1
-			Srev sprintfk "Reverb Decay [reverbsc]: %f", kRev_Decay
-				puts Srev, kRev_Decay
+			if $PRINT == 1 then 
+				Srev sprintfk "Reverb Decay [reverbsc]: %f", kRev_Decay
+					puts Srev, kRev_Decay
+			endif
 			kRev_Decay port kRev_Decay, 0.1
 
-			kRev_Cutoff scale kRev_Cutoff, 12000, 200
-				Srev sprintfk "Reverb Cutoff [reverbsc]: %f", kRev_Cutoff
-			puts Srev, kRev_Cutoff
+			kRev_Cutoff scale kRev_Cutoff, $MAX_FREQ, $MIN_FREQ
+			if $PRINT == 1 then 
+					Srev sprintfk "Reverb Cutoff [reverbsc]: %f", kRev_Cutoff
+				puts Srev, kRev_Cutoff
+			endif
 
 			; Empty buffer when switching reverb mode
 			if (changed(kMode) == 1) then
@@ -91,13 +103,19 @@ opcode Reverb, aa, aaPVVO
 			********************************************************/
 			
 			kRoomSize scale kRev_Decay, 1, 0.1
-			Srev sprintfk "Reverb Room size [freeverb]: %f", kRoomSize
-				puts Srev, kRoomSize+1
+			if $PRINT == 1 then 
+				Srev sprintfk "Reverb Room size [freeverb]: %f", kRoomSize
+					puts Srev, kRoomSize+1
+			endif
 			kRoomSize port kRoomSize, 0.1
 
-			kHFDamp = kRev_Cutoff 
-				Srev sprintfk "Reverb HF Damp [freeverb]: %f", kHFDamp
-			puts Srev, kHFDamp
+			kHFMax = kRev_Cutoff / $MAX_FREQ
+			kHFMin = $MIN_FREQ / 20000
+			kHFDamp scale kRev_Cutoff, kHFMax, kHFMin 
+			if $PRINT == 1 then 
+					Srev sprintfk "Reverb HF Damp [freeverb]: %f", kHFDamp
+				puts Srev, kHFDamp
+			endif
 
 			; Empty buffer when switching reverb mode
 			if (changed(kMode) == 1) then
@@ -120,7 +138,9 @@ opcode Reverb, aa, aaPVVO
 	xout aoutL, aoutR
 endop
 
-; Mono -> Stereo Reverb
+;*********************************************************************
+; Reverb - 1 in / 2 out
+;*********************************************************************
 
 opcode Reverb, aa, aPVVO
 	ainMono, kRev_Decay, kRev_Cutoff, kRev_Mix, kMode xin
@@ -130,7 +150,9 @@ opcode Reverb, aa, aPVVO
 	xout aL, aR
 endop
 
-; Mono -> Mono Reverb
+;*********************************************************************
+; Reverb - 1 in / 1 out
+;*********************************************************************
 
 opcode Reverb, a, aPVVO
 
@@ -138,7 +160,7 @@ opcode Reverb, a, aPVVO
 
 	aL, aR Reverb ainMono, ainMono, kRev_Decay, kRev_Cutoff, kRev_Mix, kMode
 
-	xout aL
+	xout (aL + aR) * 0.5
 endop
 
 
