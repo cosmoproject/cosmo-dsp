@@ -4,7 +4,7 @@
 	Lowpass.udo
 	Author: Bernt Isak Wærstad
 
-	Arguments: Cutoff frequency, Resonance, Distortion
+	Arguments: Cutoff frequency, Resonance, Distortion, Mode
     Defaults:  0.8, 0.3, 0
 
 	Cutoff frequency: 30Hz - 12000Hz
@@ -22,7 +22,6 @@
 ********************************************************/
 
 	; Default argument values
-
 	#define Cutoff_frequency #0.8# 
 	#define Resonance #0.3#
 	#define Distortion #0#
@@ -30,6 +29,7 @@
 	; Toggle printing on/off
 	#define PRINT #0#
 
+	; Max and minimum values
 	#define MAX_FREQ #20000#
 	#define MIN_FREQ #30#	
 	#define MAX_RESO #1.25#
@@ -55,24 +55,22 @@ opcode Lowpass, a, akkkk
 
 		kfco expcurve kfco, 30
 		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
+		kdist scale kdist, $MAX_DIST, 0
+		kres scale kres, $MAX_RESO, 0
+
 		if $PRINT == 1 then 
 			Srev sprintfk "LPF Cutoff: %f", kfco
 				puts Srev, kfco
+
+			Sres sprintfk "LPF Reso: %f", kres
+				puts Sres, kres
+
+			Sdist sprintfk "LPF Dist: %f", kdist
+				puts Sdist, kdist
 		endif
+
 		kfco port kfco, 0.1
-
-		kres scale kres, $MAX_RESO, 0
-		if $PRINT == 1 then 
-			Srev sprintfk "LPF Reso: %f", kres
-				puts Srev, kres
-		endif
 		kres port kres, 0.01
-
-		kdist scale kdist, $MAX_DIST, 0
-		if $PRINT == 1 then 
-			Srev sprintfk "LPF Dist: %f", kdist
-				puts Srev, kdist
-		endif
 		kdist port kdist, 0.01
 
 		aout lpf18 ain, kfco, kres, kdist
@@ -131,7 +129,7 @@ opcode Lowpass, a, akkkk
 		endif
 		kfco port kfco, 0.1
 
-		kres scale kres, $MAX_RESO, 0
+		kres scale kres, $MAX_RESO*10, 0
 		if $PRINT == 1 then 
 			Srev sprintfk "LPF Reso: %f", kres
 				puts Srev, kres
@@ -147,6 +145,10 @@ opcode Lowpass, a, akkkk
 */
 
 		; k35 apparently not in Csound yet - using tone instead for now 
+
+		; They're called k35_something based on the type you want
+
+		aout K35_lpf ain, kfco, kres
 
 		aout tone ain, kfco
 		;aout k35 ain, kfco, kres

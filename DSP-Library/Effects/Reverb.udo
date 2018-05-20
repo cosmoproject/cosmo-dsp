@@ -21,7 +21,6 @@
 ********************************************************/
 
 	; Default argument values
-
 	#define DecayTime #0.85#
 	#define HighFreq_Cutoff #0.5#
 	#define DryWet_Mix #0.5#
@@ -30,6 +29,7 @@
 	; Toggle printing on/off
 	#define PRINT #0#
 
+	; Max and minimum values
 	#define MAX_FREQ #12000#
 	#define MIN_FREQ #200#	
 

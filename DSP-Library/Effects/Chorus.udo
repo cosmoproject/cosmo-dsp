@@ -4,7 +4,7 @@
 	Author: Alex Hofmann
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
-	Arguments: Feedback, Dry/wet mix
+	Arguments: Feedback, Dry/wet mix[, Mod]
     Defaults:  0.4, 0.5
 
 	Feedback: 0.001% - 100%
@@ -12,57 +12,88 @@
 
 	Description: 
 	A chorus effect
+	
+	Mod argument is there to make a stereo chorus. 
 
 ********************************************************/
 
-opcode Chorus, aa, aakk
-	ainL, ainR, kFeedback, kDryWet xin
+	; Default argument values
+	#define Feedback #0.4# 
+	#define DryWet_Mix #0.5#
+	#define Left_Mod #0#
+	#define Right_Mod #0.02#	
+
+	; Toggle printing on/off
+	#define PRINT #0#
+
+	; Max and minimum values
+	#define MAX_RESO #1.25#
+	#define MAX_DIST #1#
+
+;*********************************************************************
+; Chorus - 1 in / 1 out
+;*********************************************************************
+
+opcode Chorus, a, akkO
+	ain, kFeedback, kDryWet, kMod xin
 
 	kFeedback scale kFeedback, 1, 0.0001
-	Srev sprintfk "Chorus feedback: %f", kFeedback
-		puts Srev, kFeedback+1
-
-
 	kDryWet scale kDryWet, 1, 0
-	Srev sprintfk "Chorus Mix: %f", kDryWet
-		puts Srev, kDryWet+1
+
+	if ($PRINT == 1) then 
+		Srev sprintfk "Chorus feedback: %f", kFeedback
+			puts Srev, kFeedback+1
+
+		Srev sprintfk "Chorus Mix: %f", kDryWet
+			puts Srev, kDryWet+1
+	endif
 
 	kDryWet init 0.5
 	kFeedback init 0.5
 
-	aWetL init 0.0
-	aWetR init 0.0
+	aWet init 0.0
 
-	aSinL poscil 0.001, 3
-	aSinR poscil 0.001, 1
+	aSin poscil 0.001, 3
 
-	aDelayL delayr 5.25					;  a delayline, with 1 second maximum delay-time is initialised
-	aWetL deltapi aSinL+(0.1/2)		; data at a flexible position is read from the
-		 delayw ainL+(aWetL*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
+	aDelay delayr 5.25					;  a delayline, with 1 second maximum delay-time is initialised
+	aWet deltapi aSin+kMod+(0.1/2)		; data at a flexible position is read from the
+		 delayw ain+(aWet*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
 
+/*
 	aDelayR delayr 5.25					;  a delayline, with 1 second maximum delay-time is initialised
 	;aWetR	deltapi aSinR+0.22+kgDelTim
 	aWetR	deltapi aSinR+0.02+(0.1/2)				; data at a flexible position is read from the delayline
 		  delayw ainR+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
+*/
+	aOut ntrpol ain, aWet, kDryWet
 
-	aOutL ntrpol ainL, aWetL, kDryWet
-	aOutR ntrpol ainR, aWetR, kDryWet
-
-xout aOutL, aOutR
+xout aOut
 endop
 
-opcode Chorus, aa, aak
-	ainL, ainR, kFeedback xin
+;*********************************************************************
+; Chorus - 1 in / 2 out
+;*********************************************************************
 
-	aOutL, aOutR Chorus ainL, ainR, kFeedback, 0.5
+
+opcode Chorus, aa, akkO
+	ain, kFeedback, kDryWet, kMod xin
+
+	aOutL Chorus ain, kFeedback, kDryWet, $Left_Mod
+	aOutR Chorus ain, kFeedback, kDryWet, $Right_Mod
 
 	xout aOutL, aOutR
 endop
 
-opcode Chorus, aa, aa
-	ainL, ainR xin
+;*********************************************************************
+; Chorus - 2 in / 2 out
+;*********************************************************************
 
-	aOutL, aOutR Chorus ainL, ainR, 0.5, 0.5
+
+opcode Chorus, aa, aakkO
+	ainL, ainR, kFeedback, kDryWet, kMod xin
+
+	aOutL Chorus ainL, kFeedback, kDryWet, $Left_Mod
+	aOutR Chorus ainR, kFeedback, kDryWet, $Right_Mod
 
 	xout aOutL, aOutR
 endop

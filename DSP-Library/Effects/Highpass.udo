@@ -22,7 +22,6 @@
 ********************************************************/
 
 	; Default argument values
-	
 	#define Cutoff_frequency #0.8# 
 	#define Resonance #0.3#
 	#define Distortion #0#

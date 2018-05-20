@@ -15,49 +15,76 @@
 
 ********************************************************/
 
-opcode Hack, aa, aakk
+	; Default argument values
+	#define Hack_frequency #0.3# 
+	#define DryWet_Mix #0.5#
 
-	ainL, ainR, kFreq, kDryWet  xin
+	; Toggle printing on/off
+	#define PRINT #0#
 
+	; Max and minimum values
+	#define MAX_FREQ #45#
+	#define MIN_FREQ #0.5#	
+
+;*********************************************************************
+; Hack - 1 in / 1 out
+;*********************************************************************
+
+opcode Hack, a, akk
+
+	ain, kFreq, kDryWet  xin
 
 	kFreq expcurve kFreq, 30
-	kFreq scale kFreq, 45, 0.5
-	Srev sprintfk "Hack freq: %fHz", kFreq
-		puts Srev, kFreq
-	kFreq port kFreq, 0.1
+	kFreq scale kFreq, $MAX_FREQ, $MIN_FREQ
 
 	kDryWet scale kDryWet, 1, 0
-	Srev sprintfk "Hack Mix: %f", kDryWet
-		puts Srev, kDryWet+1
+
+	if ($PRINT == 1) then
+		Srev sprintfk "Hack freq: %fHz", kFreq
+			puts Srev, kFreq
+
+		Srev sprintfk "Hack Mix: %f", kDryWet
+			puts Srev, kDryWet+1
+	endif
+
+	kFreq port kFreq, 0.1
 
 	aMod lfo 1, kFreq, 3
 	aMod butlp aMod, 300
 
-	aHackL = ainL * (aMod)
-	aHackR = ainR * (aMod)
+	aHack = ain * (aMod)
 
-	aOutL ntrpol ainL, aHackL, kDryWet
-	aOutR ntrpol ainR, aHackR, kDryWet
+	aOut ntrpol ain, aHack, kDryWet
+
+	xout aOut
+
+endop
+
+;*********************************************************************
+; Hack - 1 in / 2 out
+;*********************************************************************
+
+opcode Hack, aa, akk
+
+	ain, kFreq, kDryWet  xin
+
+	aOutL Hack ain, kFreq, kDryWet
+	aOutR Hack ain, kFreq, kDryWet
 
 	xout aOutL, aOutR
 
 endop
 
-opcode Hack, aa, aak
+;*********************************************************************
+; Hack - 2 in / 2 out
+;*********************************************************************
 
-	ainL, ainR, kDryWet  xin
+opcode Hack, aa, aakk
 
-	aOutL, aOutR Hack ainL, ainR, kDryWet, 0.5
+	ainL, ainR, kFreq, kDryWet  xin
 
-	xout aOutL, aOutR
-
-endop
-
-opcode Hack, aa, aa
-
-	ainL, ainR  xin
-
-	aOutL, aOutR Hack ainL, ainR, 1, 0.5
+	aOutL Hack ainL, kFreq, kDryWet
+	aOutR Hack ainR, kFreq, kDryWet
 
 	xout aOutL, aOutR
 
