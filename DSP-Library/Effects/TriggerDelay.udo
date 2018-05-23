@@ -41,70 +41,105 @@
 
 ********************************************************/
 
+	; Default argument values
+/*
+	#define DelayTime #0.2# 
+	#define Feedback #0.3#
+	#define Filter #0.5#
+	#define Distortion #0#	
+	#define Modulation #0#
+	#define Mix #0.4#
+*/
+	; Toggle printing on/off
+	#define PRINT #0#
+
+;*********************************************************************
+; Triggerelay
+;*********************************************************************
+
 opcode TriggerDelay, aa, aakkkkkkkkkkk
 
 	ainL, ainR, kthreshold, kdly1, kdly2, kfback1, kfback2, kwidth, klevel, kporttime, kcf, kbw, kmix xin
 
+	; ******************************
+	; Controller value scalings
+	; ******************************
+
 	kthreshold expcurve kthreshold, 10
 	kthreshold scale kthreshold, 1, 0.0001
 	kthreshold init 0.1
-	Scut sprintfk "Threshold: %f", kthreshold
-		puts Scut, kthreshold
 
 	kdly1 expcurve kdly1, 10
 	kdly1 scale kdly1, 2, 0.0001
 	kdly1 init 0.0001
-	Scut sprintfk "Delay time 1: %fs", kdly1
-		puts Scut, kdly1
 
 	kdly2 expcurve kdly2, 10
 	kdly2 scale kdly2, 2, 0.0001
 	kdly2 init 0.1
-	Scut sprintfk "Delay time 2: %fs", kdly2
-		puts Scut, kdly2
 
 	kfback1 scale kfback1, 1.2, 0
 	kfback1 init 0.5
-	Sfb sprintfk "Feedback 1: %f", kfback1
-		puts Sfb, kfback1+1
 
 	kfback2 scale kfback2, 1.2, 0
 	kfback2 init 0.9
-	Sfb sprintfk "Feedback 2: %f", kfback2
-		puts Sfb, kfback2+1
 
 	kwidth scale kwidth, 1, 0
 	kwidth init 1
-	Smix sprintfk "Stereo Width: %f", kwidth
-		puts Smix, kwidth+1
 
 	klevel scale klevel, 1, 0
 	klevel init 1
-	Smix sprintfk "Level: %f", klevel
-		puts Smix, klevel+1
 
 	kporttime expcurve kporttime, 10
 	kporttime scale kporttime, 5, 0
 	kporttime init 0.01
-	Smix sprintfk "Port time: %f", kporttime
-		puts Smix, kporttime+1
 
 	kcf logcurve kcf, 0.05
 	kcf scale kcf, 10000, 50
 	kcf init 5000
-	Slpf sprintfk "Dly Feed LPF Cutoff: %d", kcf
-		puts Slpf, kcf
 
 	kbw expcurve kbw, 30
 	kbw scale kbw, 22050, 600
 	kbw init 4000
-	Slpf sprintfk "Bandwidth: %d", kbw
-		puts Slpf, kbw
 
 	kmix scale kmix, 1, 0
 	kmix init 0.5
-	Smix sprintfk "Delay Mix: %f", kmix
-		puts Smix, kmix+1
+
+	if $PRINT == 1 then 
+		
+		Scut sprintfk "Threshold: %f", kthreshold
+			puts Scut, kthreshold
+
+		Scut sprintfk "Delay time 1: %fs", kdly1
+			puts Scut, kdly1
+
+		Scut sprintfk "Delay time 2: %fs", kdly2
+			puts Scut, kdly2
+
+		Sfb sprintfk "Feedback 1: %f", kfback1
+			puts Sfb, kfback1+1
+
+		Sfb sprintfk "Feedback 2: %f", kfback2
+			puts Sfb, kfback2+1
+
+		Smix sprintfk "Stereo Width: %f", kwidth
+			puts Smix, kwidth+1
+
+		Smix sprintfk "Level: %f", klevel
+			puts Smix, klevel+1
+
+		Smix sprintfk "Port time: %f", kporttime
+			puts Smix, kporttime+1
+
+		Slpf sprintfk "Dly Feed LPF Cutoff: %d", kcf
+			puts Slpf, kcf
+
+		Slpf sprintfk "Bandwidth: %d", kbw
+			puts Slpf, kbw
+
+		Smix sprintfk "Delay Mix: %f", kmix
+			puts Smix, kmix+1
+
+	endif
 
 	krms	rms	(ainL+ainR)
 
