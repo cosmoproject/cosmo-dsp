@@ -26,33 +26,178 @@
 	#define Resonance #0.3#
 	#define Distortion #0#
 
+	; Toggle printing on/off
+	#define PRINT #0#
+
+	; Max and minimum values
+	#define MAX_FREQ #20000#
+	#define MIN_FREQ #30#	
+	#define MAX_RESO #1.25#
+	#define MAX_DIST #1#
+
+	; TODO: Scale and print frequency correctly for highpass 
+
+
 ;*********************************************************************
 ; Highpass - 1 in / 1 out
 ;*********************************************************************
 
-opcode Highpass, a, akkkk 
-
+opcode Highpass, a, akkkk
 	ain, kfco, kres, kdist, kmode xin
 
-	#include "Lowpass.udo"
+	; ******************************
+	; LPF18
+	; ******************************
 
-	; TODO: Scale and print frequency correctly for highpass 
+	if kmode == 0 then 
+	  	; ******************************
+	  	; Controller value scalings
+	  	; ******************************
 
-	alowpass Lowpass ain, kfco, kres, kdist, kmode
+		kfco expcurve kfco, 30
+		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
+		kdist scale kdist, $MAX_DIST, 0
+		kres scale kres, $MAX_RESO, 0
 
-	; Lowpass to highpass 
-	aout = ain - alowpass
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Cutoff: %f", kfco
+				puts Srev, kfco
 
-	xout aout 
+			Sres sprintfk "LPF Reso: %f", kres
+				puts Sres, kres
 
+			Sdist sprintfk "LPF Dist: %f", kdist
+				puts Sdist, kdist
+		endif
+
+		kfco port kfco, 0.1
+		kres port kres, 0.01
+		kdist port kdist, 0.01
+
+		alowpass lpf18 ain, kfco, kres, kdist
+		; Lowpass to highpass 
+		aout = ain - alowpass
+	
+	; ******************************
+	; Moogladder
+	; ******************************
+
+	elseif kmode == 1 then
+
+		; ******************************
+	  	; Controller value scalings
+	  	; ******************************
+
+		kfco expcurve kfco, 30
+		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Cutoff: %f", kfco
+				puts Srev, kfco
+		endif
+		kfco port kfco, 0.1
+
+		kres scale kres, $MAX_RESO, 0
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Reso: %f", kres
+				puts Srev, kres
+		endif
+		kres port kres, 0.01
+/*
+		kdist scale kdist, $MAX_DIST, 0
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Dist: %f", kdist
+				puts Srev, kdist
+		endif
+		kdist port kdist, 0.01
+*/
+		alowpass moogladder ain, kfco, kres
+		; Add some distortion ??
+
+		; Lowpass to highpass 
+		aout = ain - alowpass
+
+	; ******************************
+	; K35
+	; ******************************
+
+	elseif kmode == 2 then
+
+		; ******************************
+	  	; Controller value scalings
+	  	; ******************************
+
+
+		kfco expcurve kfco, 30
+		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Cutoff: %f", kfco
+				puts Srev, kfco
+		endif
+		kfco port kfco, 0.1
+
+		kres scale kres, $MAX_RESO*10, 0
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Reso: %f", kres
+				puts Srev, kres
+		endif
+		kres port kres, 0.01
+
+		kdist scale kdist, $MAX_DIST*10, 1
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Dist: %f", kdist
+				puts Srev, kdist
+		endif
+		kdist port kdist, 0.01
+
+		knonlinear = 1
+
+		aout K35_hpf ain, kfco, kres, knonlinear, kdist
+
+	; ******************************
+	; ZDF
+	; ******************************
+
+	elseif kmode == 3 then
+
+		; ******************************
+	  	; Controller value scalings
+	  	; ******************************
+
+		kfco expcurve kfco, 30
+		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Cutoff: %f", kfco
+				puts Srev, kfco
+		endif
+		kfco port kfco, 0.1
+
+		kres scale kres, $MAX_RESO*25, 0.5
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Reso: %f", kres
+				puts Srev, kres
+		endif
+		kres port kres, 0.01
+/*
+		kdist scale kdist, $MAX_DIST, 0
+		if $PRINT == 1 then 
+			Srev sprintfk "LPF Dist: %f", kdist
+				puts Srev, kdist
+		endif
+		kdist port kdist, 0.01
+*/
+
+		aout zdf_2pole ain, kfco, kres, 1
+		; Add some distortion ??
+
+	endif
+
+	xout aout
 endop
-
 ;*********************************************************************
 ; Highpass - '' in / 2 out
 ;*********************************************************************
 
-opcode Highpass, a, aakkk
-
+opcode Highpass, aa, akkkk
 	ain, kfco, kres, kdist, kmode xin
 
 	aOutL Highpass ain, kfco, kres, kdist, kmode
@@ -66,9 +211,8 @@ endop
 ; Highpass - 2 in / 2 out
 ;*********************************************************************
 
-opcode Highpass, aa, aakkk
-
-	ainL,ainR, kfco, kres, kdist, kmode xin
+opcode Highpass, aa, aakkkk
+	ainL, ainR, kfco, kres, kdist, kmode xin
 
 	aOutL Highpass ainL, kfco, kres, kdist, kmode
 	aOutR Highpass ainR, kfco, kres, kdist, kmode

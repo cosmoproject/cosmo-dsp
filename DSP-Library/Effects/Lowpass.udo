@@ -99,19 +99,19 @@ opcode Lowpass, a, akkkk
 				puts Srev, kres
 		endif
 		kres port kres, 0.01
-
+/*
 		kdist scale kdist, $MAX_DIST, 0
 		if $PRINT == 1 then 
 			Srev sprintfk "LPF Dist: %f", kdist
 				puts Srev, kdist
 		endif
 		kdist port kdist, 0.01
-
+*/
 		aout moogladder ain, kfco, kres
 		; Add some distortion ??
 
 	; ******************************
-	; k35
+	; K35
 	; ******************************
 
 	elseif kmode == 2 then
@@ -135,25 +135,17 @@ opcode Lowpass, a, akkkk
 				puts Srev, kres
 		endif
 		kres port kres, 0.01
-/*
-		kdist scale kdist, $MAX_DIST, 0
+
+		kdist scale kdist, $MAX_DIST*10, 1
 		if $PRINT == 1 then 
 			Srev sprintfk "LPF Dist: %f", kdist
 				puts Srev, kdist
 		endif
 		kdist port kdist, 0.01
-*/
 
-		; k35 apparently not in Csound yet - using tone instead for now 
+		knonlinear = 1
 
-		; They're called k35_something based on the type you want
-
-		aout K35_lpf ain, kfco, kres
-
-		aout tone ain, kfco
-		;aout k35 ain, kfco, kres
-		; Add some distortion ??
-
+		aout K35_lpf ain, kfco, kres, knonlinear, kdist
 
 	; ******************************
 	; ZDF
@@ -173,7 +165,7 @@ opcode Lowpass, a, akkkk
 		endif
 		kfco port kfco, 0.1
 
-		kres scale kres, $MAX_RESO, 0
+		kres scale kres, $MAX_RESO*25, 0.5
 		if $PRINT == 1 then 
 			Srev sprintfk "LPF Reso: %f", kres
 				puts Srev, kres
