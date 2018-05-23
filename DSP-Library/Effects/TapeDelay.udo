@@ -36,7 +36,7 @@
 ; TapeDelay
 ;*********************************************************************
 
-opcode TapeDelay, a, akkk
+opcode TapeDelay, a, akkkkkk
 	ain, kdlytime, kfeed, kfilter, kdist, kmod, kmix xin
 
 	; ******************************
@@ -97,6 +97,33 @@ opcode TapeDelay, a, akkk
 
 	xout aout
 endop
+
+;*********************************************************************
+; TapeDelay - 1i/2o
+;*********************************************************************
+
+opcode TapeDelay, aa, akkkkkk
+	ain, kdlytime, kfeed, kfilter, kdist, kmod, kmix xin
+
+	aOutL TapeDelay ain, kdlytime, kfeed, kfilter, kdist, kmod, kmix
+	aOutR TapeDelay ain, kdlytime, kfeed, kfilter, kdist, kmod, kmix
+
+	xout aOutL, aOutR
+endop
+
+;*********************************************************************
+; TapeDelay - 2i/2o
+;*********************************************************************
+
+opcode TapeDelay, aa, aakkkkkk
+	ainL, ainR, kdlytime, kfeed, kfilter, kdist, kmod, kmix xin
+
+	aOutL TapeDelay ainL, kdlytime, kfeed, kfilter, kdist, kmod, kmix
+	aOutR TapeDelay ainR, kdlytime, kfeed, kfilter, kdist, kmod, kmix
+
+	xout aOutL, aOutR
+endop
+
 
 ;	avDlyL vdelay3 ainL + (aFeedL * kfeed), adlytime, 3000
 ;	avDlyR vdelay3 ainR + (aFeedR * kfeed), adlytime*1.02, 3000
