@@ -36,7 +36,7 @@
 ; TapeDelay
 ;*********************************************************************
 
-opcode AnalogDelay, a, akkk
+opcode TapeDelay, a, akkk
 	ain, kdlytime, kfeed, kfilter, kdist, kmod, kmix xin
 
 	; ******************************
@@ -54,7 +54,7 @@ opcode AnalogDelay, a, akkk
 	if $PRINT == 1 then 
 		Scut sprintfk "TapeDelay time: %dms", kdlytime
 			puts Scut, kdlytime	
-			
+
 		Sfb sprintfk "TapeDelay Feedback: %f\%", kfeed*100
 				puts Sfb, kfeed+1
 
