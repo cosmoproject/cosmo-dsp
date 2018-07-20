@@ -11,7 +11,7 @@ nchnls 	= 2
 
 #include "../DSP-Library/Includes/cosmo_utilities.inc"
 
-#include "../DSP-Library/Effects/Reverb.udo"
+#include "../DSP-Library/Effects/FakeGrainer.udo"
 #include "../DSP-Library/Effects/Lowpass.udo"
 #include "../DSP-Library/Effects/Distortion.udo"
 
@@ -36,7 +36,7 @@ instr 100
 		printk2 krev_mode
 
 		; Reverb arguments: decay, cutoff, mix
-		aL, aR Reverb aL, aR, 0.9, 0.5, 0.2, krev_mode
+		aL, aR FakeGrainer aL, aR, 0.9
 
 	elseif kPreset == 2 then
 
