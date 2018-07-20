@@ -1,6 +1,6 @@
 /********************************************************
 
-	SineDelay.csd
+	SineDelay.udo
 	Author: Alex Hofmann
 	COSMO UDO adaptation: Bernt Isak Wærstad
 

@@ -1,13 +1,14 @@
-/*
-m_reverb - a reverberator built on reverbsc with freeze and shimmer
+/********************************************************
+
 
 Author: Jeanette C. with many thanks to the Csound community for their great
 support!
 COSMO UDO adaptation: Bernt Isak Wærstad
 
-DESCRIPTION
-m_reverb is a reverberator built on Csound's reverbsc opcode with optional
-shimmer and reverb freeze.
+Description:
+
+ShimmerReverb (originally named "m_reverb") is a reverberator built on 
+Csound's reverbsc opcode with optional shimmer and reverb freeze.
 
 SYNTAX
 aout_l, aout_r m_reverb ain_l, ain_r, klevel, kfeedback, kdamp, kshimmer, \
@@ -18,8 +19,6 @@ iwindow - Number of the window function for the pitchshifter, a triangle is
 	suggested
 
 PERFORMANCE
-aout_l, aout_r - Stereo output of the reverb unit
-ain_l, ain_r - Stereo input into the reverb unit
 klevel - Output level of the reverb effect (0 = bypass/off)
 kfeedback - Feedback or reverb time, between 0 <= feedback < 1
 kdamp - Low frequency damping in Hertz
@@ -31,10 +30,27 @@ kfreeze_trigger - Start/stop input into the freeze. Start and stop have a
 kfreeze_off - If set to one, will stop the frozen audio with a fade
 
 CREDITS
-*/
+********************************************************/
 
-opcode m_reverb, aa, aakkkkkki
-	ainl, ainr, klevel, kfbk, kdamp, kshimmer, kfreeze_trigger, kfreeze_off, iwin xin
+	; Default argument values
+	#define DecayTime #0.85#
+
+	#define DryWet_Mix #0.5#
+	#define Mode #0#
+
+	; Toggle printing on/off
+	#define PRINT #0#
+
+	; Max and minimum values
+	#define MAX_FREQ #12000#
+	#define MIN_FREQ #200#	
+
+;*********************************************************************
+; Reverb - 2 in / 2 out
+;*********************************************************************
+
+opcode ShimmerReverb, aa, aakkkkkki
+	ainL, ainr, kLevel, kFbk, kDamp, kShimmer, kFreeze_trigger, kFreeze_off, iwin xin
 
 	; Limit some parameters to secure ranges and setup some basics
 	kfreeze_time init 0
@@ -50,7 +66,7 @@ opcode m_reverb, aa, aakkkkkki
 
 	; Freezing
 	; Fade in and out, when conditions are right
-	if (kfreeze_trigger >0) then
+	if (kfreeze_trigger > 0) then
 		kfreeze_time = 1
 	endif
 	kfreeze_trigger port kfreeze_trigger, .02

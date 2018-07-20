@@ -1,6 +1,6 @@
 /********************************************************
 
-	Hack.csd
+	Hack.udo
 	Author: Alex Hofmann
 	COSMO UDO adaptation: Bernt Isak Wærstad
 

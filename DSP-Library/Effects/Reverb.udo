@@ -1,6 +1,6 @@
 /********************************************************
 
-	Reverb.csd
+	Reverb.udo
 	Author: Bernt Isak Wærstad
 
 	Arguments: DecayTime, HighFreq_Cutoff, DryWet_Mix, Mode

@@ -1,6 +1,6 @@
 /********************************************************
 
-	Blur.csd
+	Blur.udo
 	Author: Bernt Isak Wærstad
 
 	Arguments: Blur time, Gain, Dry/wet mix[, StereoMode]
