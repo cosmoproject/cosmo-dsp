@@ -11,7 +11,7 @@ nchnls 	= 2
 
 #include "../DSP-Library/Includes/cosmo_utilities.inc"
 
-#include "../DSP-Library/Effects/FakeGrainer.udo"
+#include "../DSP-Library/Effects/SineDelay.udo"
 #include "../DSP-Library/Effects/Lowpass.udo"
 #include "../DSP-Library/Effects/Distortion.udo"
 
@@ -20,6 +20,8 @@ instr 100
 	#include "../DSP-Library/Includes/gpio_channels.inc"
 
 	aL, aR ins
+
+	;aL, aR diskin2 "Tom Dooley - Kurer - Kun Melodi.wav"
 
 	; Name of pots: gkpotX
 	; Name of switches: gkswitchX or gktoggleX
@@ -36,7 +38,7 @@ instr 100
 		printk2 krev_mode
 
 		; Reverb arguments: decay, cutoff, mix
-		aL, aR FakeGrainer aL, aR, 0.9
+		aL, aR SineDelay aL, aR, 0.8, 0.3, 0.1, 0.3, 0.5
 
 	elseif kPreset == 2 then
 
