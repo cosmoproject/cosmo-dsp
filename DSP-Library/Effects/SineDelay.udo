@@ -46,7 +46,7 @@ opcode SineDelay, a, akkkkk
 	ain, kRange, kFrequency, kModIdx, kFeedback, kDryWet xin
 
 	kRange init $Range
-	kFeedback init $Frequency
+	kFrequency init $Frequency
 	kModIdx init $ModulationIdx
 	kFeedback init $Feedback
 	kDryWet init $DryWet_Mix
