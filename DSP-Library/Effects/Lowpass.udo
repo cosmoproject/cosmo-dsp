@@ -1,4 +1,3 @@
-
 /********************************************************
 
 	Lowpass.udo
@@ -217,3 +216,84 @@ opcode Lowpass, aa, aakkkk
 endop
 
 
+;*********************************************************************
+; Lowpass - 1 in / 1 out - Optional, named arguemnts
+;*********************************************************************
+
+opcode Lowpass, a, aS[]k[]
+   	ain, Snames[], kvalues[] xin
+
+    ifco init -1
+    ires init -1
+    idist init -1
+	imode init -1
+
+    kfco init $Cutoff_frequency
+    kres init $Resonance
+    kdist init $Distortion
+	kmode init 0
+
+    icnt = 0
+    while icnt < lenarray(Snames) do
+        if strcmp("cutoff",Snames[icnt]) == 0 then
+            ifco = icnt
+        elseif strcmp("resonance",Snames[icnt]) == 0 then
+            ires = icnt
+        elseif strcmp("distortion",Snames[icnt]) == 0 then
+            idist = icnt
+        elseif strcmp("mode",Snames[icnt]) == 0 then
+            imode = icnt
+        endif
+        icnt += 1
+    od
+
+    if ifco >= 0 then
+        kfco = kvalues[ifco]
+    endif
+
+    if ires >= 0 then
+        kres = kvalues[ires]
+    endif
+
+    if idist >= 0 then
+        kdist = kvalues[idist]
+    endif
+
+	if imode >= 0 then 
+		kmode = kvalues[imode]
+	endif
+
+	aout Lowpass ain, kfco, kres, kdist, kmode
+
+	xout aout
+
+endop 
+
+	
+
+;*********************************************************************
+; Lowpass - 1 in / 2 out - Optional, named arguemnts
+;*********************************************************************
+
+opcode Lowpass, aa, aS[]k[]
+	ain, Snames[], kValues[] xin
+
+	aoutL Lowpass ain, Snames, kValues
+	aoutR Lowpass ain, Snames, kValues
+
+	xout aoutL, aoutR
+endop
+
+
+;*********************************************************************
+; Lowpass - 2 in / 2 out - Optional, named arguemnts
+;*********************************************************************
+
+opcode Lowpass, aa, aaS[]k[]
+	ainL, ainR, Snames[], kValues[] xin
+
+	aoutL Lowpass ainL, Snames, kValues
+	aoutR Lowpass ainR, Snames, kValues
+
+	xout aoutL, aoutR
+endop
