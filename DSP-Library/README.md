@@ -1,4 +1,4 @@
-## List of supported effect UDOs: 
+## List of effects: 
 | UDO              | Arguments                                                                                                                                    |
 |:-----------------|:---------------------------------------------------------------------------------------------------------------------------------------------|
 | Blur.udo         | Blur time, Gain, Dry/wet mix[, StereoMode]                                                                                                   |
@@ -7,7 +7,6 @@
 | Hack.udo         | Frequency, Dry/wet mix                                                                                                                       |
 | Highpass.udo     | Cutoff_frequency, Resonance, Distortion [, Mode]                                                                                             |
 | Lowpass.udo      | Cutoff frequency, Resonance, Distortion [, Mode]                                                                                             |
-| README.md        |                                                                                                                                              |
 | RandDelay.udo    | Range, Speed, Feedback, Dry/wet mix, [Stereo Mode 1i/1o only]                                                                                |
 | Reverb.udo       | DecayTime, HighFreq_Cutoff, DryWet_Mix, Mode                                                                                                 |
 | Reverse.udo      | Reverse_time, Speed, Dry/wet mix                                                                                                             |
