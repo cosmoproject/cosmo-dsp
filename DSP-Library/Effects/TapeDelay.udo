@@ -24,10 +24,10 @@
 	#define Feedback #0.3#
 	#define Filter #0.5#
 	#define Distortion #0#	
-	#define Modulation #0#
+	#define Modulation #0.2#
 	#define Mix #0.4#
 	#define StereoMode #0#
-
+	
 	; Toggle printing on/off
 	#define PRINT #1#
 
@@ -50,7 +50,6 @@ opcode TapeDelay, a, akkkkO
 	aout TapeDelay ain, Sargs, kvalues
 
 	xout aout
-
 endop 
 
 
@@ -177,13 +176,12 @@ opcode TapeDelay, aa, aaS[]k[]
 	kfilter scale kfilter, 12000, 200
 
 	kdist init $Distortion
-	kdist scale kdist, 2, 0
+	kdist scale kdist, 1, 0
 
 	kmod init $Modulation
 	kmod scale kmod, 1, 0
 
 	kmix scale kmix, 1, 0
-
 
 	if $PRINT == 1 then 
 		Stime sprintfk "TapeDelay time: %dms", kdlytime
@@ -195,7 +193,7 @@ opcode TapeDelay, aa, aaS[]k[]
 		Sfilt sprintfk "TapeDelay Filter: %.2fHz", kfilter
 			puts Sfilt, kfilter+1
 
-		Sdist sprintfk "TapeDelay Distortion: %f", kdist
+		Sdist sprintfk "TapeDelay Distortion: %.2f", kdist
 			puts Sdist, kdist+1
 
 		Smod sprintfk "TapeDelay Modulation: %.2f%%", kmod*100
@@ -205,34 +203,49 @@ opcode TapeDelay, aa, aaS[]k[]
 			puts Smix, kmix+1
 	endif
 	
-	kdlytime port kdlytime, 0.7
+	kdlytime port kdlytime, 0.5
 	adlytime interp kdlytime
 
-	; Delay code
-	aFeed init 0
+	kmod port kmod, 0.5
 
-; Modulate delay time too?
-	if kstereo == 1 then 
-		avDlyL vdelay3 ainL + (aFeed * kfeed), adlytime , 3000
-		avDlyR vdelay3 ainR + (aFeed * kfeed), adlytime , 3000
-	else
-		avDly vdelay3 ainL + (aFeed * kfeed), adlytime , 3000
-		avDlyR = avDly
+	; Delay code
+	aFeedL init 0
+	aFeedR init 0
+
+	ktime_mod = 1.01
+	kfeed_mod = 0.99
+	kfilter_mod = 1.1
+
+	kWowFreq = 0.7 ; 0.1 - 10Hz
+	kWow oscil kmod*0.01, kWowFreq 
+	kWow += 1
+	;kFlutter = 0
+
+	if kdlytime < 1.5 then 
+		ktime_mod = 1
+		kWow = 1
 	endif
 
-	kModfreq = 10
-	aLFO oscil kmod, kModfreq*kmod
+	adlytime *= kWow
 
-	aFeed lpf18 avDly, kfilter*k(aLFO*0.1), 0, kdist*k(aLFO*0.1)
+	if kstereo == 1 then 
 
-	aLFO *= 0.5
-	aLFO += 1
-	aFeed *= aLFO
-	
-	;----------------------
+		avDlyL vdelay3 ainL + aFeedL, adlytime * ktime_mod, 3000
+		avDlyR vdelay3 ainR + aFeedR, adlytime , 3000
 
-	aoutL ntrpol ainL, avDly, kmix
-	aoutR ntrpol ainR, avDly, kmix
+		aFeedL lpf18 avDlyL * kfeed, kfilter, 0, kdist
+		aFeedR lpf18 avDlyR * kfeed * kfeed_mod, kfilter * kfilter_mod, 0, kdist
+
+		aoutL ntrpol ainL, avDlyL, kmix
+		aoutR ntrpol ainR, avDlyR, kmix	
+	else
+		avDlyL vdelay3 ainL + aFeedL, adlytime , 3000
+
+		aFeedL lpf18 avDlyL * kfeed, kfilter, 0, kdist
+		
+		aoutL ntrpol ainL, avDlyL, kmix
+		aoutR = aoutL
+	endif
 
 	xout aoutL, aoutR
 
@@ -266,5 +279,4 @@ opcode TapeDelay, aa, aS[]k[]
 	xout aoutL, aoutR
 
 endop
-
 
