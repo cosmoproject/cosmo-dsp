@@ -35,9 +35,9 @@
 
 		aL, aR ins
 
-        alfo lfo 0.5, 1, 1
-        aL oscili alfo, 220
-        aR oscili alfo, 260
+        ; alfo lfo 0.5, 1, 1
+        ; aL oscili alfo, 220
+        ; aR oscili alfo, 260
 
 		adlyL = 0
 		adlyR = 0
@@ -105,15 +105,16 @@
 
 
 		;AH ok-mac / ?-bela
-		; TODO: turn off printing
 		;aL, aR TapeDelay aL, aR, 0.2, 0.4, 0.5, 0.4, 0
 		;aL, aR TapeDelay aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1, gkCC24_CH1, 0.5
 
+		;AH ok-mac / ?-bela
+		; Arguments: Frequency, Depth, Dry/wet mix
+		; aL, aR Tremolo aL, aR, 0.8, 1, 0.5
+		; aL, aR Tremolo aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1
 
-		;aL, aR Tremolo aL, aR, 0.8, 1
-		aL, aR Tremolo aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1
-
-
+		; AH ok-mac / ?-bela
+		; Arguments: 	Threshold, DelayTime Min, DelayTime Max, Feedback Min, Feedback Max, Width, Level, Portamento time, Cutoff frequency, Bandwidth, Dry/wet mix
         ; aL, aR TriggerDelay aL, aR, 1, 0.1, 0.2, 0.5, 0.9, 1, 1, 0.1, 0.5, 0.1, 0.5
 
 		;AH ok-mac / ?-bela
