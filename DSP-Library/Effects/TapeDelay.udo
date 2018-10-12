@@ -1,17 +1,15 @@
 /********************************************************
 
-	EXPERIMENTAL!
-
 	TapeDelay.udo
 	Author: Bernt Isak Wærstad
 
-	Arguments: DelayTime, Feedback, Filter, Distortion, Modulation, Mix
-    Defaults:  0.2, 0.4, 0.5
+	Arguments: DelayTime, Feedback, Filter, Distortion, Modulation, Mix [, StereoMode]
+    Defaults:  0.2, 0.4, 0.5, 0, 0, 0.4, 0
 
 	Delay time: 1ms - 2s
 	Feedback: 0% - 120%
 	Filter: 200Hz - 12000Hz
-	Distortion:
+	Distortion: 
 	Modulation: 	
 	Mix: 0% - 100%
 
@@ -28,9 +26,10 @@
 	#define Distortion #0#	
 	#define Modulation #0#
 	#define Mix #0.4#
+	#define StereoMode #0#
 
 	; Toggle printing on/off
-	#define PRINT #0#
+	#define PRINT #1#
 
 ;*********************************************************************
 ; TapeDelay
@@ -51,24 +50,25 @@ opcode TapeDelay, a, akkkkkk
 	kmod scale kmod, 1, 0
 	kmix scale kmix, 1, 0
 
-	if $PRINT == 1 then 
-		Scut sprintfk "TapeDelay time: %dms", kdlytime
-			puts Scut, kdlytime	
 
-		Sfb sprintfk "TapeDelay Feedback: %f\%", kfeed*100
+	if $PRINT == 1 then 
+		Stime sprintfk "TapeDelay time: %dms", kdlytime
+			puts Stime, kdlytime	
+
+		Sfb sprintfk "TapeDelay Feedback: %.2f%%", kfeed*100
 				puts Sfb, kfeed+1
 
-		Sfilt sprintfk "TapeDelay Filter: %fHz", kfilter
+		Sfilt sprintfk "TapeDelay Filter: %.2fHz", kfilter
 			puts Sfilt, kfilter+1
 
 		Sdist sprintfk "TapeDelay Distortion: %f", kdist
 			puts Sdist, kdist+1
 
-		Smod sprintfk "TapeDelay Modulation: %f\%", kmod*100
+		Smod sprintfk "TapeDelay Modulation: %.2f%%", kmod*100
 			puts Smod, kmod+1
 
-		Srev sprintfk "TapeDelay Mix: %f\%", kmix*100
-			puts Srev, kmix+1
+		Smix sprintfk "TapeDelay Mix: %.2f%%", kmix*100
+			puts Smix, kmix+1
 	endif
 	
 	kdlytime port kdlytime, 0.7
@@ -102,11 +102,21 @@ endop
 ; TapeDelay - 1i/2o
 ;*********************************************************************
 
-opcode TapeDelay, aa, akkkkkk
-	ain, kdlytime, kfeed, kfilter, kdist, kmod, kmix xin
+opcode TapeDelay, aa, akkkkkkO
+	ain, kdlytime, kfeed, kfilter, kdist, kmod, kmix, kstereo xin
+
+	if kstereo == 1 then 
+		kTimeMod = 1.1
+		kFilterMod = 0.95
+		kFeedMod = 1.02
+	else
+		kTimeMod = 1
+		kFilterMod = 1
+		kFeedMod = 1
+	endif
 
 	aOutL TapeDelay ain, kdlytime, kfeed, kfilter, kdist, kmod, kmix
-	aOutR TapeDelay ain, kdlytime, kfeed, kfilter, kdist, kmod, kmix
+	aOutR TapeDelay ain, kdlytime*kTimeMod, kfeed*kFeedMod, kfilter*kFilterMod, kdist, kmod, kmix
 
 	xout aOutL, aOutR
 endop
@@ -115,16 +125,22 @@ endop
 ; TapeDelay - 2i/2o
 ;*********************************************************************
 
-opcode TapeDelay, aa, aakkkkkk
-	ainL, ainR, kdlytime, kfeed, kfilter, kdist, kmod, kmix xin
+opcode TapeDelay, aa, aakkkkkkO
+	ainL, ainR, kdlytime, kfeed, kfilter, kdist, kmod, kmix, kstereo xin
+
+	if kstereo == 1 then 
+		kTimeMod = 1.1
+		kFilterMod = 0.95
+		kFeedMod = 1.02
+	else
+		kTimeMod = 1
+		kFilterMod = 1
+		kFeedMod = 1
+	endif
 
 	aOutL TapeDelay ainL, kdlytime, kfeed, kfilter, kdist, kmod, kmix
-	aOutR TapeDelay ainR, kdlytime, kfeed, kfilter, kdist, kmod, kmix
+	aOutR TapeDelay ainR, kdlytime*kTimeMod, kfeed*kFeedMod, kfilter*kFilterMod, kdist, kmod, kmix
 
 	xout aOutL, aOutR
 endop
-
-
-;	avDlyL vdelay3 ainL + (aFeedL * kfeed), adlytime, 3000
-;	avDlyR vdelay3 ainR + (aFeedR * kfeed), adlytime*1.02, 3000
 
