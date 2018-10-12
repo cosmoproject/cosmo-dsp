@@ -43,28 +43,36 @@
 		adlyL = 0
 		adlyR = 0
 
-
+		; MIDI in for testing...
 		gkCC21_CH1 ctrl7 1, 21, 0, 1
         gkCC21_CH1 port gkCC21_CH1, .1
 
 		gkCC22_CH1 ctrl7 1, 22, 0, 1
         gkCC22_CH1 port gkCC22_CH1, .1
 
-        aL, aR Blur aL, aR, 0.3, 0.5, 0.3, 0.2
-		aL, aR Chorus aL, aR, gkCC21_CH1, gkCC22_CH1
-        aL, aR FakeGrainer aL, aR, 0.5
-        aL, aR Hack aL, aR, 0.3, 0.5
-        aL, aR Highpass aL, aR, 0.8, 0.3, 0, 1
-        aL, aR Lowpass aL, aR
-        aL, aR RandDelay aL, aR
-        aL, aR Reverb aL, aR
-        aL, aR Reverse aL, aR
-        aL, aR SineDelay aL, aR
-        aL, aR TapeDelay aL, aR
-        aL, aR Tremolo aL, aR
-        aL, aR TriggerDelay aL, aR
-        aL, aR Volume aL, aR
-        aL, aR Wobble aL, aR
+		gkCC23_CH1 ctrl7 1, 23, 0, 1
+        gkCC23_CH1 port gkCC23_CH1, .1
+
+		gkCC24_CH1 ctrl7 1, 24, 0, 1
+        gkCC24_CH1 port gkCC24_CH1, .1
+
+		;--------------------------
+
+        ; aL, aR Blur aL, aR, 0.3, 0.5, 0.3, 0.2
+		; aL, aR Chorus aL, aR, gkCC21_CH1, gkCC22_CH1
+        ; aL, aR FakeGrainer aL, aR, 0.5
+        ; aL, aR Hack aL, aR, 0.3, 0.5
+        ; aL, aR Highpass aL, aR, 0.8, 0.3, 0, 1 ;make mode optional?
+        ; aL, aR Lowpass aL, aR, 0.8, 0.3, 0, 1
+        ; aL, aR RandDelay aL, aR, 0.5, 0.1, 0.2, 0.5
+        aL, aR Reverb aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1, 1
+        ; aL, aR Reverse aL, aR, 0.1, 0, 0.5
+        ; aL, aR SineDelay aL, aR, 0.8, 0.3, 0.1, 0.3, 0.5
+        ; aL, aR TapeDelay aL, aR, 0.2, 0.4, 0.5, 0.4, 0
+        ; aL, aR Tremolo aL, aR, 0.8, 1
+        ; aL, aR TriggerDelay aL, aR, 1, 0.1, 0.2, 0.5, 0.9, 1, 1, 0.1, 0.5, 0.1, 0.5
+        ; aL, aR Volume aL, aR, 1
+        ; aL, aR Wobble aL, aR, 0.2, 0.5
 
 
 		aOutL = (aL + adlyL)

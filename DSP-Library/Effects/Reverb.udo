@@ -9,7 +9,7 @@
 	Decay Time: 0.1 - 1
 	Dampening/cutoff freq: 200Hz - 12000Hz
 	Dry/wet mix: 0% - 100%
-	Mode: 
+	Mode:
 
 		0: reverbsc
 		1: freeverb
@@ -31,7 +31,7 @@
 
 	; Max and minimum values
 	#define MAX_FREQ #12000#
-	#define MIN_FREQ #200#	
+	#define MIN_FREQ #200#
 
 ;*********************************************************************
 ; Reverb - 2 in / 2 out
@@ -43,22 +43,24 @@ opcode Reverb, aa, aaPVVO
 	kRev_Decay init $DecayTime
 	kRev_Cutoff init $HighFreq_Cutoff
 	kRev_Mix init $DryWet_Mix
-	kMode init $Mode	
+	kMode init $Mode
 
 	kRev_Mix limit kRev_Mix, 0, 1
-	Srev sprintfk "Reverb Mix: %f", kRev_Mix
-		puts Srev, kRev_Mix
+	if $PRINT == 1 then
+		Srev sprintfk "Reverb Mix: %f", kRev_Mix
+			puts Srev, kRev_Mix
+	endif
 	kRev_Mix port kRev_Mix, 0.05
 
 	; Skip Reverb processing when mix is close to 0
-	 
+
 	if (kRev_Mix > 0.01) then
 
 		if kMode == 0 then
 
 			/********************************************************
 			Reverbsc
-			
+
 			8 delay line stereo FDN reverb, with feedback matrix
 			based upon physical modeling scattering junction of 8
 			lossless waveguides of equal characteristic impedance.
@@ -68,14 +70,14 @@ opcode Reverb, aa, aaPVVO
 			********************************************************/
 
 			kRev_Decay scale kRev_Decay, 1, 0.1
-			if $PRINT == 1 then 
+			if $PRINT == 1 then
 				Srev sprintfk "Reverb Decay [reverbsc]: %f", kRev_Decay
 					puts Srev, kRev_Decay
 			endif
 			kRev_Decay port kRev_Decay, 0.1
 
 			kRev_Cutoff scale kRev_Cutoff, $MAX_FREQ, $MIN_FREQ
-			if $PRINT == 1 then 
+			if $PRINT == 1 then
 					Srev sprintfk "Reverb Cutoff [reverbsc]: %f", kRev_Cutoff
 				puts Srev, kRev_Cutoff
 			endif
@@ -89,21 +91,21 @@ opcode Reverb, aa, aaPVVO
 			arevL, arevR reverbsc ainL, ainR, kRev_Decay, kRev_Cutoff
 
 		elseif kMode == 1 then
-			
+
 			/********************************************************
 			Freeverb
 
-			freeverb is a stereo reverb unit based on Jezar's public 
-			domain C++ sources, composed of eight parallel comb 
-			filters on both channels, followed by four allpass units 
+			freeverb is a stereo reverb unit based on Jezar's public
+			domain C++ sources, composed of eight parallel comb
+			filters on both channels, followed by four allpass units
 			in series. The filters on the right channel are slightly
-			 detuned compared to the left channel in order to create 
+			 detuned compared to the left channel in order to create
 			 a stereo effect.
 
 			********************************************************/
-			
+
 			kRoomSize scale kRev_Decay, 1, 0.1
-			if $PRINT == 1 then 
+			if $PRINT == 1 then
 				Srev sprintfk "Reverb Room size [freeverb]: %f", kRoomSize
 					puts Srev, kRoomSize+1
 			endif
@@ -111,8 +113,8 @@ opcode Reverb, aa, aaPVVO
 
 			kHFMax = kRev_Cutoff / $MAX_FREQ
 			kHFMin = $MIN_FREQ / 20000
-			kHFDamp scale kRev_Cutoff, kHFMax, kHFMin 
-			if $PRINT == 1 then 
+			kHFDamp scale kRev_Cutoff, kHFMax, kHFMin
+			if $PRINT == 1 then
 					Srev sprintfk "Reverb HF Damp [freeverb]: %f", kHFDamp
 				puts Srev, kHFDamp
 			endif
@@ -162,8 +164,3 @@ opcode Reverb, a, aPVVO
 
 	xout (aL + aR) * 0.5
 endop
-
-
-
-
-
