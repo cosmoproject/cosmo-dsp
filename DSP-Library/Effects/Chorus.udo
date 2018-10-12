@@ -4,24 +4,24 @@
 	Author: Alex Hofmann
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
-	Arguments: Feedback, Dry/wet mix[, Mod]
+	Arguments: Feedback, Dry/wet mix
     Defaults:  0.4, 0.5
 
 	Feedback: 0.001% - 100%
 	Dry/wet mix: 0% - 100%
 
-	Description: 
+	Description:
 	A chorus effect
-	
-	Mod argument is there to make a stereo chorus. 
+
+	Mod argument is there to make a stereo chorus.
 
 ********************************************************/
 
 	; Default argument values
-	#define Feedback #0.4# 
+	#define Feedback #0.4#
 	#define DryWet_Mix #0.5#
 	#define Left_Mod #0#
-	#define Right_Mod #0.02#	
+	#define Right_Mod #0.02#
 
 	; Toggle printing on/off
 	#define PRINT #0#
@@ -40,7 +40,7 @@ opcode Chorus, a, akkO
 	kFeedback scale kFeedback, 1, 0.0001
 	kDryWet scale kDryWet, 1, 0
 
-	if ($PRINT == 1) then 
+	if ($PRINT == 1) then
 		Srev sprintfk "Chorus feedback: %f", kFeedback
 			puts Srev, kFeedback+1
 
@@ -75,8 +75,8 @@ endop
 ;*********************************************************************
 
 
-opcode Chorus, aa, akkO
-	ain, kFeedback, kDryWet, kMod xin
+opcode Chorus, aa, akk
+	ain, kFeedback, kDryWet xin
 
 	aOutL Chorus ain, kFeedback, kDryWet, $Left_Mod
 	aOutR Chorus ain, kFeedback, kDryWet, $Right_Mod
@@ -89,8 +89,8 @@ endop
 ;*********************************************************************
 
 
-opcode Chorus, aa, aakkO
-	ainL, ainR, kFeedback, kDryWet, kMod xin
+opcode Chorus, aa, aakk
+	ainL, ainR, kFeedback, kDryWet xin
 
 	aOutL Chorus ainL, kFeedback, kDryWet, $Left_Mod
 	aOutR Chorus ainR, kFeedback, kDryWet, $Right_Mod
