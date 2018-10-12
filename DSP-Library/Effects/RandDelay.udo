@@ -5,7 +5,7 @@
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
 	Arguments: Range, Speed, Feedback, Dry/wet mix, [Stereo Mode 1i/1o only]
-    Defaults:  0.5, 0.1, 0.2, 0.5 [, 0]
+    Defaults:  0.1, 0.4, 0.2, 0.5 [, 0]
 
 	Range: 0.001 - 15
 	Speed: 0.001 - 2
@@ -18,8 +18,8 @@
 ********************************************************/
 
 	; Default argument values
-	#define Range #0.5#
-	#define Speed #0.1#
+	#define Range #0.1#
+	#define Speed #0.4#
 	#define Feedback #0.2#
 	#define DryWet_Mix #0.5#
 
