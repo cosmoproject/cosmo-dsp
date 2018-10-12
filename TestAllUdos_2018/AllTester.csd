@@ -77,7 +77,7 @@
 		; aL, aR Hack aL, aR, 0.3, 0.5
 		; aL, aR Hack aL, aR, gkCC21_CH1, gkCC22_CH1
 
-		; TODO: test HP, LP again after bernt changed them
+		; BIW ok-mac
         ; aL, aR Highpass aL, aR, 0.8, 0.3, 0, 1 ;make mode optional?
         ; aL, aR Lowpass aL, aR, 0.8, 0.3, 0, 1
 
@@ -86,7 +86,7 @@
 		; aL, aR RandDelay aL, aR, 0.1, 0.4, 0.2, 0.5
 		; aL, aR RandDelay aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1, gkCC24_CH1
 
-		;TODO: test Reverb again after bernt changed it
+		; BIW ok-mac
 		; Arguments: DecayTime, HighFreq_Cutoff, DryWet_Mix, Mode
 		; aL, aR Reverb aL, aR, 0.85, 0.5, 0.5, 0
         ; aL, aR Reverb aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1, 1
