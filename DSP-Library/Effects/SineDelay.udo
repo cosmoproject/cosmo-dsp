@@ -9,7 +9,7 @@
 
 	Range: 0.001s - 0.5s
 	Frequency: 0.1Hz - 10Hz
-	ModulationIdx: 0 - 5 
+	ModulationIdx: 0 - 5
 	Feedback: 0% - 100%
 	Dry/wet mix: 0% - 100%
 
@@ -19,7 +19,7 @@
 ********************************************************/
 
 	; Default argument values
-	#define Range #0.8# 
+	#define Range #0.8#
 	#define Frequency #0.3#
 	#define ModulationIdx #0.1#
 	#define Feedback #0.3#
@@ -30,10 +30,10 @@
 
 	; Max and minimum values
 	#define MAX_RANGE #0.5#
-	#define MIN_RANGE #0.001#	
+	#define MIN_RANGE #0.001#
 
 	#define MAX_FREQ #10#
-	#define MIN_FREQ #0.1#	
+	#define MIN_FREQ #0.1#
 
 	#define MAX_MOD #5#
 
@@ -74,7 +74,7 @@ opcode SineDelay, a, akkkkk
 			puts Sfb, kFeedback+1
 		Smix sprintfk "SineDelay Mix: %f", kDryWet
 			puts Smix, kDryWet+1
-	endif 
+	endif
 
 	kRange port kRange, 0.1
 	aRange interp kRange
@@ -86,7 +86,7 @@ opcode SineDelay, a, akkkkk
 	aSin poscil aRange, kFrequency+kMod
 
 	aDelay delayr $MAX_RANGE*2			; a delayline, with $MAX_RANGE*2 second maximum delay-time is initialised
-	aWet deltapi aSin+0.5				; data at a flexible position is read from the delayline
+	aWet deltap3 aSin+0.5				; data at a flexible position is read from the delayline
 		 delayw ain+(aWet*kFeedback)	; the audio in is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
 
 	aOut ntrpol ain, aWet, kDryWet
@@ -122,5 +122,3 @@ opcode SineDelay, aa, aakkkkk
 
 	xout aoutL, aoutR
 endop
-
-
