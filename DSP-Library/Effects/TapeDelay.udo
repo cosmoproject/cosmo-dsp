@@ -11,13 +11,15 @@
 	Filter: 200Hz - 12000Hz
 	Mix: 0% - 100%
 
-	Additional arguements: 
-	Distortion: 0 - 1
-	Modulation: 	
+	Optional arguments:
+	StereoMode: 0 or 1 - Enables stereo delay 
 
+	Additional named arguments: 
+	Distortion: 0 - 1
+	Modulation: 0% - 100%	
 
 	Description:
-	Analoge style delay
+	Analog tape-ish delay
 
 ********************************************************/
 
@@ -32,7 +34,7 @@
 	#define StereoMode #0#
 	
 	; Toggle printing on/off
-	#define PRINT #1#
+	#define PRINT #0#
 
 ;*********************************************************************
 ; TapeDelay - 2i/2o - Named arguments

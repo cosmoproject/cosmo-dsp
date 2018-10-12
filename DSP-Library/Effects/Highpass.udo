@@ -1,15 +1,16 @@
-
 /********************************************************
 
 	Highpass.udo
 	Author: Bernt Isak Wærstad
 
-	Arguments: Cutoff_frequency, Resonance, Distortion, Mode
-    Defaults:  0.8, 0.3, 0, 0
+	Arguments: Cutoff_frequency, Resonance, Distortion [, Mode]
+    Defaults:  0.8, 0.3, 0 [, 0]
 
-	Cutoff frequency: 30Hz - 12000Hz
-	Resonance: 0 - 0.9
-	Distortion: 0 - 0.9
+	Cutoff frequency: 20Hz - 19000Hz
+	Resonance: 0 - 1.25
+	Distortion: 0 - 1
+
+	Optional arguments:
 	Mode:
 		0: lpf18
 		1: moogladder
@@ -25,25 +26,23 @@
 	#define Cutoff_frequency #0.8#
 	#define Resonance #0.3#
 	#define Distortion #0#
-    #define Mode #0# ; but how to use it??
+    #define Mode #0# 
 
 	; Toggle printing on/off
-	#define PRINT #0#
+	#define PRINT #1#
 
 	; Max and minimum values
-	#define MAX_FREQ #20000#
-	#define MIN_FREQ #30#
+	#define MAX_FREQ #19000#
+	#define MIN_FREQ #20#
 	#define MAX_RESO #1.25#
 	#define MAX_DIST #1#
-
-	; TODO: Scale and print frequency correctly for highpass
 
 
 ;*********************************************************************
 ; Highpass - 1 in / 1 out
 ;*********************************************************************
 
-opcode Highpass, a, akkkk
+opcode Highpass, a, akkkO
 	ain, kfco, kres, kdist, kmode xin
 
 	; ******************************
@@ -57,17 +56,19 @@ opcode Highpass, a, akkkk
 
 		kfco expcurve kfco, 30
 		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
+		kfco limit kfco, $MIN_FREQ, $MAX_FREQ
+
 		kdist scale kdist, $MAX_DIST, 0
 		kres scale kres, $MAX_RESO, 0
 
 		if $PRINT == 1 then
-			Srev sprintfk "LPF Cutoff: %f", kfco
-				puts Srev, kfco
+			Sfco sprintfk "HPF Cutoff: %.2f", kfco
+				puts Sfco, kfco
 
-			Sres sprintfk "LPF Reso: %f", kres
+			Sres sprintfk "HPF Reso: %.2f", kres
 				puts Sres, kres
 
-			Sdist sprintfk "LPF Dist: %f", kdist
+			Sdist sprintfk "HPF Dist: %.2f", kdist
 				puts Sdist, kdist
 		endif
 
@@ -91,17 +92,18 @@ opcode Highpass, a, akkkk
 
 		kfco expcurve kfco, 30
 		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
-		if $PRINT == 1 then
-			Srev sprintfk "LPF Cutoff: %f", kfco
-				puts Srev, kfco
-		endif
-		kfco port kfco, 0.1
+		kfco limit kfco, $MIN_FREQ, $MAX_FREQ
 
-		kres scale kres, $MAX_RESO, 0
+		kres scale kres, $MAX_RESO*25, 0.5
+
 		if $PRINT == 1 then
-			Srev sprintfk "LPF Reso: %f", kres
-				puts Srev, kres
+			Sres sprintfk "HPF Reso: %f", kres
+				puts Sres, kres
+			Sfco sprintfk "HPF Cutoff: %f", kfco
+				puts Sfco, kfco
 		endif
+		
+		kfco port kfco, 0.1
 		kres port kres, 0.01
 /*
 		kdist scale kdist, $MAX_DIST, 0
@@ -130,24 +132,26 @@ opcode Highpass, a, akkkk
 
 		kfco expcurve kfco, 30
 		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
-		if $PRINT == 1 then
-			Srev sprintfk "LPF Cutoff: %f", kfco
-				puts Srev, kfco
-		endif
-		kfco port kfco, 0.1
-
-		kres scale kres, $MAX_RESO*10, 0
-		if $PRINT == 1 then
-			Srev sprintfk "LPF Reso: %f", kres
-				puts Srev, kres
-		endif
-		kres port kres, 0.01
+		kfco limit kfco, $MIN_FREQ, $MAX_FREQ
 
 		kdist scale kdist, $MAX_DIST*10, 1
+		kres scale kres, $MAX_RESO*10, 0
+
+
+
 		if $PRINT == 1 then
-			Srev sprintfk "LPF Dist: %f", kdist
-				puts Srev, kdist
+			Sfco sprintfk "HPF Cutoff: %.2f", kfco
+				puts Sfco, kfco
+
+			Sres sprintfk "HPF Reso: %.2f", kres
+				puts Sres, kres
+
+			Sdist sprintfk "HPF Dist: %.2f", kdist
+				puts Sdist, kdist
 		endif
+
+		kfco port kfco, 0.1
+		kres port kres, 0.01
 		kdist port kdist, 0.01
 
 		knonlinear = 1
@@ -166,18 +170,19 @@ opcode Highpass, a, akkkk
 
 		kfco expcurve kfco, 30
 		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
-		if $PRINT == 1 then
-			Srev sprintfk "LPF Cutoff: %f", kfco
-				puts Srev, kfco
-		endif
-		kfco port kfco, 0.1
+		kfco limit kfco, $MIN_FREQ, $MAX_FREQ
 
 		kres scale kres, $MAX_RESO*25, 0.5
 		if $PRINT == 1 then
-			Srev sprintfk "LPF Reso: %f", kres
-				puts Srev, kres
+			Sres sprintfk "HPF Reso: %f", kres
+				puts Sres, kres
+			Sfco sprintfk "HPF Cutoff: %f", kfco
+				puts Sfco, kfco
 		endif
+		
+		kfco port kfco, 0.1
 		kres port kres, 0.01
+
 /*
 		kdist scale kdist, $MAX_DIST, 0
 		if $PRINT == 1 then
@@ -195,10 +200,10 @@ opcode Highpass, a, akkkk
 	xout aout
 endop
 ;*********************************************************************
-; Highpass - '' in / 2 out
+; Highpass - 1 in / 2 out
 ;*********************************************************************
 
-opcode Highpass, aa, akkkk
+opcode Highpass, aa, akkkO
 	ain, kfco, kres, kdist, kmode xin
 
 	aOutL Highpass ain, kfco, kres, kdist, kmode
@@ -212,7 +217,7 @@ endop
 ; Highpass - 2 in / 2 out
 ;*********************************************************************
 
-opcode Highpass, aa, aakkkk
+opcode Highpass, aa, aakkkO
 	ainL, ainR, kfco, kres, kdist, kmode xin
 
 	aOutL Highpass ainL, kfco, kres, kdist, kmode

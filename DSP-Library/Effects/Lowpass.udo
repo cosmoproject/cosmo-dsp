@@ -3,12 +3,14 @@
 	Lowpass.udo
 	Author: Bernt Isak Wærstad
 
-	Arguments: Cutoff frequency, Resonance, Distortion, Mode
+	Arguments: Cutoff frequency, Resonance, Distortion [, Mode]
     Defaults:  0.8, 0.3, 0, 0
 
-	Cutoff frequency: 30Hz - 12000Hz
-	Resonance: 0 - 0.9
-	Distortion: 0 - 0.9
+	Cutoff frequency: 20Hz - 19000Hz
+	Resonance: 0 - 1.25
+	Distortion: 0 - 1
+
+	Optional arguments:
 	Mode:
 		0: lpf18
 		1: moogladder
@@ -26,11 +28,11 @@
 	#define Distortion #0#
 
 	; Toggle printing on/off
-	#define PRINT #0#
+	#define PRINT #1#
 
 	; Max and minimum values
-	#define MAX_FREQ #20000#
-	#define MIN_FREQ #30#
+	#define MAX_FREQ #19000#
+	#define MIN_FREQ #20#
 	#define MAX_RESO #1.25#
 	#define MAX_DIST #1#
 
@@ -39,9 +41,8 @@
 ; Lowpass - 1 in / 1 out
 ;*********************************************************************
 
-opcode Lowpass, a, akkkk
+opcode Lowpass, a, akkkO
 	ain, kfco, kres, kdist, kmode xin
-
 
 	; ******************************
 	; LPF18
@@ -54,12 +55,13 @@ opcode Lowpass, a, akkkk
 
 		kfco expcurve kfco, 30
 		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
+		kfco limit kfco, $MIN_FREQ, $MAX_FREQ
 		kdist scale kdist, $MAX_DIST, 0
 		kres scale kres, $MAX_RESO, 0
 
 		if $PRINT == 1 then
-			Srev sprintfk "LPF Cutoff: %f", kfco
-				puts Srev, kfco
+			Sfco sprintfk "LPF Cutoff: %f", kfco
+				puts Sfco, kfco
 
 			Sres sprintfk "LPF Reso: %f", kres
 				puts Sres, kres
@@ -86,17 +88,19 @@ opcode Lowpass, a, akkkk
 
 		kfco expcurve kfco, 30
 		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
-		if $PRINT == 1 then
-			Srev sprintfk "LPF Cutoff: %f", kfco
-				puts Srev, kfco
-		endif
-		kfco port kfco, 0.1
+		kfco limit kfco, $MIN_FREQ, $MAX_FREQ
 
 		kres scale kres, $MAX_RESO, 0
+
 		if $PRINT == 1 then
-			Srev sprintfk "LPF Reso: %f", kres
-				puts Srev, kres
+			Sfco sprintfk "LPF Cutoff: %f", kfco
+				puts Sfco, kfco
+
+			Sres sprintfk "LPF Reso: %f", kres
+				puts Sres, kres
 		endif
+
+		kfco port kfco, 0.1
 		kres port kres, 0.01
 /*
 		kdist scale kdist, $MAX_DIST, 0
@@ -122,24 +126,23 @@ opcode Lowpass, a, akkkk
 
 		kfco expcurve kfco, 30
 		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
-		if $PRINT == 1 then
-			Srev sprintfk "LPF Cutoff: %f", kfco
-				puts Srev, kfco
-		endif
-		kfco port kfco, 0.1
-
+		kfco limit kfco, $MIN_FREQ, $MAX_FREQ
 		kres scale kres, $MAX_RESO*10, 0
-		if $PRINT == 1 then
-			Srev sprintfk "LPF Reso: %f", kres
-				puts Srev, kres
-		endif
-		kres port kres, 0.01
-
 		kdist scale kdist, $MAX_DIST*10, 1
+
 		if $PRINT == 1 then
-			Srev sprintfk "LPF Dist: %f", kdist
-				puts Srev, kdist
+			Sfco sprintfk "LPF Cutoff: %f", kfco
+				puts Sfco, kfco
+
+			Sres sprintfk "LPF Reso: %f", kres
+				puts Sres, kres
+
+			Sdist sprintfk "LPF Dist: %f", kdist
+				puts Sdist, kdist
 		endif
+
+		kfco port kfco, 0.1
+		kres port kres, 0.01
 		kdist port kdist, 0.01
 
 		knonlinear = 1
@@ -158,18 +161,19 @@ opcode Lowpass, a, akkkk
 
 		kfco expcurve kfco, 30
 		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
-		if $PRINT == 1 then
-			Srev sprintfk "LPF Cutoff: %f", kfco
-				puts Srev, kfco
-		endif
-		kfco port kfco, 0.1
+		kfco limit kfco, $MIN_FREQ, $MAX_FREQ
 
 		kres scale kres, $MAX_RESO*25, 0.5
 		if $PRINT == 1 then
-			Srev sprintfk "LPF Reso: %f", kres
-				puts Srev, kres
+			Sfco sprintfk "LPF Cutoff: %f", kfco
+				puts Sfco, kfco
+
+			Sres sprintfk "LPF Reso: %f", kres
+				puts Sres, kres
 		endif
+
 		kres port kres, 0.01
+		kfco port kfco, 0.1
 /*
 		kdist scale kdist, $MAX_DIST, 0
 		if $PRINT == 1 then
@@ -192,7 +196,7 @@ endop
 ; Lowpass - 1 in / 2 out
 ;*********************************************************************
 
-opcode Lowpass, aa, akkkk
+opcode Lowpass, aa, akkkO
 	ain, kfco, kres, kdist, kmode xin
 
 	aoutL Lowpass ain, kfco, kres, kdist, kmode
@@ -206,7 +210,7 @@ endop
 ; Lowpass - 2 in / 2 out
 ;*********************************************************************
 
-opcode Lowpass, aa, aakkkk
+opcode Lowpass, aa, aakkkO
 	ainL, ainR, kfco, kres, kdist, kmode xin
 
 	aoutL Lowpass ainL, kfco, kres, kdist, kmode
