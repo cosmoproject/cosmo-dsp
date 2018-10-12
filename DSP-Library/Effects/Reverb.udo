@@ -1,15 +1,15 @@
 /********************************************************
 
-	Reverb.csd
+	Reverb.udo
 	Author: Bernt Isak Wærstad
 
-	Arguments: Decay time, Cutoff frequency, Dry/wet mix, Mode
+	Arguments: DecayTime, HighFreq_Cutoff, DryWet_Mix, Mode
     Defaults:  0.85, 0.5, 0.5, 0
 
-	Decay time: 0.1 - 1
-	Cutoff frequency: 200Hz - 12000Hz
+	Decay Time: 0.1 - 1
+	Dampening/cutoff freq: 200Hz - 12000Hz
 	Dry/wet mix: 0% - 100%
-	Mode: 
+	Mode:
 
 		0: reverbsc
 		1: freeverb
@@ -20,35 +20,47 @@
 
 ********************************************************/
 
-; -----------------------
-; Default argument values
-; -----------------------
-#define DECAY #0.85#
-#define CUTOFF #0.5#
-#define MIX #0.5#
-#define MODE #0#
-; -----------------------
+	; Default argument values
+	#define DecayTime #0.85#
+	#define HighFreq_Cutoff #0.5#
+	#define DryWet_Mix #0.5#
+	#define Mode #0#
 
-opcode Reverb, aa, aakkkk
+	; Toggle printing on/off
+	#define PRINT #0#
+
+	; Max and minimum values
+	#define MAX_FREQ #12000#
+	#define MIN_FREQ #200#
+
+;*********************************************************************
+; Reverb - 2 in / 2 out
+;*********************************************************************
+
+opcode Reverb, aa, aaPVVO
 	ainL, ainR, kRev_Decay, kRev_Cutoff, kRev_Mix, kMode xin
 
-	kRev_Decay init $DECAY
-	kRev_Cutoff init $CUTOFF
+	kRev_Decay init $DecayTime
+	kRev_Cutoff init $HighFreq_Cutoff
+	kRev_Mix init $DryWet_Mix
+	kMode init $Mode
 
-	kRev_Mix scale kRev_Mix, 1, 0
-	Srev sprintfk "Reverb Mix: %f", kRev_Mix
-		puts Srev, kRev_Mix+1
-
+	kRev_Mix limit kRev_Mix, 0, 1
+	if $PRINT == 1 then
+		Srev sprintfk "Reverb Mix: %f", kRev_Mix
+			puts Srev, kRev_Mix
+	endif
 	kRev_Mix port kRev_Mix, 0.05
-	kRev_Mix init $MIX
 
-	if (kRev_Mix > 0.1) then
+	; Skip Reverb processing when mix is close to 0
+
+	if (kRev_Mix > 0.01) then
 
 		if kMode == 0 then
 
 			/********************************************************
 			Reverbsc
-			
+
 			8 delay line stereo FDN reverb, with feedback matrix
 			based upon physical modeling scattering junction of 8
 			lossless waveguides of equal characteristic impedance.
@@ -58,13 +70,17 @@ opcode Reverb, aa, aakkkk
 			********************************************************/
 
 			kRev_Decay scale kRev_Decay, 1, 0.1
-			Srev sprintfk "Reverb Decay [reverbsc]: %f", kRev_Decay
-				puts Srev, kRev_Decay+1
+			if $PRINT == 1 then
+				Srev sprintfk "Reverb Decay [reverbsc]: %f", kRev_Decay
+					puts Srev, kRev_Decay
+			endif
 			kRev_Decay port kRev_Decay, 0.1
 
-			kRev_Cutoff scale kRev_Cutoff, 12000, 200
-				Srev sprintfk "Reverb Cutoff [reverbsc]: %f", kRev_Cutoff
-			puts Srev, kRev_Cutoff
+			kRev_Cutoff scale kRev_Cutoff, $MAX_FREQ, $MIN_FREQ
+			if $PRINT == 1 then
+					Srev sprintfk "Reverb Cutoff [reverbsc]: %f", kRev_Cutoff
+				puts Srev, kRev_Cutoff
+			endif
 
 			; Empty buffer when switching reverb mode
 			if (changed(kMode) == 1) then
@@ -75,27 +91,33 @@ opcode Reverb, aa, aakkkk
 			arevL, arevR reverbsc ainL, ainR, kRev_Decay, kRev_Cutoff
 
 		elseif kMode == 1 then
-			
+
 			/********************************************************
 			Freeverb
 
-			freeverb is a stereo reverb unit based on Jezar's public 
-			domain C++ sources, composed of eight parallel comb 
-			filters on both channels, followed by four allpass units 
+			freeverb is a stereo reverb unit based on Jezar's public
+			domain C++ sources, composed of eight parallel comb
+			filters on both channels, followed by four allpass units
 			in series. The filters on the right channel are slightly
-			 detuned compared to the left channel in order to create 
+			 detuned compared to the left channel in order to create
 			 a stereo effect.
 
 			********************************************************/
-			
+
 			kRoomSize scale kRev_Decay, 1, 0.1
-			Srev sprintfk "Reverb Room size [freeverb]: %f", kRoomSize
-				puts Srev, kRoomSize+1
+			if $PRINT == 1 then
+				Srev sprintfk "Reverb Room size [freeverb]: %f", kRoomSize
+					puts Srev, kRoomSize+1
+			endif
 			kRoomSize port kRoomSize, 0.1
 
-			kHFDamp = kRev_Cutoff 
-				Srev sprintfk "Reverb HF Damp [freeverb]: %f", kHFDamp
-			puts Srev, kHFDamp
+			kHFMax = kRev_Cutoff / $MAX_FREQ
+			kHFMin = $MIN_FREQ / 20000
+			kHFDamp scale kRev_Cutoff, kHFMax, kHFMin
+			if $PRINT == 1 then
+					Srev sprintfk "Reverb HF Damp [freeverb]: %f", kHFDamp
+				puts Srev, kHFDamp
+			endif
 
 			; Empty buffer when switching reverb mode
 			if (changed(kMode) == 1) then
@@ -118,46 +140,27 @@ opcode Reverb, aa, aakkkk
 	xout aoutL, aoutR
 endop
 
-/********************************************************
-	With default value for Mode 
-********************************************************/
-opcode Reverb, aa, aakkk
-	ainL, ainR, kRev_Decay, kRev_Cutoff, kMix xin
+;*********************************************************************
+; Reverb - 1 in / 2 out
+;*********************************************************************
 
-	aoutL, aoutR Reverb ainL, ainR, kRev_Decay, kRev_Cutoff, kMix, $MODE
+opcode Reverb, aa, aPVVO
+	ainMono, kRev_Decay, kRev_Cutoff, kRev_Mix, kMode xin
 
-	xout aoutL, aoutR
+	aL, aR Reverb ainMono, ainMono, kRev_Decay, kRev_Cutoff, kRev_Mix, kMode
+
+	xout aL, aR
 endop
 
-/********************************************************
-	With default value for Dry/wet mix and Mode
-********************************************************/
-opcode Reverb, aa, aakk
-	ainL, ainR, kRev_Decay, kRev_Cutoff xin
+;*********************************************************************
+; Reverb - 1 in / 1 out
+;*********************************************************************
 
-	aoutL, aoutR Reverb ainL, ainR, kRev_Decay, kRev_Cutoff, $MIX, $MODE
+opcode Reverb, a, aPVVO
 
-	xout aoutL, aoutR
-endop
+	ainMono, kRev_Decay, kRev_Cutoff, kRev_Mix, kMode xin
 
-/********************************************************
-	With default value for Cutoff, Dry/wet mix and Mode 
-********************************************************/
-opcode Reverb, aa, aak
-	ainL, ainR, kRev_Decay xin
+	aL, aR Reverb ainMono, ainMono, kRev_Decay, kRev_Cutoff, kRev_Mix, kMode
 
-	aoutL, aoutR Reverb ainL, ainR, kRev_Decay, $CUTOFF, $MIX, $MODE
-
-	xout aoutL, aoutR
-endop
-
-/********************************************************
-	With default value for Decay, Cutoff Dry/wet mix and Mode
-********************************************************/
-opcode Reverb, aa, aa
-	ainL, ainR xin
-
-	aoutL, aoutR Reverb ainL, ainR, $DECAY, $CUTOFF, $MIX, $MODE
-
-	xout aoutL, aoutR
+	xout (aL + aR) * 0.5
 endop

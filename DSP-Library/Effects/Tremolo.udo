@@ -1,41 +1,93 @@
 /********************************************************
-	Tremolo.csd
+	Tremolo.udo
 	Author: Bernt Isak Wærstad
 
-	Arguments: Frequency, Depth
-    Defaults:  0.8, 1
+	Arguments: Frequency, Depth, Dry/wet mix
+    Defaults:  0.8, 1, 0.5
 
-	Frequency: 0.001Hz - 5Hz
+	Frequency: 0.001Hz - 15Hz
 	Depth: 0 - 1
+	Dry/wet mix: 0% - 100%
 
 	Description:
     A tremolo effect
 ********************************************************/
 
-opcode Tremolo, aa, aakk
-	ainL, ainR, kFreq, kDepth xin
+	; Default argument values
+	#define Frequency #0.5#
+	#define Depth #1#
+	#define DryWet_Mix #0.5#
+
+	; Toggle printing on/off
+	#define PRINT #0#
+
+	; Max and minimum values
+	#define MAX_FREQ #15#
+	#define MIN_FREQ #0.001#
+
+;*********************************************************************
+; Tremolo - 1 in / 1 out
+;*********************************************************************
+
+opcode Tremolo, a, akkkk
+	ain, kFreq, kDepth, kDryWet, kStereoMode xin
+
+	kFreq init $Frequency
+	kDepth init $Depth
 
 	kFreq expcurve kFreq, 30
-	kFreq scale kFreq, 15, 0.001
-	Sfreq sprintfk "Tremolo freq: %fHz", kFreq
-		puts Sfreq, kFreq + 1
+	kFreq scale kFreq, $MAX_FREQ, $MIN_FREQ
+
+	if $PRINT == 1 then
+		Sfreq sprintfk "Tremolo freq: %fHz", kFreq
+			puts Sfreq, kFreq + 1
+
+		Sdepth sprintfk "Tremolo depth: %f", kDepth
+			puts Sdepth, kDepth + 1
+	endif
+
 	kFreq port kFreq, 0.1
 	aFreq interp kFreq
 
-	Sdepth sprintfk "Tremolo depth: %f", kDepth
-		puts Sdepth, kDepth + 1 
-
 	aMod oscil kDepth, aFreq
 
-	aCarL oscil 0.45, 4.21*aMod
-	aCarR oscil 0.5, 4.7*aMod*0.98
+	if kStereoMode == 0 then
+		aCar oscil 0.45, 4.21*aMod
+	else
+		aCar oscil 0.5, 4.7*aMod*0.98
+	endif
 
-	aoutL = ainL* aCarL
-	aoutR = ainR * aCarR
+	aTremolo= ain * aCar
+	aOut ntrpol ain, aTremolo, kDryWet
 
-	;aoutL ntrpol ainL, aRML, kDepth
-	;aoutR ntrpol ainR, aRMR, kDepth
+	xout aOut
 
-	xout aoutL, aoutR
+endop
+
+;*********************************************************************
+; Tremolo - 1 in / 2 out
+;*********************************************************************
+
+opcode Tremolo, aa, akkk
+	ain, kFreq, kDepth, kDryWet xin
+
+	aL Tremolo  ain, kFreq, kDepth, kDryWet, 0
+	aR Tremolo  ain, kFreq, kDepth, kDryWet, 1
+
+	xout aL, aR
+
+endop
+
+;*********************************************************************
+; Tremolo - 2 in / 2 out
+;*********************************************************************
+
+opcode Tremolo, aa, aakkk
+	ainL, ainR, kFreq, kDepth, kDryWet xin
+
+	aL Tremolo  ainL, kFreq, kDepth, kDryWet, 0
+	aR Tremolo  ainR, kFreq, kDepth, kDryWet, 1
+
+	xout aL, aR
 
 endop

@@ -1,110 +1,108 @@
 /********************************************************
 
-	Reverse.csd
-	Author: Alex Hofmann
+	Reverse.udo
+	Author: Iain McCurdy
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
-	Arguments: Reverse time, Dry/wet mix
-    Defaults:  0.5, 0.5
+	Arguments: Reverse_time, Speed, Dry/wet mix
+    Defaults:  0.1, 0, 0.5
 
 	Reverse time: 0.1s - 3s
+	Speed: 1x - 5x
 	Dry/wet mix: 0% - 100%
-	
+
 	Description:
 	A reverse effect
 
 ********************************************************/
 
+	; Default argument values
+	#define Reverse_time #0.1#
+	#define Speed #0#
 
-; ********************************************************
-; 		MONO VERSION
-; ********************************************************
+	; Toggle printing on/off
+	#define PRINT #0#
 
-opcode	Reverse, a, aK				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A USEFUL VALUE ALSO AT I-TIME
-	ain,ktime	xin			;READ IN INPUT ARGUMENTS
+	; Max and minimum values
+	#define MAX_TIME #1#
+	#define MIN_TIME #0.1#
+	#define MAX_SPEED #2#
+	#define MIN_SPEED #0#
 
-	ktime scale ktime, 3, 0.1
-	Scut sprintfk "Reverse time: %dms", ktime
-		puts Scut, ktime
 
-	ktime init 0.1
+;*********************************************************************
+; Reverse - 1 in / 1 out
+;*********************************************************************
 
-	ktrig	changed	ktime			;IF ktime CONTROL IS MOVED GENERATE A MOMENTARY '1' IMPULSE
-	if ktrig=1 then				;IF A TRIGGER HAS BEEN GENERATED IN THE LINE ABOVE...
+opcode	Reverse, a, akkk
+	ain, ktime, kspeed, kDryWet	xin			;READ IN INPUT ARGUMENTS
+
+	; ******************************
+	; Controller value scalings
+	; ******************************
+
+	ktime scale ktime, $MAX_TIME, $MIN_TIME
+	kspeed scale kspeed, $MAX_SPEED, $MIN_SPEED
+
+	if $PRINT == 1 then
+		Stime sprintfk "Reverse time: %dms", ktime
+			puts Stime, ktime
+
+		Speed sprintfk "Reverse speed: %dx", kspeed
+			puts Speed, kspeed
+	endif
+
+	ktime init $Reverse_time
+	kspeed init $Speed
+
+	ktrig1	changed	ktime			;IF ktime CONTROL IS MOVED GENERATE A MOMENTARY '1' IMPULSE
+	ktrig2	changed kspeed
+	if ktrig1==1 || ktrig2==1 then				;IF A TRIGGER HAS BEEN GENERATED IN THE LINE ABOVE...
 		reinit	UPDATE			;...BEGIN A REINITILISATION PASS FROM LABEL 'UPDATE'
 	endif					;END OF CONDITIONAL BRANCH
 
+	ienv	ftgentmp	0,0,1024,7,0,(1024*0.01),1,(1024*0.98),1,(0.01*1024),0	;ANTI-CLICK ENVELOPE SHAPE
+
 	UPDATE:					;LABEL CALLED 'UPDATE'
 	itime	=	i(ktime)		;CREATE AN I-TIME VERSION OF ktime
-	aptr	phasor	2/itime			;CREATE A MOVING PHASOR THAT WITH BE USED TO TAP THE DELAY BUFFER
+	ispeed  =	i(kspeed)
+	aptr	phasor	(2/itime) * ispeed		;CREATE A MOVING PHASOR THAT WITH BE USED TO TAP THE DELAY BUFFER
 	aptr	=	aptr*itime		;SCALE PHASOR ACCORDING TO THE LENGTH OF THE DELAY TIME CHOSEN BY THE USER
-	ienv	ftgentmp	0,0,1024,7,0,(1024*0.01),1,(1024*0.98),1,(0.01*1024),0	;ANTI-CLICK ENVELOPE SHAPE
- 	aenv	poscil	1, 2/itime, ienv	;CREATE A CYCLING AMPLITUDE ENVELOPE THAT WILL SYNC TO THE TAP DELAY TIME PHASOR
+ 	aenv	poscil	1, (2/itime)*ispeed, ienv	;CREATE A CYCLING AMPLITUDE ENVELOPE THAT WILL SYNC TO THE TAP DELAY TIME PHASOR
  	abuffer	delayr	5			;CREATE A DELAY BUFFER
 	atap	deltap3	aptr			;READ AUDIO FROM A TAP WITHIN THE DELAY BUFFER
 		delayw	ain			;WRITE AUDIO INTO DELAY BUFFER
 	rireturn				;RETURN FROM REINITIALISATION PASS
-	xout	atap*aenv			;SEND AUDIO BACK TO CALLER INSTRUMENT. APPLY AMPLITUDE ENVELOPE TO PREVENT CLICKS.
+	aRev = atap*aenv			;SEND AUDIO BACK TO CALLER INSTRUMENT. APPLY AMPLITUDE ENVELOPE TO PREVENT CLICKS.
+
+	aOut ntrpol ain, aRev, kDryWet
+
+	xout aOut
+
 endop
 
-opcode Reverse, a,a
-	a1 xin
-	aout Reverse a1, 0.5
-	xout aout
+;*********************************************************************
+; Reverse - 1 in / 2 out
+;*********************************************************************
+
+opcode	Reverse, aa, akkk
+	ain, ktime, kspeed, kDryWet	xin			;READ IN INPUT ARGUMENTS
+
+	aOutL Reverse ain, ktime, kspeed, kDryWet
+	aOutR Reverse ain, ktime, kspeed, kDryWet
+
+	xout aOutL, aOutR
 endop
 
-; ********************************************************
-; 		STEREO VERSION
-; ********************************************************
+;*********************************************************************
+; Reverse - 2 in / 2 out
+;*********************************************************************
 
-opcode	Reverse, aa, aaKk				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A USEFUL VALUE ALSO AT I-TIME
-	ainL,ainR,ktime,kdrywet	xin			;READ IN INPUT ARGUMENTS
+opcode	Reverse, aa, aakkk
+	ainL, ainR, ktime, kspeed, kDryWet	xin
 
-	ktime scale ktime, 3, 0.1
-	Scut sprintfk "Reverse time: %dms", ktime*1000
-		puts Scut, ktime
+	aOutL Reverse ainL, ktime, kspeed, kDryWet
+	aOutR Reverse ainR, ktime, kspeed, kDryWet
 
-	Smix sprintfk "Reverse dry/wet: %f", kdrywet
-		puts Smix, kdrywet + 1
-
-;	if kdrywet == 1 then
-
-		ktrig	changed	ktime			;IF ktime CONTROL IS MOVED GENERATE A MOMENTARY '1' IMPULSE
-		if ktrig=1 then				;IF A TRIGGER HAS BEEN GENERATED IN THE LINE ABOVE...
-			reinit	UPDATE			;...BEGIN A REINITILISATION PASS FROM LABEL 'UPDATE'
-		endif					;END OF CONDITIONAL BRANCH
-
-		UPDATE:					;LABEL CALLED 'UPDATE'
-		itime	=	i(ktime)		;CREATE AN I-TIME VERSION OF ktime
-		aptr	phasor	2/itime			;CREATE A MOVING PHASOR THAT WITH BE USED TO TAP THE DELAY BUFFER
-		aptr	=	aptr*itime		;SCALE PHASOR ACCORDING TO THE LENGTH OF THE DELAY TIME CHOSEN BY THE USER
-		ienv	ftgentmp	0,0,1024,7,0,(1024*0.01),1,(1024*0.98),1,(0.01*1024),0	;ANTI-CLICK ENVELOPE SHAPE
-	 	aenv	poscil	1, 2/itime, ienv	;CREATE A CYCLING AMPLITUDE ENVELOPE THAT WILL SYNC TO THE TAP DELAY TIME PHASOR
-
-	 	abufferL	delayr	5			;CREATE A DELAY BUFFER
-		atapL	deltap3	aptr			;READ AUDIO FROM A TAP WITHIN THE DELAY BUFFER
-			delayw	ainL			;WRITE AUDIO INTO DELAY BUFFER
-
-		abufferR	delayr 5
-		atapR	deltap3	aptr			;READ AUDIO FROM A TAP WITHIN THE DELAY BUFFER
-			delayw	ainR			;WRITE AUDIO INTO DELAY BUFFER
-
-		rireturn				;RETURN FROM REINITIALISATION PASS
-		arevL = atapL*aenv
-		arevR = atapR*aenv
-
-;	else
-;		aoutL = ainL
-;		aoutR = ainR
-;	endif
-
-	aoutL, aoutR FadeSwitch ainL, ainR, arevL, arevR, 5, kdrywet
-
-	xout	aoutL, aoutR			;SEND AUDIO BACK TO CALLER INSTRUMENT. APPLY AMPLITUDE ENVELOPE TO PREVENT CLICKS.
-endop
-
-opcode	Reverse, aa, aa				;nb. CAPITAL K CREATE A K-RATE VARIABLE THAT HAS A USEFUL VALUE ALSO AT I-TIME
-	ainL,ainR xin			;READ IN INPUT ARGUMENTS
-	aOutL, aOutR Reverse ainL, ainR, 0.75, 1
 	xout aOutL, aOutR
 endop

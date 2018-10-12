@@ -1,10 +1,10 @@
 /********************************************************
 
-	Lowpass.udo
+	Highpass.udo
 	Author: Bernt Isak Wærstad
 
-	Arguments: Cutoff frequency, Resonance, Distortion [, Mode]
-    Defaults:  0.8, 0.3, 0, 0
+	Arguments: Cutoff_frequency, Resonance, Distortion [, Mode]
+    Defaults:  0.8, 0.3, 0 [, 0]
 
 	Cutoff frequency: 20Hz - 19000Hz
 	Resonance: 0 - 1.25
@@ -18,7 +18,7 @@
 		3: zdf
 
 	Description:
-	A resonant lowpass filter (some with distortion)
+	Resonant highpass filters (some with distortion)
 
 ********************************************************/
 
@@ -26,6 +26,7 @@
 	#define Cutoff_frequency #0.8#
 	#define Resonance #0.3#
 	#define Distortion #0#
+    #define Mode #0# 
 
 	; Toggle printing on/off
 	#define PRINT #1#
@@ -38,10 +39,10 @@
 
 
 ;*********************************************************************
-; Lowpass - 1 in / 1 out
+; Highpass - 1 in / 1 out
 ;*********************************************************************
 
-opcode Lowpass, a, akkkO
+opcode Highpass, a, akkkO
 	ain, kfco, kres, kdist, kmode xin
 
 	; ******************************
@@ -56,17 +57,18 @@ opcode Lowpass, a, akkkO
 		kfco expcurve kfco, 30
 		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
 		kfco limit kfco, $MIN_FREQ, $MAX_FREQ
+
 		kdist scale kdist, $MAX_DIST, 0
 		kres scale kres, $MAX_RESO, 0
 
 		if $PRINT == 1 then
-			Sfco sprintfk "LPF Cutoff: %f", kfco
+			Sfco sprintfk "HPF Cutoff: %.2f", kfco
 				puts Sfco, kfco
 
-			Sres sprintfk "LPF Reso: %f", kres
+			Sres sprintfk "HPF Reso: %.2f", kres
 				puts Sres, kres
 
-			Sdist sprintfk "LPF Dist: %f", kdist
+			Sdist sprintfk "HPF Dist: %.2f", kdist
 				puts Sdist, kdist
 		endif
 
@@ -74,7 +76,9 @@ opcode Lowpass, a, akkkO
 		kres port kres, 0.01
 		kdist port kdist, 0.01
 
-		aout lpf18 ain, kfco, kres, kdist
+		alowpass lpf18 ain, kfco, kres, kdist
+		; Lowpass to highpass
+		aout = ain - alowpass
 
 	; ******************************
 	; Moogladder
@@ -90,16 +94,15 @@ opcode Lowpass, a, akkkO
 		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
 		kfco limit kfco, $MIN_FREQ, $MAX_FREQ
 
-		kres scale kres, $MAX_RESO, 0
+		kres scale kres, $MAX_RESO*25, 0.5
 
 		if $PRINT == 1 then
-			Sfco sprintfk "LPF Cutoff: %f", kfco
-				puts Sfco, kfco
-
-			Sres sprintfk "LPF Reso: %f", kres
+			Sres sprintfk "HPF Reso: %f", kres
 				puts Sres, kres
+			Sfco sprintfk "HPF Cutoff: %f", kfco
+				puts Sfco, kfco
 		endif
-
+		
 		kfco port kfco, 0.1
 		kres port kres, 0.01
 /*
@@ -110,8 +113,11 @@ opcode Lowpass, a, akkkO
 		endif
 		kdist port kdist, 0.01
 */
-		aout moogladder ain, kfco, kres
+		alowpass moogladder ain, kfco, kres
 		; Add some distortion ??
+
+		; Lowpass to highpass
+		aout = ain - alowpass
 
 	; ******************************
 	; K35
@@ -127,17 +133,20 @@ opcode Lowpass, a, akkkO
 		kfco expcurve kfco, 30
 		kfco scale kfco, $MAX_FREQ, $MIN_FREQ
 		kfco limit kfco, $MIN_FREQ, $MAX_FREQ
-		kres scale kres, $MAX_RESO*10, 0
+
 		kdist scale kdist, $MAX_DIST*10, 1
+		kres scale kres, $MAX_RESO*10, 0
+
+
 
 		if $PRINT == 1 then
-			Sfco sprintfk "LPF Cutoff: %f", kfco
+			Sfco sprintfk "HPF Cutoff: %.2f", kfco
 				puts Sfco, kfco
 
-			Sres sprintfk "LPF Reso: %f", kres
+			Sres sprintfk "HPF Reso: %.2f", kres
 				puts Sres, kres
 
-			Sdist sprintfk "LPF Dist: %f", kdist
+			Sdist sprintfk "HPF Dist: %.2f", kdist
 				puts Sdist, kdist
 		endif
 
@@ -147,7 +156,7 @@ opcode Lowpass, a, akkkO
 
 		knonlinear = 1
 
-		aout K35_lpf ain, kfco, kres, knonlinear, kdist
+		aout K35_hpf ain, kfco, kres, knonlinear, kdist
 
 	; ******************************
 	; ZDF
@@ -165,15 +174,15 @@ opcode Lowpass, a, akkkO
 
 		kres scale kres, $MAX_RESO*25, 0.5
 		if $PRINT == 1 then
-			Sfco sprintfk "LPF Cutoff: %f", kfco
-				puts Sfco, kfco
-
-			Sres sprintfk "LPF Reso: %f", kres
+			Sres sprintfk "HPF Reso: %f", kres
 				puts Sres, kres
+			Sfco sprintfk "HPF Cutoff: %f", kfco
+				puts Sfco, kfco
 		endif
-
-		kres port kres, 0.01
+		
 		kfco port kfco, 0.1
+		kres port kres, 0.01
+
 /*
 		kdist scale kdist, $MAX_DIST, 0
 		if $PRINT == 1 then
@@ -183,121 +192,37 @@ opcode Lowpass, a, akkkO
 		kdist port kdist, 0.01
 */
 
-		aout zdf_2pole ain, kfco, kres
+		aout zdf_2pole ain, kfco, kres, 1
 		; Add some distortion ??
 
 	endif
 
 	xout aout
 endop
-
-
 ;*********************************************************************
-; Lowpass - 1 in / 2 out
+; Highpass - 1 in / 2 out
 ;*********************************************************************
 
-opcode Lowpass, aa, akkkO
+opcode Highpass, aa, akkkO
 	ain, kfco, kres, kdist, kmode xin
 
-	aoutL Lowpass ain, kfco, kres, kdist, kmode
-	aoutR Lowpass ain, kfco, kres, kdist, kmode
+	aOutL Highpass ain, kfco, kres, kdist, kmode
+	aOutR Highpass ain, kfco, kres, kdist, kmode
 
-	xout aoutL, aoutR
+	xout aOutL, aOutR
+
 endop
 
-
 ;*********************************************************************
-; Lowpass - 2 in / 2 out
+; Highpass - 2 in / 2 out
 ;*********************************************************************
 
-opcode Lowpass, aa, aakkkO
+opcode Highpass, aa, aakkkO
 	ainL, ainR, kfco, kres, kdist, kmode xin
 
-	aoutL Lowpass ainL, kfco, kres, kdist, kmode
-	aoutR Lowpass ainR, kfco, kres, kdist, kmode
+	aOutL Highpass ainL, kfco, kres, kdist, kmode
+	aOutR Highpass ainR, kfco, kres, kdist, kmode
 
-	xout aoutL, aoutR
-endop
+	xout aOutL, aOutR
 
-
-;*********************************************************************
-; Lowpass - 1 in / 1 out - Optional, named arguemnts
-;*********************************************************************
-
-opcode Lowpass, a, aS[]k[]
-   	ain, Snames[], kvalues[] xin
-
-    ifco init -1
-    ires init -1
-    idist init -1
-	imode init -1
-
-    kfco init $Cutoff_frequency
-    kres init $Resonance
-    kdist init $Distortion
-	kmode init 0
-
-    icnt = 0
-    while icnt < lenarray(Snames) do
-        if strcmp("cutoff",Snames[icnt]) == 0 then
-            ifco = icnt
-        elseif strcmp("resonance",Snames[icnt]) == 0 then
-            ires = icnt
-        elseif strcmp("distortion",Snames[icnt]) == 0 then
-            idist = icnt
-        elseif strcmp("mode",Snames[icnt]) == 0 then
-            imode = icnt
-        endif
-        icnt += 1
-    od
-
-    if ifco >= 0 then
-        kfco = kvalues[ifco]
-    endif
-
-    if ires >= 0 then
-        kres = kvalues[ires]
-    endif
-
-    if idist >= 0 then
-        kdist = kvalues[idist]
-    endif
-
-	if imode >= 0 then
-		kmode = kvalues[imode]
-	endif
-
-	aout Lowpass ain, kfco, kres, kdist, kmode
-
-	xout aout
-
-endop
-
-
-
-;*********************************************************************
-; Lowpass - 1 in / 2 out - Optional, named arguemnts
-;*********************************************************************
-
-opcode Lowpass, aa, aS[]k[]
-	ain, Snames[], kValues[] xin
-
-	aoutL Lowpass ain, Snames, kValues
-	aoutR Lowpass ain, Snames, kValues
-
-	xout aoutL, aoutR
-endop
-
-
-;*********************************************************************
-; Lowpass - 2 in / 2 out - Optional, named arguemnts
-;*********************************************************************
-
-opcode Lowpass, aa, aaS[]k[]
-	ainL, ainR, Snames[], kValues[] xin
-
-	aoutL Lowpass ainL, Snames, kValues
-	aoutR Lowpass ainR, Snames, kValues
-
-	xout aoutL, aoutR
 endop

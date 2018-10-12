@@ -1,103 +1,127 @@
-/* ----------------------------------------------------
+/********************************************************
 
-	RandDelay.csd
+	RandDelay.udo
 	Author: Alex Hofmann
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
-	Arguments: Range, Feedback, Dry/wet mix
-    Defaults:  0.5, 0.2, 0.5
+	Arguments: Range, Speed, Feedback, Dry/wet mix, [Stereo Mode 1i/1o only]
+    Defaults:  0.1, 0.4, 0.2, 0.5 [, 0]
 
 	Range: 0.001 - 15
+	Speed: 0.001 - 2
 	Feedback: 0% - 100%
 	Dry/wet mix: 0% - 100%
 
 	Description:
 	Delay with random delay times
 
-----------------------------------------------------*/
+********************************************************/
 
-opcode RandDelay, aa, aakkk
+	; Default argument values
+	#define Range #0.1#
+	#define Speed #0.4#
+	#define Feedback #0.2#
+	#define DryWet_Mix #0.5#
 
-	ainL, ainR, kRange, kFeedback, kDryWet xin
+	; Toggle printing on/off
+	#define PRINT #0#
 
-	kRange scale kRange, 15, 0.001
-	Sfb sprintfk "RandDly Range: %f", kRange
-		puts Sfb, kRange+1
+	; Max and minimum values
+	#define MAX_RANGE #15#
+	#define MIN_RANGE #0.001#
 
+	#define MAX_SPEED #2#
+	#define MIN_SPEED #0.001#
 
+;*********************************************************************
+; RandDelay - 1 in / 1 out
+;*********************************************************************
+
+opcode RandDelay, a, akkkkk
+
+	ain, kRange, kSpeed, kFeedback, kDryWet, kStereoMode xin
+
+	kRange init $Range
+	kSpeed init $Speed
+	;kModIdx init $ModulationIdx
+	kFeedback init $Feedback
+	kDryWet init $DryWet_Mix
+	aWet init 0
+
+	kRange scale kRange, $MAX_RANGE, $MIN_RANGE
+	kSpeed scale kSpeed, $MAX_SPEED, $MIN_SPEED
 	kFeedback scale kFeedback, 1, 0
-	Sfb sprintfk "RandDly Feedback: %f", kFeedback
-		puts Sfb, kFeedback+1
-
 	kDryWet scale kDryWet, 1, 0
-	Srev sprintfk "RandDly Mix: %f", kDryWet
-		puts Srev, kDryWet+1
 
-	kRange init 5
-	kFeedback init 0.2
-	kDryWet init 0.5
-	aWetL init 0
-	aWetR init 0
+	if $PRINT == 1 then
+		Sr sprintfk "RandDly Range: %f", kRange
+			puts Sr, kRange+1
 
-	if kDryWet > 0.1 then
+		Ss sprintfk "RandDly Speed: %f", kSpeed
+			puts Ss, kSpeed+1
 
-		aPulse lfo 0.5, 3, 1
-		aPulse butlp aPulse, 100
+		Sfb sprintfk "RandDly Feedback: %f", kFeedback
+			puts Sfb, kFeedback+1
 
-		aInSigL = (ainL*aPulse)
-		aInSigR = (ainR*aPulse)
-
-		aRandomTimesL randh 0.4, 0.2 + kRange, 10, 0, 0.401
-		aRandomTimesL butlp aRandomTimesL, 2
-		aRandomTimesR randh 0.4, 0.25 + kRange, 0.6, 0, 0.401
-		aRandomTimesR butlp aRandomTimesR, 2
-
-		aDelayL delayr 1					;  a delayline, with 1 second maximum delay-time is initialised
-		aWetL deltapi aRandomTimesL			; data at a flexible position is read from the delayline
-			 delayw aInSigL+(aWetL*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
-		aDelayR delayr 1					;  a delayline, with 1 second maximum delay-time is initialised
-		aWetR	deltapi aRandomTimesR		; data at a flexible position is read from the delayline
-			  delayw aInSigR+(aWetR*kFeedback)	; the "g.a.Bus" is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
-
-	else
-		aWetL = 0
-		aWetR = 0
+		Smix sprintfk "RandDly Mix: %f", kDryWet
+			puts Smix, kDryWet+1
 	endif
 
-	aOutL ntrpol ainL, aWetL*2, kDryWet
-	aOutR ntrpol ainR, aWetR*2, kDryWet
 
+	aPulse lfo 0.5, 3, 1
+	aPulse butlp aPulse, 100
 
-	xout aOutL, aOutR
+	aInSig = (ain*aPulse)
+
+	if kStereoMode == 0 then
+		kRangeMod = 1
+		kSpeedMod = 1
+		kSeed = 42
+	else
+		kRangeMod = 1.05
+		kSpeedMod = 0.95
+		kSeed = 86400
+	endif
+
+	aRandomTimes randh kRange*kRangeMod, kSpeed*kSpeedMod, i(kSeed), 0, 0.401
+	aRandomTimes butlp aRandomTimes, 2
+
+	aDelay delayr $MAX_RANGE			;  a delayline, with $MAX_RANGE second maximum delay-time is initialised
+	aWet deltap3 aRandomTimes			; data at a flexible position is read from the delayline
+		delayw aInSig+(aWet*kFeedback)	; the audio-in is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
+
+	aOut ntrpol ain, aWet*2, kDryWet
+
+	xout aOut
 
 endop
 
-opcode RandDelay, aa, aakk
+;*********************************************************************
+; RandDelay - 1 in / 2 out
+;*********************************************************************
 
-	ainL, ainR, kRange, kFeedback xin
+opcode RandDelay, aa, akkkk
 
-	aOutL, aOutR RandDelay ainL, ainR, kRange, kFeedback, 0.5
+	ain, kRange, kSpeed, kFeedback, kDryWet xin
 
-	xout aOutL, aOutR
+	aL RandDelay ain, kRange, kSpeed, kFeedback, kDryWet, 0
+	aR RandDelay ain, kRange, kSpeed, kFeedback, kDryWet, 1
 
-endop
-
-opcode RandDelay, aa, aak
-
-	ainL, ainR, kRange xin
-
-	aOutL, aOutR RandDelay ainL, ainR, kRange, 0.2, 0.5
-
-	xout aOutL, aOutR
+	xout aL, aR
 
 endop
 
-opcode RandDelay, aa, aa
+;*********************************************************************
+; RandDelay - 1 in / 2 out
+;*********************************************************************
 
-	ainL, ainR xin
+opcode RandDelay, aa, aakkkk
 
-	aOutL, aOutR RandDelay ainL, ainR, 0.5, 0.2, 0.5
+	ainL, ainR, kRange, kSpeed, kFeedback, kDryWet xin
 
-	xout aOutL, aOutR
+	aL RandDelay ainL, kRange, kSpeed, kFeedback, kDryWet, 0
+	aR RandDelay ainR, kRange, kSpeed, kFeedback, kDryWet, 1
+
+	xout aL, aR
 
 endop
