@@ -18,7 +18,7 @@
 ********************************************************/
 
 	; Default argument values
-	#define Range #0.5# 
+	#define Range #0.5#
 	#define Speed #0.1#
 	#define Feedback #0.2#
 	#define DryWet_Mix #0.5#
@@ -28,10 +28,10 @@
 
 	; Max and minimum values
 	#define MAX_RANGE #15#
-	#define MIN_RANGE #0.001#	
+	#define MIN_RANGE #0.001#
 
 	#define MAX_SPEED #2#
-	#define MIN_SPEED #0.001#	
+	#define MIN_SPEED #0.001#
 
 ;*********************************************************************
 ; RandDelay - 1 in / 1 out
@@ -48,12 +48,13 @@ opcode RandDelay, a, akkkkk
 	kDryWet init $DryWet_Mix
 	aWet init 0
 
+	kRange expcurve kRange, $MIN_RANGE
 	kRange scale kRange, $MAX_RANGE, $MIN_RANGE
 	kSpeed scale kSpeed, $MAX_SPEED, $MIN_SPEED
 	kFeedback scale kFeedback, 1, 0
 	kDryWet scale kDryWet, 1, 0
 
-	if $PRINT == 1 then 
+	if $PRINT == 1 then
 		Sr sprintfk "RandDly Range: %f", kRange
 			puts Sr, kRange+1
 
@@ -73,7 +74,7 @@ opcode RandDelay, a, akkkkk
 
 	aInSig = (ain*aPulse)
 
-	if kStereoMode == 0 then 
+	if kStereoMode == 0 then
 		kRangeMod = 1
 		kSpeedMod = 1
 		kSeed = 42
@@ -87,7 +88,7 @@ opcode RandDelay, a, akkkkk
 	aRandomTimes butlp aRandomTimes, 2
 
 	aDelay delayr $MAX_RANGE			;  a delayline, with $MAX_RANGE second maximum delay-time is initialised
-	aWet deltapi aRandomTimes			; data at a flexible position is read from the delayline
+	aWet deltap3 aRandomTimes			; data at a flexible position is read from the delayline
 		delayw aInSig+(aWet*kFeedback)	; the audio-in is written to the delayline, - to get a feedbackdelay, the delaysignal (aWet) is also added, but scaled by kFeedback
 
 	aOut ntrpol ain, aWet*2, kDryWet
