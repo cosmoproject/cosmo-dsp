@@ -6,7 +6,7 @@ from tabulate import tabulate
 
 # read all file names in directory
 fileDir = os.path.dirname(__file__)
-mypath = os.path.join(fileDir, '../Effects/')
+mypath = os.path.join(fileDir, '../../DSP-Library/Effects/')
 onlyfiles = sorted([f for f in listdir(mypath) if isfile(join(mypath, f))])
 # print onlyfiles
 
