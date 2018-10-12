@@ -24,10 +24,10 @@
 	#define PRINT #0#
 
 	; Max and minimum values
-	#define MAX_TIME #3#
+	#define MAX_TIME #1#
 	#define MIN_TIME #0.1#
-	#define MAX_SPEED #5#
-	#define MIN_SPEED #1#
+	#define MAX_SPEED #2#
+	#define MIN_SPEED #0#
 
 
 ;*********************************************************************
@@ -61,12 +61,13 @@ opcode	Reverse, a, akkk
 		reinit	UPDATE			;...BEGIN A REINITILISATION PASS FROM LABEL 'UPDATE'
 	endif					;END OF CONDITIONAL BRANCH
 
+	ienv	ftgentmp	0,0,1024,7,0,(1024*0.01),1,(1024*0.98),1,(0.01*1024),0	;ANTI-CLICK ENVELOPE SHAPE
+
 	UPDATE:					;LABEL CALLED 'UPDATE'
 	itime	=	i(ktime)		;CREATE AN I-TIME VERSION OF ktime
 	ispeed  =	i(kspeed)
 	aptr	phasor	(2/itime) * ispeed		;CREATE A MOVING PHASOR THAT WITH BE USED TO TAP THE DELAY BUFFER
 	aptr	=	aptr*itime		;SCALE PHASOR ACCORDING TO THE LENGTH OF THE DELAY TIME CHOSEN BY THE USER
-	ienv	ftgentmp	0,0,1024,7,0,(1024*0.01),1,(1024*0.98),1,(0.01*1024),0	;ANTI-CLICK ENVELOPE SHAPE
  	aenv	poscil	1, (2/itime)*ispeed, ienv	;CREATE A CYCLING AMPLITUDE ENVELOPE THAT WILL SYNC TO THE TAP DELAY TIME PHASOR
  	abuffer	delayr	5			;CREATE A DELAY BUFFER
 	atap	deltap3	aptr			;READ AUDIO FROM A TAP WITHIN THE DELAY BUFFER

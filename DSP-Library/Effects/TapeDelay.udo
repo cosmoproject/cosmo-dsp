@@ -4,7 +4,7 @@
 	Author: Bernt Isak Wærstad
 
 	Arguments: DelayTime, Feedback, Filter, Mix [, StereoMode]
-    Defaults:  0.2, 0.4, 0.5, 0.4, 0
+    Defaults:  0.2, 0.4, 0.5, 0.4 [, 0]
 
 	Delay time: 1ms - 2s
 	Feedback: 0% - 120%
@@ -25,14 +25,14 @@
 
 	; Default argument values
 
-	#define DelayTime #0.2# 
+	#define DelayTime #0.2#
 	#define Feedback #0.3#
 	#define Filter #0.5#
-	#define Distortion #0#	
+	#define Distortion #0#
 	#define Modulation #0.2#
 	#define Mix #0.4#
 	#define StereoMode #0#
-	
+
 	; Toggle printing on/off
 	#define PRINT #0#
 
@@ -74,7 +74,7 @@ opcode TapeDelay, aa, aaS[]k[]
         elseif strcmp("mix",Snames[icnt]) == 0 then
             imix = icnt
         elseif strcmp("stereo",Snames[icnt]) == 0 then
-            istereo = icnt	
+            istereo = icnt
         endif
         icnt += 1
     od
@@ -91,7 +91,7 @@ opcode TapeDelay, aa, aaS[]k[]
     if idist >= 0 then
         kdist = kvalues[idist]
     endif
-	if imod >= 0 then 
+	if imod >= 0 then
 		kmod = kvalues[imod]
 	endif
     if imix >= 0 then
@@ -104,7 +104,7 @@ opcode TapeDelay, aa, aaS[]k[]
 	; ******************************
 	; Controller value scalings
 	; ******************************
- 
+
 	kdlytime expcurve kdlytime, 10
 	kdlytime scale kdlytime, 2000, 1
 	kfeed scale kfeed, 1.2, 0
@@ -118,9 +118,9 @@ opcode TapeDelay, aa, aaS[]k[]
 
 	kmix scale kmix, 1, 0
 
-	if $PRINT == 1 then 
+	if $PRINT == 1 then
 		Stime sprintfk "TapeDelay time: %dms", kdlytime
-			puts Stime, kdlytime	
+			puts Stime, kdlytime
 
 		Sfb sprintfk "TapeDelay Feedback: %.2f%%", kfeed*100
 				puts Sfb, kfeed+1
@@ -137,7 +137,7 @@ opcode TapeDelay, aa, aaS[]k[]
 		Smix sprintfk "TapeDelay Mix: %.2f%%", kmix*100
 			puts Smix, kmix+1
 	endif
-	
+
 	kdlytime port kdlytime, 0.5
 	adlytime interp kdlytime
 
@@ -152,18 +152,18 @@ opcode TapeDelay, aa, aaS[]k[]
 	kfilter_mod = 1.1
 
 	kWowFreq = 0.7 ; 0.1 - 10Hz
-	kWow oscil kmod*0.01, kWowFreq 
+	kWow oscil kmod*0.01, kWowFreq
 	kWow += 1
 	;kFlutter = 0
 
-	if kdlytime < 1.5 then 
+	if kdlytime < 1.5 then
 		ktime_mod = 1
 		kWow = 1
 	endif
 
 	adlytime *= kWow
 
-	if kstereo == 1 then 
+	if kstereo == 1 then
 
 		avDlyL vdelay3 ainL + aFeedL, adlytime * ktime_mod, 3000
 		avDlyR vdelay3 ainR + aFeedR, adlytime , 3000
@@ -172,12 +172,12 @@ opcode TapeDelay, aa, aaS[]k[]
 		aFeedR lpf18 avDlyR * kfeed * kfeed_mod, kfilter * kfilter_mod, 0, kdist
 
 		aoutL ntrpol ainL, avDlyL, kmix
-		aoutR ntrpol ainR, avDlyR, kmix	
+		aoutR ntrpol ainR, avDlyR, kmix
 	else
 		avDlyL vdelay3 ainL + aFeedL, adlytime , 3000
 
 		aFeedL lpf18 avDlyL * kfeed, kfilter, 0, kdist
-		
+
 		aoutL ntrpol ainL, avDlyL, kmix
 		aoutR = aoutL
 	endif
@@ -231,7 +231,7 @@ opcode TapeDelay, a, akkkkO
 	aout TapeDelay ain, Sargs, kvalues
 
 	xout aout
-endop 
+endop
 
 
 ;*********************************************************************
