@@ -25,7 +25,7 @@
 	#define Cutoff_frequency #0.8#
 	#define Resonance #0.3#
 	#define Distortion #0#
-    #define Mode #0#
+    #define Mode #0# ; but how to use it??
 
 	; Toggle printing on/off
 	#define PRINT #0#
