@@ -48,7 +48,6 @@ opcode RandDelay, a, akkkkk
 	kDryWet init $DryWet_Mix
 	aWet init 0
 
-	kRange expcurve kRange, $MIN_RANGE
 	kRange scale kRange, $MAX_RANGE, $MIN_RANGE
 	kSpeed scale kSpeed, $MAX_SPEED, $MIN_SPEED
 	kFeedback scale kFeedback, 1, 0
