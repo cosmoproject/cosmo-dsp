@@ -9,9 +9,12 @@
 	Delay time: 1ms - 2s
 	Feedback: 0% - 120%
 	Filter: 200Hz - 12000Hz
-	Distortion: 
-	Modulation: 	
 	Mix: 0% - 100%
+
+	Additional arguements: 
+	Distortion: 0 - 1
+	Modulation: 	
+
 
 	Description:
 	Analoge style delay
@@ -32,77 +35,7 @@
 	#define PRINT #1#
 
 ;*********************************************************************
-; TapeDelay
-;*********************************************************************
-
-opcode TapeDelay, a, akkkkO
-	ain, kdlytime, kfeed, kfilter, kmix, kstereo xin
-
-	Sargs[] fillarray "delaytime", "feedback", "filter", "mix", "stereo"
-	;kvalues[] fillarray kdlytime, kfeed, kfilter, kmix
-	kvalues[] init 5
-	kvalues[0] = kdlytime
-	kvalues[1] = kfeed
-	kvalues[2] = kfilter
-	kvalues[3] = kmix
-	kvalues[4] = kstereo
-
-	aout TapeDelay ain, Sargs, kvalues
-
-	xout aout
-endop 
-
-
-
-;*********************************************************************
-; TapeDelay - 1i/2o
-;*********************************************************************
-
-opcode TapeDelay, aa, akkkkO
-	ain, kdlytime, kfeed, kfilter, kmix, kstereo xin
-
-	if kstereo == 1 then 
-		kTimeMod = 1.1
-		kFilterMod = 0.95
-		kFeedMod = 1.02
-	else
-		kTimeMod = 1
-		kFilterMod = 1
-		kFeedMod = 1
-	endif
-
-	aOutL TapeDelay ain, kdlytime, kfeed, kfilter, kmix
-	aOutR TapeDelay ain, kdlytime*kTimeMod, kfeed*kFeedMod, kfilter*kFilterMod, kmix
-
-	xout aOutL, aOutR
-endop
-
-;*********************************************************************
-; TapeDelay - 2i/2o
-;*********************************************************************
-
-opcode TapeDelay, aa, aakkkkO
-	ainL, ainR, kdlytime, kfeed, kfilter, kmix, kstereo xin
-
-	if kstereo == 1 then 
-		kTimeMod = 1.1
-		kFilterMod = 0.95
-		kFeedMod = 1.02
-	else
-		kTimeMod = 1
-		kFilterMod = 1
-		kFeedMod = 1
-	endif
-
-	aOutL TapeDelay ainL, kdlytime, kfeed, kfilter, kmix
-	aOutR TapeDelay ainR, kdlytime*kTimeMod, kfeed*kFeedMod, kfilter*kFilterMod, kmix
-
-	xout aOutL, aOutR
-endop
-
-
-;*********************************************************************
-; TapeDelay - 2i/2o - Optional arguments
+; TapeDelay - 2i/2o - Named arguments
 ;*********************************************************************
 
 opcode TapeDelay, aa, aaS[]k[]
@@ -251,9 +184,8 @@ opcode TapeDelay, aa, aaS[]k[]
 
 endop
 
-
 ;*********************************************************************
-; TapeDelay - 1i/1o - Optional arguments
+; TapeDelay - 1i/1o - Named arguments
 ;*********************************************************************
 
 opcode TapeDelay, a, aS[]k[]
@@ -265,10 +197,8 @@ opcode TapeDelay, a, aS[]k[]
 
 endop
 
-
-
 ;*********************************************************************
-; TapeDelay - 1i/2o - Optional arguments
+; TapeDelay - 1i/2o - Named arguments
 ;*********************************************************************
 
 opcode TapeDelay, aa, aS[]k[]
@@ -280,3 +210,50 @@ opcode TapeDelay, aa, aS[]k[]
 
 endop
 
+;*********************************************************************
+; TapeDelay - 1i/1o - Fixed arguments
+;*********************************************************************
+
+opcode TapeDelay, a, akkkkO
+	ain, kdlytime, kfeed, kfilter, kmix, kstereo xin
+
+	Sargs[] fillarray "delaytime", "feedback", "filter", "mix", "stereo"
+	;kvalues[] fillarray kdlytime, kfeed, kfilter, kmix
+	kvalues[] init 5
+	kvalues[0] = kdlytime
+	kvalues[1] = kfeed
+	kvalues[2] = kfilter
+	kvalues[3] = kmix
+	kvalues[4] = kstereo
+
+	aout TapeDelay ain, Sargs, kvalues
+
+	xout aout
+endop 
+
+
+;*********************************************************************
+; TapeDelay - 1i/2o - Fixed arguments
+;*********************************************************************
+
+opcode TapeDelay, aa, akkkkO
+	ain, kdlytime, kfeed, kfilter, kmix, kstereo xin
+
+	aOutL TapeDelay ain, kdlytime, kfeed, kfilter, kmix, kstereo
+	aOutR TapeDelay ain, kdlytime, kfeed, kfilter, kmix, kstereo
+
+	xout aOutL, aOutR
+endop
+
+;*********************************************************************
+; TapeDelay - 2i/2o - Fixed arguments
+;*********************************************************************
+
+opcode TapeDelay, aa, aakkkkO
+	ainL, ainR, kdlytime, kfeed, kfilter, kmix, kstereo xin
+
+	aOutL TapeDelay ainL, kdlytime, kfeed, kfilter, kmix, kstereo
+	aOutR TapeDelay ainR, kdlytime, kfeed, kfilter, kmix, kstereo
+
+	xout aOutL, aOutR
+endop
