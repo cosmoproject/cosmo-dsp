@@ -56,72 +56,73 @@
         gkCC24_CH1 port gkCC24_CH1, .05
 
 		;--------------------------
-		;AH ok-mac / ?-bela
+		;AH ok-mac / bela: produces constant dropouts even at ksmps=64, b=128
 		; Blur Arguments: Blur time, Gain, Dry/wet mix[, StereoMode]
         ; aL, aR Blur aL, aR, 0.3, 0.5, 0.3, 0.2
 		; aL, aR Blur aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1, gkCC24_CH1
 
-		;AH ok-mac / ?-bela
+		;AH ok-mac / BIW ok-bela
 		; Chorus Arguments: Feedback, Dry/wet mix
 		; aL, aR Chorus aL, aR, 0.4, 0.5
 		; aL, aR Chorus aL, aR, gkCC21_CH1, gkCC22_CH1
 
-		;AH ok-mac / ?-bela
+		;AH ok-mac / BIW ok-bela
 		; FakeGrainer Arguments: Dry/wet mix
         ; aL, aR FakeGrainer aL, aR, 0.5
         ; aL, aR FakeGrainer aL, aR, gkCC21_CH1
 
-		;AH ok-mac / ?-bela
+		;AH ok-mac / BIW ok-bela
 		; Hack Arguments: Frequency, Dry/wet mix
 		; TODO: add more waveforms
 		; aL, aR Hack aL, aR, 0.3, 0.5
 		; aL, aR Hack aL, aR, gkCC21_CH1, gkCC22_CH1
 
-		; BIW ok-mac
+		; BIW ok-mac / 0,2 and 3 ok-bela, moogladder is too heavy?
         ; aL, aR Highpass aL, aR, 0.8, 0.3, 0, 1 ;make mode optional?
         ; aL, aR Lowpass aL, aR, 0.8, 0.3, 0, 1
 
-		;AH ok-mac / ?-bela
+		;AH ok-mac / BIW ok--bela
 		; RandDelay Arguments: Range, Speed, Feedback, Dry/wet mix, [Stereo Mode 1i/1o only]
 		; aL, aR RandDelay aL, aR, 0.1, 0.4, 0.2, 0.5
 		; aL, aR RandDelay aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1, gkCC24_CH1
 
-		; BIW ok-mac
+		; BIW ok-mac / BIW ok-bela
 		; Arguments: DecayTime, HighFreq_Cutoff, DryWet_Mix, Mode
 		; aL, aR Reverb aL, aR, 0.85, 0.5, 0.5, 0
         ; aL, aR Reverb aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1, 1
 
 
-		;AH ok-mac / ?-bela
+		;AH ok-mac / BIW ok after changing the Reverse min max values-bela
 		; Reverse Arguments: Reverse_time, Speed, Dry/wet mix
 		; aL, aR Reverse aL, aR, 0.1, 0.5, 0.5
 		; aL, aR Reverse aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1
 
 
-		;AH ok-mac / ?-bela
+		;AH ok-mac / BIW ok-bela
 		; SineDelay Arguments: Range, Frequency, ModulationIdx, Feedback, Dry/wet mix
 		; aL, aR SineDelay aL, aR, 0.8, 0.3, 0.1, 0.3, 0.5
 		; aL, aR SineDelay aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1, gkCC24_CH1, 0.5
 
 
-		;AH ok-mac / ?-bela
+		;AH ok-mac / BIW ok-bela
+		; TapeDelay Arguments: DelayTime, Feedback, Filter, Mix [, StereoMode]
 		;aL, aR TapeDelay aL, aR, 0.2, 0.4, 0.5, 0.4, 0
 		;aL, aR TapeDelay aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1, gkCC24_CH1, 0.5
 
-		;AH ok-mac / ?-bela
+		;AH ok-mac / BIW-ok Works, but sounds a bit weird (needs to be checked more thouroughly)-bela
 		; Arguments: Frequency, Depth, Dry/wet mix
 		; aL, aR Tremolo aL, aR, 0.8, 1, 0.5
 		; aL, aR Tremolo aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1
 
-		; AH ok-mac / ?-bela
+		; AH ok-mac / BIW ok-bela
 		; Arguments: 	Threshold, DelayTime Min, DelayTime Max, Feedback Min, Feedback Max, Width, Level, Portamento time, Cutoff frequency, Bandwidth, Dry/wet mix
         ; aL, aR TriggerDelay aL, aR, 1, 0.1, 0.2, 0.5, 0.9, 1, 1, 0.1, 0.5, 0.1, 0.5
 
-		;AH ok-mac / ?-bela
+		;AH ok-mac / BIW ok-bela
   		; aL, aR Volume aL, aR, 1
 		; aL, aR Volume aL, aR, gkCC21_CH1
 
-		; AH ok-mac / ?-bela
+		; AH ok-mac / BIW ok-bela
 		; Arguments: Frequency, Dry/wet mix
         ; aL, aR Wobble aL, aR, 0.2, 0.5
         ; aL, aR Wobble aL, aR, gkCC21_CH1, gkCC22_CH1
