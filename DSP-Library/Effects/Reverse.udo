@@ -24,10 +24,10 @@
 	#define PRINT #0#
 
 	; Max and minimum values
-	#define MAX_TIME #1#
+	#define MAX_TIME #3#
 	#define MIN_TIME #0.1#
-	#define MAX_SPEED #2#
-	#define MIN_SPEED #0#
+	#define MAX_SPEED #5#
+	#define MIN_SPEED #1#
 
 
 ;*********************************************************************
