@@ -17,6 +17,7 @@
 
     #include "../DSP-Library/Effects/Blur.udo"
     #include "../DSP-Library/Effects/Chorus.udo"
+    #include "../DSP-Library/Effects/Distortion.udo"
     #include "../DSP-Library/Effects/FakeGrainer.udo"
     #include "../DSP-Library/Effects/Hack.udo"
     #include "../DSP-Library/Effects/Highpass.udo"
@@ -65,6 +66,12 @@
 		; Chorus Arguments: Feedback, Dry/wet mix
 		; aL, aR Chorus aL, aR, 0.4, 0.5
 		; aL, aR Chorus aL, aR, gkCC21_CH1, gkCC22_CH1
+
+		;BIW ok-mac / ? -bela
+		; Distortion Arguments: Level, Drive, Tone, Dry/wet mix [, Mode]
+		aL, aR Distortion aL, aR, 0.6, 0.8, 0.8, 1 
+		; aL, aR Distortion aL, aR, gkCC21_CH1, gkCC22_CH1, gkCC23_CH1, 1
+
 
 		;AH ok-mac / BIW ok-bela
 		; FakeGrainer Arguments: Dry/wet mix
