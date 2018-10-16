@@ -1,9 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
-; Linux
--odac:hw:1,0 -iadc:hw:1 -d -+rtaudio=ALSA -b128 -B1024 -j4 --realtime
 ; OS X
-;-odac -iadc0 -b128 -B512 -m0d
+-odac -iadc0 -b128 -B512 -m0d
 </CsOptions>
 <CsInstruments>
 sr      = 44100
@@ -11,19 +9,13 @@ ksmps  	= 64
 0dbfs	= 1
 nchnls 	= 2
 
-#include "../DSP-Library/Includes/cosmo_utilities.inc"
-#include "../DSP-Library/Includes/adc_channels.inc"
-#include "../DSP-Library/Includes/gpio_channels.inc"
-
 #include "../DSP-Library/Effects/Reverb.udo"
 #include "../DSP-Library/Effects/Lowpass.udo"
 
 instr 1 
 	aL, aR ins
 
-	; Name of pots: gkpotX
-	; Name of switches: gkswitchX or gktoggleX
-	; Name of LEDs: gkledX
+	; All arguments are normalized (0-1)
 
 	; Lowpass arguments: cutoff, resonance, distortion, mode
 	aL, aR Lowpass aL, aR, 0.6, 0.7, 0.5, 0
