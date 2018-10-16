@@ -3,6 +3,7 @@
 |:-----------------|:---------------------------------------------------------------------------------------------------------------------------------------------|
 | Blur.udo         | Blur time, Gain, Dry/wet mix[, StereoMode]                                                                                                   |
 | Chorus.udo       | Feedback, Dry/wet mix                                                                                                                        |
+| Distortion.udo   | Level, Drive, Tone, Dry/wet mix                                                                                                              |
 | FakeGrainer.udo  | Dry/wet mix                                                                                                                                  |
 | Hack.udo         | Frequency, Dry/wet mix                                                                                                                       |
 | Highpass.udo     | Cutoff_frequency, Resonance, Distortion [, Mode]                                                                                             |
@@ -12,7 +13,7 @@
 | Reverse.udo      | Reverse_time, Speed, Dry/wet mix                                                                                                             |
 | SineDelay.udo    | Range, Frequency, ModulationIdx, Feedback, Dry/wet mix                                                                                       |
 | TapeDelay.udo    | DelayTime, Feedback, Filter, Mix [, StereoMode]                                                                                              |
-| Tremolo.udo      | Frequency, Depth, Dry/wet mix                                                                                                                |
+| Tremolo.udo      | Frequency, Depth, Dry/wet mix [, StereoMode]                                                                                                 |
 | TriggerDelay.udo | Threshold, DelayTime Min, DelayTime Max, Feedback Min, Feedback Max, Width, Level, Portamento time, Cutoff frequency, Bandwidth, Dry/wet mix |
 | Volume.udo       | Level                                                                                                                                        |
 | Wobble.udo       | Frequency, Dry/wet mix                                                                                                                       |
