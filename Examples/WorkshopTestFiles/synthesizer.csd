@@ -12,8 +12,8 @@ nchnls 	= 2
 
 instr 1
 
-	#include "../DSP-Library/Includes/adc_channels.inc"
-	#include "../DSP-Library/Includes/gpio_channels.inc"
+	#include "../../DSP-Library/Includes/adc_channels.inc"
+	#include "../../DSP-Library/Includes/gpio_channels.inc"
 
 	;----------------------
 	; Synthesizer!
