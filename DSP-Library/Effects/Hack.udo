@@ -61,7 +61,7 @@ opcode Hack, a, akkk
     elseif (kWave >= 3 && kWave < 4) then ; Saw
         aMod lfo 1, kFreq, 4
     elseif (kWave >= 4 && kWave < 5) then ; RevSaw
-        aMod lfo 1, kFreq, 4
+        aMod lfo 1, kFreq, 5
     endif
 
 
