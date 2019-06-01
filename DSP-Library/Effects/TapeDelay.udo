@@ -34,7 +34,7 @@
 	#define StereoMode #0#
 
 	; Toggle printing on/off
-	#define PRINT #0#
+	#define PRINT #1#
 
 ;*********************************************************************
 ; TapeDelay - 2i/2o - Named arguments
@@ -182,8 +182,10 @@ opcode TapeDelay, aa, aaS[]k[]
 		aoutR = aoutL
 	endif
 
-	xout aoutL, aoutR
+	aoutL = 2 * taninv(aoutL) / 3.1415927 ; limit output
+	aoutR = 2 * taninv(aoutR) / 3.1415927 ; limit output
 
+	xout aoutL, aoutR
 endop
 
 ;*********************************************************************

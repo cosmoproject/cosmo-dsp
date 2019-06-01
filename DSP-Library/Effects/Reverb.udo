@@ -137,6 +137,9 @@ opcode Reverb, aa, aaPVVO
 		aoutR = ainR
 	endif
 
+	aoutL = 2 * taninv(aoutL) / 3.1415927 ; limit output
+	aoutR = 2 * taninv(aoutR) / 3.1415927 ; limit output
+
 	xout aoutL, aoutR
 endop
 

@@ -196,6 +196,8 @@ opcode Highpass, a, akkkO
 		; Add some distortion ??
 
 	endif
+	
+	aout = 2 * taninv(aout) / 3.1415927 ; limit output
 
 	xout aout
 endop
