@@ -4,14 +4,15 @@
 	Author: Alex Hofmann
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
-	Arguments: Frequency, Dry/wet mix
-    Defaults:  0.3, 0.5
+	Arguments: Frequency, Dry/wet mix, Waveform
+    Defaults:  0.3, 0.5, 0.6
 
 	Frequency: 0.5Hz - 45Hz
 	Dry/wet mix: 0% - 100%
+    Wave: 0 - 5 (Sine, Tri, Pulse, Saw, RevSaw)
 
 	Description:
-	A square wave amplitude modulator
+	A amplitude modulator, mainly meant for pulse.
 
 ********************************************************/
 
