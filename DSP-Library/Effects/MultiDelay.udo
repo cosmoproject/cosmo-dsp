@@ -85,12 +85,15 @@ opcode MultiDelay, a, akkkkk
 	endif
 	aDly = aDly + avDly
 	aFeed tone aDly, kcutoff
+	aFeed = 2 * taninv(aFeed) / 3.1415927 ; limit output
 
 			delayw ain + (aFeed * kfeed)
 
 	;----------------------
 
 	aout = (ain * (1-kDly_Mix)) + (aDly * kDly_Mix)
+
+	aout = 2 * taninv(aout) / 3.1415927 ; limit output
 
 	xout aout
 endop
@@ -161,6 +164,7 @@ opcode MultiDelay, aa, aakkkkk
 	endif
 	aDlyL = aDlyL + avDlyL
 	aFeedL tone aDlyL, kcutoff
+	aFeedL = 4 * taninv(aFeedL) / 3.1415927 ; limit feed
 
 
 	abufR 	delayr ($MAX_DLY_TIME * 3)/1000 ; Right delay time in seconds
@@ -174,6 +178,7 @@ opcode MultiDelay, aa, aakkkkk
 	endif
 	aDlyR = aDlyR + avDlyR
 	aFeedR tone aDlyR, kcutoff
+	aFeedR = 4 * taninv(aFeedR) / 3.1415927 ; limit feed
 
 			delayw ainL + (aFeedL * kfeed)
 			delayw ainR + (aFeedR * kfeed)
@@ -182,6 +187,9 @@ opcode MultiDelay, aa, aakkkkk
 
 	aoutL = (ainL * (1-kDly_Mix)) + (aDlyL * kDly_Mix)
 	aoutR = (ainR * (1-kDly_Mix)) + (aDlyR * kDly_Mix)
+
+	aoutL = 2 * taninv(aoutL) / 3.1415927 ; limit output
+	aoutR = 2 * taninv(aoutR) / 3.1415927 ; limit output
 
 	xout aoutL, aoutR
 endop

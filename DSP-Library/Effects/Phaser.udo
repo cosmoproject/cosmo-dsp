@@ -31,7 +31,7 @@
 	#define Mode #0#
 
 	; Toggle printing on/off
-	#define PRINT #0#
+	#define PRINT #1#
 
 	; Max and minimum values
 	#define MAX_FREQ #1800#
@@ -98,6 +98,7 @@ opcode Phaser,a,akkkkkO
     endif
 
 	aOut ntrpol ain, aPhaser, kmix
+    aOut = 2 * taninv(aOut) / 3.1415927 ; limit output
 
 ; audio out
 	xout	aOut
