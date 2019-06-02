@@ -33,14 +33,23 @@ for udo in onlyfiles:
         udos.append(arguments)
 print(udos)
 
+# create master include file
+fXFilePath = '#include "../Effects/'
+filename = os.path.join(fileDir, '../Includes/cosmo-dsp.inc')
+with open(filename, 'w+') as include_file:
+    for udo in udos:
+        include_file.write(fXFilePath + udo[0] + '"\n')
+    include_file.close
+
+
 # make LATEX table, used in NIME 2017 paper
 head = ['UDO', 'Arguments']
-latexTable = tabulate(udos, headers = head,  tablefmt = 'latex')
+latexTable = tabulate(udos, headers=head,  tablefmt='latex')
 latexTable = latexTable.replace(',', ' \par')
 print(latexTable)
 
 # make Markup table
-markupTable = tabulate(udos, headers = head, tablefmt = 'pipe')
+markupTable = tabulate(udos, headers=head, tablefmt='pipe')
 print(markupTable)
 
 # export Markup table into README.me file
