@@ -42,33 +42,37 @@
 	; Toggle printing on/off
 	#define PRINT #0#
 
-	; Max and minimum values
-	#define MAX_FREQ #12000#
-	#define MIN_FREQ #200#
-
 ;*********************************************************************
 ; Ducking UDO to avoid clicking at loop points
 ;*********************************************************************
 
-opcode ducking, a, aak
-
-    ainput, andx, kducktime xin
+opcode ducking, a, aakkk
+	; INDEX VALUE HAS TO BE NORMALIZED
+    ainput, andx, kloopstart, kloopend, kducktime xin
 
     kenv init 1
     kidx = 0
-    kducktime *= 0.5
-    kducktime limit kducktime, 0, 0.5
+	kloopstart init 0
+	kloopend init 0
+	kloopstart /= sr 
+	kloopend /= sr
+	klooplen = (kloopend - kloopstart)
+    kducktime scale kducktime, klooplen*0.45, 0
 
-    while (kidx < ksmps) do
-        kval = andx[kidx]
-        if (kval > (1-kducktime)) then
-            kenv = ((1 - kval) * (1/kducktime))
+	kducktime limit kducktime, 0, klooplen*0.45
+
+	while (kidx < ksmps) do
+		kbuffer_idx = andx[kidx]
+		if (kbuffer_idx > (kloopend-kducktime)) then
+			;kenv = ((klooplen - kbuffer_idx)/klooplen) * (1/kducktime)
+			kenv = ((klooplen - kbuffer_idx)/kducktime)
+			;printk2 kenv;kbuffer_idx/klooplen
+		endif
+	    if (kbuffer_idx > kloopstart) && (kbuffer_idx < kducktime) then
+            kenv = (kbuffer_idx * (1/kducktime))
         endif
-        if (kval > 0) && (kval < kducktime) then
-            kenv = (kval * (1/kducktime))
-        endif
-        kidx += 1
-    od
+        kidx += 1	
+	od 
 
     xout ainput*kenv
 endop
@@ -86,7 +90,8 @@ endop
 		kputstrig init 0
 	  	aZero = 0
 
-	  	iLiveSamplAudioTable ftgen 0, 0, giLiveSamplTableLen, 2, 0
+	  	iLiveSamplAudioTable1 ftgen 0, 0, giLiveSamplTableLen, 2, 0
+	  	iLiveSamplAudioTable2 ftgen 0, 0, giLiveSamplTableLen, 2, 0
 
 	  	kRec init $Record_Play
 	  	kPlayStopToggle init $Play_Stop
@@ -96,6 +101,8 @@ endop
 	  	kThrough init $Audio_Through
 	  	kLoopStart init $LoopStart
 	  	kLoopEnd init $LoopEnd
+		kRecDur init 1
+		kRecTable init 0
 
 	  	print i(kCrossFadeDur)
 
@@ -121,9 +128,9 @@ endop
 	 	kThrough = kThrough > 0.5 ? 1 : 0
 		
 		; Loop start point: 
-	 	kLoopStart scale kLoopStart, kLoopLength-0.01, 0
+	 	kLoopStart limit kLoopStart, 0, 1
 	 	; Loop end point: 
-	 	kLoopEnd scale kLoopEnd, kLoopLength, 0.01
+	 	kLoopEnd limit kLoopEnd, 0, 1
 
 		if $PRINT == 1 then 
 			Sspeed sprintfk "Loop speed %f", kSpeed
@@ -138,6 +145,10 @@ endop
 				puts Start, kLoopStart+1 
 			Start sprintfk "Loop end: %f s", kLoopEnd
 				puts Start, kLoopEnd+1 
+			if trigger(kRec,0.5,1) == 1 then
+				Start sprintfk "Loop length: %.02f s", kRecDur/sr
+					puts Start, kRecDur+1 
+			endif
 		endif
 
 		; Speed: 0 to 1, but with no forced normalization
@@ -159,8 +170,11 @@ endop
 	    ; ...stop playing loop
 	    if kRecStartTrigger == 1 then
 	    	kPlay = 0
+			kRecTable = (kRecTable+1) % 2
+			Srectable sprintfk "Recording to buffer%d", kRecTable
+				puts Srectable, kRecTable+1
 	    endif
-
+		printk2 kRecTable, 20
 		; Toggle playback (start/stop) of loop
 		if changed(kPlayStopToggle) == 1 then
 			kPlay = (kPlay + 1) %2
@@ -171,27 +185,34 @@ endop
 	  	; ******************************
 
 		Srec sprintfk "Recording: %f", kRec
-		puts Srec, kRec+1
+			puts Srec, kRec+1
 
 		; Reset kndx (table index) to 0 when start recording 
 		kndx 	= trigger(kRec,0.5,0) == 1 ? 0 : kndx
 
 		; As long as kRec = 1, write audio to table
-		if kRec == 1 then
-
-        	tablew	ain/0dbfs,a(kndx),iLiveSamplAudioTable
+		if kRec == 1 then 
+			if kRecTable == 0 then 
+        		tablew	ain/0dbfs,a(kndx),iLiveSamplAudioTable1
+			else 
+				tablew	ain/0dbfs,a(kndx),iLiveSamplAudioTable2
+			endif
 	        kndx	+=	ksmps
 	        ; Loop length in seconds
-	        kLoopLength	= kndx/sr
-
+	        kRecDur	= kndx
 		endif
+
 
 	  	; ******************************
 		; PLAYBACK 
 	  	; ******************************
 
-		if (kPlay == 1)  then
+		kPlay port kPlay, 0.5
+	
+		aLoop init 0
+		aLoop ntrpol aZero, aLoop, kPlay
 
+		if (kPlay > 0 && kRec == 0)  then
 			kputstrig += kRecStopTrigger
 			puts "Playing loop\n", kputstrig+1
 
@@ -203,23 +224,38 @@ endop
 			if changed(kReverse) == 1 then 
 				 reinit RESTART_PLAYBACK
 			endif
+	
+			kLoopStart	portk	kLoopStart, 0.05		;APPLY PORTAMENTO SMOOTHING TO CHANGES OF LOOP BEGIN SLIDER
+			kLoopEnd	portk	kLoopEnd, 0.05		;APPLY PORTAMENTO SMOOTHING TO CHANGES OF LOOP END SLIDER
+			kLoopStart	=	kLoopStart * kRecDur
+			kLoopEnd	=	kLoopEnd * kRecDur
 
+			kLoopLength	=	kLoopEnd - kLoopStart
 
 		RESTART_PLAYBACK:
 			kLoopLevel init 1
-			kLoopLength init 1
-			krate = 1 / kLoopLength 
-			andx phasor krate * kSpeed, 0
-			;aLoop flooper2 kLoopLevel, kSpeed, kLoopStart, kLoopLength, kCrossFadeDur, iLiveSamplAudioTable, 0, i(kLoopMode)
-			;aLoop lposcil3 1, kSpeed, kLoopStart*sr, kLoopLength*sr, iLiveSamplAudioTable     
-			aLoop table3 andx*kLoopLength*sr, iLiveSamplAudioTable, 0, 0, 1
-			;aLoop ducking aLoop, andx*kLoopLength, 0.1
-			kAntiClick linseg 0, 0.01, 1
-		else
-			kAntiClick linseg 1, 0.01, 0
-		endif
 
-		aLoop ntrpol aZero, aLoop, kAntiClick
+			kPlayRate divz kSpeed, (kLoopLength/sr), 0.000001
+			aPlayIdx phasor kPlayRate
+			
+			kLoopStart = (kLoopStart < kLoopEnd ? kLoopStart : kLoopEnd)
+			aLoopLength interp abs(kLoopLength) 
+			aLoopStart interp kLoopStart
+			aPlayIdx = (aPlayIdx*aLoopLength) + aLoopStart
+
+			aLoop init 0
+			;aLoop flooper2 kLoopLevel, kSpeed, kLoopStart, kLoopLength, kCrossFadeDur, iLiveSamplAudioTable, 0, i(kLoopMode)
+			;aLoop lposcil3 1, kSpeed, kLoopStart*sr, kLoopLength*sr, iLiveSamplAudioTable   
+			  
+			if kRecTable == 0 then 
+				;aLoop flooper2 kLoopLevel, kSpeed, kLoopStart, kLoopLength, kCrossFadeDur, iLiveSamplAudioTable1, 0, i(kLoopMode)
+				aLoop tablei aPlayIdx, iLiveSamplAudioTable1 ;, 0, 0, 1
+			else 
+				;aLoop flooper2 kLoopLevel, kSpeed, kLoopStart, kLoopLength, kCrossFadeDur, iLiveSamplAudioTable2, 0, i(kLoopMode)
+				aLoop tablei aPlayIdx, iLiveSamplAudioTable2 ;, 0, 0, 1
+			endif
+			aLoop ducking aLoop, aPlayIdx/sr, kLoopStart, kLoopEnd, 0.1
+		endif
 
 		if kThrough == 1 then
 			aout = aLoop + ain
@@ -227,7 +263,7 @@ endop
 			aout = aLoop
 		endif
 
-	xout	aout, kRec, kPlay
+	xout aout, kRec, kPlay
 
 	endop
 
