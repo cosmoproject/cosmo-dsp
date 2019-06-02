@@ -4,10 +4,10 @@
 	Author: Bernt Isak Wærstad
 
 	Arguments: 	ModOffset, ModFreq, ModFreqMulti, Mix [, mode, ModIndex, Feed, ModWave]
-    Defaults:  
+    Defaults:
 
 	Modoffset: 0 - 1 (0 is AM, 1 is RM)
-	ModFreq: 0.05Hz - 30Hz 
+	ModFreq: 0.05Hz - 30Hz
 	ModFreqMulti: 1 - 100 (frequency multiplier)
 	Dry/wet mix: 0% - 100%
 	Mode:
@@ -44,7 +44,7 @@
 	#define MIN_MOD_FREQ #0.05#
 	#define MAX_MOD_FREQ_MULTI #100#
 	#define MIN_MOD_FREQ_MULTI #1#
-	
+
 
 ;*********************************************************************
 ; Ampmod - 1 in / 1 out
@@ -67,15 +67,15 @@ opcode Ampmod,a,akkkkOOPO
 	kmix scale kmix, 1, 0
 	kmix limit kmix, 0, 1
 
-	if $PRINT = 1 then 
+	if $PRINT = 1 then
 		Smodoff sprintfk "Modulation offset %f", kmodOffset
-			puts Smodoff, kmodOffset + 1 
+			puts Smodoff, kmodOffset + 1
 		Smodidx sprintfk "Modulation index %f", kmodIndex
-			puts Smodidx, kmodIndex + 1 
+			puts Smodidx, kmodIndex + 1
 		Smodfreq sprintfk "Modulation frequency %f", kmodFreq
 			puts Smodfreq, kmodFreq +1
 		Smodmix sprintfk "Ampmod mix %f", kmix
-			puts Smodmix, kmix + 1 
+			puts Smodmix, kmix + 1
 		Sfeed sprintfk "Ampmod feedback %f", kfeed
 			puts Sfeed, kfeed+1
 	endif
@@ -143,12 +143,12 @@ opcode Ampmod,a,akkkkOOPO
 	iSine		ftgen	0, 0, 65536, 10, 1	; sine
 	aFeed		init 0
 
-	if kmode == 0 then 
-		kPostGain = (kmodIndex > 1) ? 1/kmodIndex : 1  
+	if kmode == 0 then
+		kPostGain = (kmodIndex > 1) ? 1/kmodIndex : 1
 		aAM 		= (aIn+aFeed) * (aMod) * kPostGain
-	elseif kmode = 1 then 
+	elseif kmode = 1 then
 
-		ain1 = ((aIn+aFeed) * .5) 
+		ain1 = ((aIn+aFeed) * .5)
 		amod2 = aMod + ain1
 		ain2 = aMod - ain1
 
@@ -164,8 +164,8 @@ opcode Ampmod,a,akkkkOOPO
 
 	aFeed = aAM * kfeed
 	aOut ntrpol aIn, aAM, kmix
-		
-	xout aOut 
+
+	xout aOut
 
 endop
 
@@ -177,10 +177,10 @@ opcode Ampmod,aa,akkkkOOPO
 
 	aIn, kmodOffset, kmodFreq, kmodFreqMulti, kmix, kmode, kmodIndex, kfeed, kWave  xin
 
-	aL Ampmod aIn, kmodOffset, kmodFreq, kmodFreqMulti, kmix, kmode, kmodIndex, kfeed, kWave  
-	aR Ampmod aIn, kmodOffset, kmodFreq, kmodFreqMulti, kmix, kmode, kmodIndex, kfeed, kWave   
+	aL Ampmod aIn, kmodOffset, kmodFreq, kmodFreqMulti, kmix, kmode, kmodIndex, kfeed, kWave
+	aR Ampmod aIn, kmodOffset, kmodFreq, kmodFreqMulti, kmix, kmode, kmodIndex, kfeed, kWave
 
-	xout aL, aR 
+	xout aL, aR
 endop
 
 ;*********************************************************************
@@ -191,8 +191,8 @@ opcode Ampmod,aa,aakkkkOOPO
 
 	aInL, aInR, kmodOffset, kmodFreq, kmodFreqMulti, kmix, kmode, kmodIndex, kfeed, kWave    xin
 
-	aL Ampmod aInL, kmodOffset, kmodFreq, kmodFreqMulti, kmix, kmode, kmodIndex, kfeed, kWave 
-	aR Ampmod aInR, kmodOffset, kmodFreq, kmodFreqMulti, kmix, kmode, kmodIndex, kfeed, kWave  
+	aL Ampmod aInL, kmodOffset, kmodFreq, kmodFreqMulti, kmix, kmode, kmodIndex, kfeed, kWave
+	aR Ampmod aInR, kmodOffset, kmodFreq, kmodFreqMulti, kmix, kmode, kmodIndex, kfeed, kWave
 
-	xout aL, aR 
+	xout aL, aR
 endop

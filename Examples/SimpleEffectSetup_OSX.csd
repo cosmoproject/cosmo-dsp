@@ -9,10 +9,9 @@ ksmps  	= 64
 0dbfs	= 1
 nchnls 	= 2
 
-#include "../DSP-Library/Effects/Reverb.udo"
-#include "../DSP-Library/Effects/Lowpass.udo"
+#include "../DSP-Library/Includes/cosmo-dsp.inc"
 
-instr 1 
+instr 1
 	aL, aR ins
 
 	; All arguments are normalized (0-1)
@@ -21,7 +20,7 @@ instr 1
 	aL, aR Lowpass aL, aR, 0.6, 0.7, 0.5, 0
 
 	; Reverb arguments: decay, cutoff, mix
-	aL, aR Reverb aL, aR, 0.9, 0.5, 0.2 
+	aL, aR Reverb aL, aR, 0.9, 0.5, 0.2
 
 	outs aL, aR
 
@@ -33,5 +32,3 @@ endin
 i1 0 86400
 </CsScore>
 </CsoundSynthesizer>
-
-
