@@ -15,6 +15,7 @@
 | Reverb.udo       | DecayTime, HighFreq_Cutoff, DryWet_Mix, Mode                                                                                                 |
 | Reverse.udo      | Reverse_time, Speed, Dry/wet mix                                                                                                             |
 | SSB.udo          | ModFreq, ModFreqMulti, Balance, Mix                                                                                                          |
+| SimpleLooper.udo | Record_Play, Play_Stop, Speed, Reverse, CrossFadeDur, Audio_Through, LoopStart, LoopEnd                                                      |
 | SineDelay.udo    | Range, Frequency, ModulationIdx, Feedback, Dry/wet mix                                                                                       |
 | TapeDelay.udo    | DelayTime, Feedback, Filter, Mix [, StereoMode]                                                                                              |
 | Tremolo.udo      | Frequency, Depth, Dry/wet mix [, StereoMode]                                                                                                 |
