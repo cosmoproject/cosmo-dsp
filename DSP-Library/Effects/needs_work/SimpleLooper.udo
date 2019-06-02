@@ -47,7 +47,6 @@
 ;*********************************************************************
 
 opcode ducking, a, aakkk
-	; INDEX VALUE HAS TO BE NORMALIZED
     ainput, andx, kloopstart, kloopend, kducktime xin
 
     kenv init 1
@@ -66,7 +65,6 @@ opcode ducking, a, aakkk
 		if (kbuffer_idx > (kloopend-kducktime)) then
 			;kenv = ((klooplen - kbuffer_idx)/klooplen) * (1/kducktime)
 			kenv = ((klooplen - kbuffer_idx)/kducktime)
-			;printk2 kenv;kbuffer_idx/klooplen
 		endif
 	    if (kbuffer_idx > kloopstart) && (kbuffer_idx < kducktime) then
             kenv = (kbuffer_idx * (1/kducktime))
@@ -74,7 +72,8 @@ opcode ducking, a, aakkk
         kidx += 1	
 	od 
 
-    xout ainput*kenv
+	aenv interp kenv
+    xout ainput*aenv
 endop
 
 ;*********************************************************************
@@ -103,8 +102,6 @@ endop
 	  	kLoopEnd init $LoopEnd
 		kRecDur init 1
 		kRecTable init 0
-
-	  	print i(kCrossFadeDur)
 
 	  	; ******************************
 	  	; Controller value scalings
@@ -174,7 +171,7 @@ endop
 			Srectable sprintfk "Recording to buffer%d", kRecTable
 				puts Srectable, kRecTable+1
 	    endif
-		printk2 kRecTable, 20
+
 		; Toggle playback (start/stop) of loop
 		if changed(kPlayStopToggle) == 1 then
 			kPlay = (kPlay + 1) %2
