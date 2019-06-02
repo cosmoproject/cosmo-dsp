@@ -44,7 +44,7 @@ markupTable = tabulate(udos, headers = head, tablefmt = 'pipe')
 print(markupTable)
 
 # export Markup table into README.me file
-filename = os.path.join(fileDir, 'README.md')
+filename = os.path.join(fileDir, '../README.md')
 with open(filename, 'w+') as readme_file:
     readme_file.write('## List of effects: \n')
     readme_file.write(markupTable)
