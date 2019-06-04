@@ -1,4 +1,3 @@
-
 opcode Saw, a, kk
     kfreq, kamp xin
     asig     vco2 kamp, kfreq
@@ -13,7 +12,7 @@ endop
 
 opcode Tri, a, kk
     kfreq, kamp xin
-    asig     vco2 kamp, kfreq, 10
+    asig     vco2 kamp, kfreq, 12
     xout asig
 endop
 
@@ -23,18 +22,24 @@ opcode Sine, a, kk
     xout asig
 endop
 
-opcode WNoise, a, k
+opcode Pulse, a, kk 
+    kfreq, kamp xin
+    asig     vco2 kamp, kfreq, 6
+    xout asig
+endop
+
+opcode WhiteNoise, a, k
     kamp xin
     awhite unirand 2.0
     ; Normalize to +/-1.0
     awhite = awhite - 1.0
-    xout awhite
+    xout awhite*kamp
+endop
+
+opcode PinkNoise, a, k
+    kamp xin
+    apink pinker
+    xout apink*kamp
 endop
 
 
-; TODO put this into an FX
-opcode AtanLimit, a, a
-  ain xin
-  aout = 2 * taninv(ain) / 3.1415927
-  xout aout
-endop
