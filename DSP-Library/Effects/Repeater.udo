@@ -96,7 +96,7 @@ endop
 ; Repeater - 1 in / 2 out
 ;*********************************************************************
 
-opcode Repeater, aa, akkkk
+opcode Repeater, aa, akkkkO
 	ain, kRange, kRepeatTime, kOnOff, kMixMode xin
 
 	aoutL Repeater ain, kRange, kRepeatTime, kOnOff, kMixMode
@@ -110,7 +110,7 @@ endop
 ; Repeater - 2 in / 2 out
 ;*********************************************************************
 
-opcode Repeater, aa, aakkkk
+opcode Repeater, aa, aakkkO
 	ainL, ainR, kRange, kRepeatTime, kOnOff, kMixMode xin
 
 	aoutL Repeater ainL, kRange, kRepeatTime, kOnOff, kMixMode
