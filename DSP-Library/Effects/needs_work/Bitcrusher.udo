@@ -6,7 +6,7 @@
 	COSMO UDO adaptation: Bernt Isak Wærstad
 
 	Arguments: Bits, Fold, Level, DryWet_Mix
-    Defaults:  0.6, 0.3, 0.8, 1
+    Defaults:  0.5, 0, 1, 1
 
 	Bits: 1 - 16
 	Fold: 1 - 1024
@@ -18,13 +18,23 @@
 
 ********************************************************/
 
-#define Bits #0.5# ; 8 bit
-#define Fold #0# ; 1
-#define Level #1# ; 1
-#define Mix #1# ; 1
+	; Default argument values
+	#define Bits #0.5# ; 8 bit
+	#define Fold #0# ; 1
+	#define Level #1# 
+	#define Mix #1# 
+
+	; Toggle printing on/off
+	#define PRINT #0#
+
+	; Max and minimum values
+	#define MAX_FOLD #1024#
+	#define MIN_FOLD #1#	
+	#define MAX_BIT #16#
+	#define MIN_BIT #1#
 
 ;*********************************************************************
-; Bitcrusher - Mono
+; Bitcrusher - 1 in / 1 out
 ;*********************************************************************
 
 opcode Bitcrusher, a, akkkk
@@ -36,25 +46,28 @@ opcode Bitcrusher, a, akkkk
 	kLevel	init $Level
 	kMix	init $Mix 	 
 
+    ; ******************************
+  	; Controller value scalings
+  	; ******************************
 
-	kBits scale kBits, 16, 1
-	kBits limit kBits, 1, 16
-	Sbit sprintfk "Bits: %d", kBits
-		puts Sbit, kBits
+	kBits scale kBits, $MAX_BIT, $MIN_BIT
+	kBits limit kBits, $MIN_BIT, $MAX_BIT
 
 	kFold expcurve kFold, 30 ; CHECK THIS
-	kFold scale kFold, 1024, 1
-	Sfold sprintfk "Foldover: %f", kFold
-		puts Sfold, kFold
+	kFold scale kFold, $MAX_FOLD, $MIN_FOLD
 
-	kLevel scale kLevel, 0.8, 0
-	Slev sprintfk "BitCrusher level: %f", kLevel
-		puts Slev, kLevel
+	if $PRINT == 1 then
+		Sfold sprintfk "Foldover: %f", kFold
+			puts Sfold, kFold
+		Slev sprintfk "BitCrusher level: %f", kLevel
+			puts Slev, kLevel
+		Smix sprintfk "BitCrusher mix: %f", kMix
+			puts Smix, kMix + 1
+		Sbit sprintfk "Bits: %d", kBits
+			puts Sbit, kBits
+	endif
+
 	kLevel port kLevel, 0.01
-
-	Smix sprintfk "BitCrusher mix: %f", kMix
-		puts Smix, kMix + 1
-
 	kporttime	linseg	0,0.001,0.01
 	kFold	portk	kFold,kporttime
 
@@ -74,7 +87,22 @@ opcode Bitcrusher, a, akkkk
 endop
 
 ;*********************************************************************
-; Bitcrusher - Stereo
+; Bitcrusher - 1 in / 2 out
+;*********************************************************************
+
+opcode Bitcrusher, aa, akkkk
+
+	ain, kBits, kFold, kLevel, kMix xin
+
+	aOutL Bitcrusher ain, kBits, kFold, kLevel, kMix
+	aOutR Bitcrusher ain, kBits, kFold, kLevel, kMix
+
+	xout aOutL, aOutR
+
+endop
+
+;*********************************************************************
+; Bitcrusher - 2 in / 2 out
 ;*********************************************************************
 
 opcode Bitcrusher, aa, aakkkk
