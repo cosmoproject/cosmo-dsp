@@ -27,7 +27,7 @@
     #define Rms_Freq #50#
 
 	; Toggle printing on/off
-	#define PRINT #1#
+	#define PRINT #0#
 
 	; Max and minimum values
 	#define MAX_DB_DIFF #24#
