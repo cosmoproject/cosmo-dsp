@@ -70,7 +70,7 @@ opcode Lowpass, a, akkkO
 				puts Sdist, kdist
 		endif
 
-		kfco port kfco, 0.1
+		kfco port kfco, 0.01
 		kres port kres, 0.01
 		kdist port kdist, 0.01
 
