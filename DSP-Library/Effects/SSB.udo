@@ -6,7 +6,6 @@
 	Arguments: ModFreq, ModFreqMulti, Balance, Mix 
     Defaults:  
 
-	Modoffset: 0 - 1 (0 is AM, 1 is RM)
 	ModFreq: 0.05Hz - 30Hz 
 	ModFreqMulti: 1 - 100 (frequency multiplier)
     Balance: 0 - 1 (mix between lower and upper band)
@@ -24,7 +23,7 @@
     #define Mix #0.5#
 
 	; Toggle printing on/off
-	#define PRINT #1#
+	#define PRINT #0#
 
 	; Max and minimum values
 	#define MAX_MOD_FREQ #30#
