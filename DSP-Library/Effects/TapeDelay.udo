@@ -34,7 +34,7 @@
 	#define StereoMode #0#
 
 	; Toggle printing on/off
-	#define PRINT #1#
+	#define PRINT #0#
 
 ;*********************************************************************
 ; TapeDelay - 2i/2o - Named arguments
