@@ -3,12 +3,9 @@
     PitchTracker.udo
     Author: Bernt Isak Wærstad
 
-    Arguments: Mode, [Smoothing]
-    Defaults:  0, 0
+    Arguments: [Smoothing]
+    Defaults:  0
 
-    Mode: 
-        0: pitch (less CPU intensive)
-        1: ptrack (SFT based)
     [Optional]
     Smoothing: 0.01s - 0.1s
 
@@ -20,7 +17,6 @@
     ; Default argument values
     #define Smoothing #0#
     #define dB_Thresh #10#
-	#define HOP_SIZE #1024#
 
 	; Toggle printing on/off
 	#define PRINT #0#
@@ -35,8 +31,8 @@
 ; Pitchtracker - 1 in / 1 out
 ;*********************************************************************
 
-opcode	PitchTracker, kk, akO
-	ain, kmode, ksmooth xin
+opcode	PitchTracker, kk, aO
+	ain, ksmooth xin
 
     ; ******************************
   	; Controller value scalings
@@ -45,18 +41,15 @@ opcode	PitchTracker, kk, akO
     ksmooth scale ksmooth, $MAX_SMOOTH, $MIN_SMOOTH
     ksmooth limit ksmooth, $MIN_SMOOTH, $MAX_SMOOTH
 
-    if kmode == 0 then 
-		iupdate = 0.001	;high definition
-		ilow = octcps($LOW_PITCH)
-		ihi = octcps($HIGH_PITCH)
-		idbthresh = $dB_Thresh
+ 
+    iupdate = 0.001	;high definition
+    ilow = octcps($LOW_PITCH)
+    ihi = octcps($HIGH_PITCH)
+    idbthresh = $dB_Thresh
 
-		koct, kamp pitch ain, iupdate, ilow, ihi, idbthresh
-		kfreq = cpsoct(koct)
-		kamp = kamp*.00005
-    elseif kmode == 1 then 
-        kfreq,kamp ptrack ain, $HOP_SIZE
-    endif 
+    koct, kamp pitch ain, iupdate, ilow, ihi, idbthresh
+    kfreq = cpsoct(koct)
+    kamp = kamp*.00005
 
     if $PRINT == 1 then
         Spitch_f sprintfk "Pitchtrack freq: %d", kfreq
@@ -75,7 +68,7 @@ endop
 ; Pitchtracker - 2 in / 1 out
 ;*********************************************************************
 
-opcode	PitchTracker, kk, aakO
+opcode	PitchTracker, kk, aaO
 	ainL, ainR, ksmooth xin
 
     ainMono = (ainL + ainR) * 0.5
