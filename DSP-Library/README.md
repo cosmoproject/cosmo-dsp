@@ -21,3 +21,11 @@
 | TapeDelay.udo    | DelayTime, Feedback, Filter, Mix [, StereoMode]                                                                                              |
 | TriggerDelay.udo | Threshold, DelayTime Min, DelayTime Max, Feedback Min, Feedback Max, Width, Level, Portamento time, Cutoff frequency, Bandwidth, Dry/wet mix |
 | Volume.udo       | Level                                                                                                                                        |
+
+## List of modulators:
+| UDO                  | Arguments                                     |
+|:---------------------|:----------------------------------------------|
+| EnvelopeFollower.udo | Attack, Release, Gain [, Smoothing]           |
+| LFO.udo              | Rate [, Wave, Smoothing]                      |
+| OnsetDetection.udo   | Db_Diff, Min_Time, Min_Db [, Delay, Rms_Freq] |
+| PitchTracker.udo     | [Smoothing]                                   |

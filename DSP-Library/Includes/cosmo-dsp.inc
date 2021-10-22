@@ -18,3 +18,7 @@
 #include "../Effects/TapeDelay.udo"
 #include "../Effects/TriggerDelay.udo"
 #include "../Effects/Volume.udo"
+#include "../Modulators/EnvelopeFollower.udo"
+#include "../Modulators/LFO.udo"
+#include "../Modulators/OnsetDetection.udo"
+#include "../Modulators/PitchTracker.udo"
