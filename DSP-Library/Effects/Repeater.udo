@@ -80,8 +80,10 @@ opcode Repeater, a, akkkO
     kOnOff port kOnOff, 0.0001
 
     aInput = (ain * (1-kOnOff)) + (aRepeat * kOnOff)
-    aRepeat vdelayx aInput, aRepeatTime, $MAX_L_DLY, 1024
-
+    ;aRepeat vdelayx aInput, aRepeatTime, $MAX_L_DLY, 1024
+   	aRepeat vdelay3 aInput, aRepeatTime*1000, $MAX_L_DLY*1000
+	; vdelayx uses insane amount of CPU
+	
     if kMixMode == 0 then 
         aout = (ain * (1-kOnOff)) + (aRepeat * kOnOff)
     else 
