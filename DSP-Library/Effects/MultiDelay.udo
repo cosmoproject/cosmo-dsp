@@ -25,7 +25,7 @@
 	#define Mix #0.5#
 
 	; Toggle printing on/off
-	#define PRINT #1#
+	#define PRINT #0#
 
 	; Max and minimum values
 	#define MAX_DLY_TIME #1000#
