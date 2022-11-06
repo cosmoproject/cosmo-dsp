@@ -1,5 +1,5 @@
 <Cabbage>
-form caption("COSMO DSP: Reverb") size(360, 140), colour("white"), pluginID("crev")
+form caption("COSMO DSP: Reverb") size(360, 140), colour("white"), pluginID("crvb")
 
 
 rslider bounds(20, 	20,  100, 100), channel("decay"), range(0, 1, 0.6, 1, .01), text("Decay"), trackercolour("navy"), outlinecolour(0, 0, 0, 50), textcolour("black")
@@ -18,7 +18,7 @@ ksmps = 32
 nchnls = 2
 0dbfs = 1
 
-#include "../Effects/Reverb.csd"
+#include "../Effects/Reverb.udo"
 
 instr 1
 
@@ -28,8 +28,8 @@ instr 1
 
 	aL,aR ins
 
-	; Reverb arguments: decay, cutoff, mix
-	aL, aR Reverb aL, aR, kDecay, kCutoff, kMix 
+	; Reverb arguments: decay, cutoff, mix, mode
+	aL, aR Reverb aL, aR, kDecay, kCutoff, kMix, 0 
 
 
 outs aL, aR
