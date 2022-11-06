@@ -44,34 +44,30 @@ nchnls = 2
 
 #include "../Includes/cosmo_utilities.inc"
 
-#include "../Effects/AnalogDelay.csd"
-#include "../Effects/Blur.csd"
-#include "../Effects/Chorus.csd"
-#include "../Effects/Distortion.csd"
-#include "../Effects/FakeGrainer.csd"
-#include "../Effects/Hack.csd"
-#include "../Effects/Lowpass.csd"
-#include "../Effects/MultiDelay.csd"
-#include "../Effects/PitchShifter.csd"
-#include "../Effects/RandDelay.csd"
-#include "../Effects/Repeater.csd"
-#include "../Effects/Reverb.csd"
-#include "../Effects/Reverse.csd"
-#include "../Effects/SimpleLooper.csd"
-#include "../Effects/SineDelay.csd"
-#include "../Effects/SolinaChorus.csd"
-#include "../Effects/Tremolo.csd"
-#include "../Effects/TriggerDelay.csd"
-#include "../Effects/Volume.csd"
-#include "../Effects/Wobble.csd"
-
-
+#include "../Effects/Ampmod.udo"
+#include "../Effects/Autopan.udo"
+#include "../Effects/Bitcrusher.udo"
+#include "../Effects/Blur.udo"
+#include "../Effects/Chorus.udo"
+#include "../Effects/Distortion.udo"
+#include "../Effects/Flanger.udo"
+#include "../Effects/Highpass.udo"
+#include "../Effects/Lowpass.udo"
+#include "../Effects/MultiDelay.udo"
+#include "../Effects/Phaser.udo"
+#include "../Effects/PitchShifter.udo"
+#include "../Effects/Repeater.udo"
+#include "../Effects/Reverb.udo"
+#include "../Effects/Reverse.udo"
+#include "../Effects/SimpleLooper.udo"
+#include "../Effects/SSB.udo"
+#include "../Effects/TapeDelay.udo"
+#include "../Effects/TriggerDelay.udo"
+#include "../Effects/Volume.udo"
 
 
 instr 1
 
-	#include "../Includes/adc_channels.inc"
-	#include "../Includes/gpio_channels.inc"
 
 	aL, aR ins
 	adlyL = 0
