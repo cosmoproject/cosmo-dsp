@@ -83,6 +83,8 @@ opcode Ampmod,a,akkkkOOPO
 	kmodIndex port kmodIndex, 0.01
 	kmodFreq port kmodFreq, 0.05
 
+	kmode = kmode > 0.5 ? 1 : 0
+
 	itab chnget "ringmod.table"
 
 	; TABLE INIT
