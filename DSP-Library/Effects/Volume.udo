@@ -53,7 +53,8 @@ opcode Volume, aa, ak
 
 	ain, kVol xin
 
-	aOutL, aOutR Volume ain, kVol
+	aOutL Volume ain, kVol
+	aOutR Volume ain, kVol
 
 	xout aOutL, aOutR
 
